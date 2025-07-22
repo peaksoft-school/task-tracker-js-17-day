@@ -1,7 +1,12 @@
+import { Button } from "@mui/material"
+import { AppButton } from "./components/UI/AppButton"
+
 function App() {
    return (
       <>
-         <div></div>
+         <div>
+          <AppButton>clik</AppButton>
+         </div>
       </>
    )
 }
