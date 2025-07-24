@@ -1,19 +1,20 @@
 import { Button } from '@mui/material'
 import React from 'react'
+import { themeColors } from '../../styles/appColors'
 
-export const AppButton = ({ children }) => {
+export const AppButton = ({ children, onClik, disabled,...props }) => {
+   const bluee = themeColors.palette.primary.blue
+   const white = themeColors.palette.primary.white
    return (
       <div>
          <Button
             sx={{
-               width: '122px',
-               height: '34px',
+               padding: '8px 16px',
                borderRadius: '24px',
-               backgroundColor: 'rgba(0, 121, 191, 1)',
-               color: 'rgba(255, 255, 255, 1)',
+               backgroundColor:  `${bluee}` ,
+               color: `${white}`,
                fontSize: '14px',
                fontWeight: '400',
-               fontFamily: 'Cera Pro',
                '&:hover': {
                   backgroundColor: 'rgba(0, 86, 136, 1)',
                },
@@ -22,6 +23,8 @@ export const AppButton = ({ children }) => {
                   backgroundColor: 'rgba(87, 174, 224, 1)',
                },
             }}
+            onClick={onClik}
+            disabled={disabled}
          >
             {children}
          </Button>
