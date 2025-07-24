@@ -2,7 +2,13 @@ import { Button } from '@mui/material'
 import React from 'react'
 import { themeColors } from '../../styles/appColors'
 
-export const AppButton = ({ children, onClik, disabled,...props }) => {
+export const AppButton = ({
+   children,
+   onClick,
+   disabled,
+   type = 'button',
+   ...rest
+}) => {
    const bluee = themeColors.palette.primary.blue
    const white = themeColors.palette.primary.white
    return (
@@ -11,7 +17,7 @@ export const AppButton = ({ children, onClik, disabled,...props }) => {
             sx={{
                padding: '8px 16px',
                borderRadius: '24px',
-               backgroundColor:  `${bluee}` ,
+               backgroundColor: `${bluee}`,
                color: `${white}`,
                fontSize: '14px',
                fontWeight: '400',
@@ -23,8 +29,10 @@ export const AppButton = ({ children, onClik, disabled,...props }) => {
                   backgroundColor: 'rgba(87, 174, 224, 1)',
                },
             }}
-            onClick={onClik}
+            onClick={onClick}
             disabled={disabled}
+            type={type}
+            {...rest}
          >
             {children}
          </Button>
