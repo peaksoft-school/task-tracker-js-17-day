@@ -14,7 +14,8 @@ export const themeColors = createTheme({
          grey2: '#B2B2B2',
          lightGrey: '#F0F0F0',
       },
-   teriary: {
+      teriary: {
+         main: '#D91212',
          red: '#D91212',
          green: '#2CB107',
          litelgreen: '#66C74B',

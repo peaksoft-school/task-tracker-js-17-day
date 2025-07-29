@@ -1,7 +1,6 @@
-import { AppButton } from './components/UI/AppButton'
+import React from 'react'
 
 function App() {
    return <div></div>
 }
 
-export default App
