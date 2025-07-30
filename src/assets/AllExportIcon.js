@@ -32,7 +32,7 @@ import ShowIcon from './images/icon/system/Show.svg?react'
 import StarIcon from './images/icon/system/Star.svg?react'
 import TemplateIcon from './images/icon/system/Template.svg?react'
 
-export {
+export  {
    //? arrows
    LeftIcon,
    RightIcon,
