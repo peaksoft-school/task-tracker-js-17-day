@@ -8,8 +8,6 @@ import { themeColors } from './styles/appColors.js'
 
 createRoot(document.getElementById('root')).render(
    <ThemeProvider theme={themeColors}>
-      <StrictMode>
-         <App />
-      </StrictMode>
+      <App />
    </ThemeProvider>
 )
