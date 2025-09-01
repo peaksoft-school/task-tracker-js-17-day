@@ -412,9 +412,9 @@ const DivPlusIcon = styled('div')({
 
 const DivSectionDownIconButtton = styled(IconButton)({ padding: 0 })
 
-const DicConteiner = styled('div')(({ open }) => ({
+const DicConteiner = styled('div')({
    display: 'flex',
-}))
+})
 
 const DownIconButton = styled(IconButton)({
    padding: 0,
