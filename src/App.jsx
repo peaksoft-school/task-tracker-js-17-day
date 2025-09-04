@@ -1,5 +1,11 @@
+import Sidebar from './components/sidebar/Sidebar'
+
 const App = () => {
-   return <div>task trecker</div>
+   return (
+      <div>
+         <Sidebar />
+      </div>
+   )
 }
 
 export default App

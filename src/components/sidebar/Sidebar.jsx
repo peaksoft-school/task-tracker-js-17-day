@@ -1,4 +1,5 @@
 import { IconButton, styled } from '@mui/material'
+import { Title, AccountingLMS } from './index'
 import { useState } from 'react'
 import {
    DownIcon,
@@ -75,16 +76,14 @@ export default function Sidebar() {
 
          {open && down && (
             <TitleBoards>
-               {['Title', 'Title', 'Title', 'Title', 'Title'].map(
-                  (label, idx) => (
-                     <TitleMap
-                        key={idx}
-                        label={label}
-                        isActive={activeIndex === idx}
-                        onClick={() => setActiveIndex(idx)}
-                     />
-                  )
-               )}
+               {Title.map((label, idx) => (
+                  <TitleMap
+                     key={idx}
+                     label={label}
+                     isActive={activeIndex === idx}
+                     onClick={() => setActiveIndex(idx)}
+                  />
+               ))}
             </TitleBoards>
          )}
 
@@ -101,9 +100,9 @@ export default function Sidebar() {
                count="(267)"
             />
             <SidebarItem
+               onClick={() => setActiveIndex(288)}
                id={288}
                isActive={activeIndex === 288}
-               onClick={() => setActiveIndex(288)}
                open={open}
                icon={<PeopleIcon />}
                label="Participants"
@@ -135,14 +134,7 @@ export default function Sidebar() {
                )}
             </DivGraph>
 
-            {[
-               'Accounting',
-               'LMS',
-               'Accounting',
-               'LMS',
-               'Accounting',
-               'LMS',
-            ].map((label, idAL) => (
+            {AccountingLMS.map((label, idAL) => (
                <Section
                   key={idAL}
                   id={idAL}
