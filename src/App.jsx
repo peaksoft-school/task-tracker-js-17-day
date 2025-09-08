@@ -4,7 +4,7 @@ import { Header } from './layouts/header/Header'
 function App() {
    return (
       <div>
-         <Header favouritesCount={1} notificationCount={2} />
+   <h1>Task Tracker</h1>
       </div>
    )
 }
