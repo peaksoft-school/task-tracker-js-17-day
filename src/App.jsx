@@ -1,12 +1,8 @@
 import React from 'react'
-import { Header } from './layouts/header/Header'
+import DatePicker from './layouts/date-picker/DatePicker'
 
 function App() {
-   return (
-      <div>
-   <h1>Task Tracker</h1>
-      </div>
-   )
+   return <DatePicker />
 }
 
 export default App
