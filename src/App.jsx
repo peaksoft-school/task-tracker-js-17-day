@@ -1,8 +1,9 @@
 import React from 'react'
 import DatePicker from './layouts/date-picker/DatePicker'
+import {  Selectt } from './components/select/Selectt'
 
 function App() {
-   return <h1>Task Tracker</h1>
+   return <Selectt/>
 }
 
 export default App
