@@ -38,7 +38,7 @@ const StyledFormControl = styled(FormControl)(({}) => ({
    minWidth: '100%',
 }))
 
-const StyledSelect = styled(Select)(({}) => ({``
+const StyledSelect = styled(Select)(({}) => ({
    minHeight: '32px',
    borderRadius: '8px',
 }))
