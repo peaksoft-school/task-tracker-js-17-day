@@ -1,5 +1,11 @@
+import DescriptionBox from "./components/DescriptionBox";
+
 function App() {
-   return <div></div>
+  return (
+    <div>
+      <DescriptionBox />
+    </div>
+  );
 }
 
-export default App
+export default App;
