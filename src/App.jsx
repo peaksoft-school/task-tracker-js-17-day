@@ -1,10 +1,8 @@
 import React from 'react'
-import DatePicker from './layouts/date-picker/DatePicker'
-import {  Selectt } from './components/select/Selectt'
-import Chipp from './components/chip/Chip'
+import AppRoutes from './routes/AppRoutes'
 
-function App() {
-   return <h1>Task Tracer</h1>
+const App = () => {
+   return <AppRoutes />
 }
 
 export default App

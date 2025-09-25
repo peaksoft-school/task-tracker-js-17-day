@@ -5,9 +5,12 @@ import './index.css'
 import App from './App.jsx'
 import { ThemeProvider } from '@mui/material'
 import { themeColors } from './styles/appColors.js'
+import { BrowserRouter } from 'react-router'
 
 createRoot(document.getElementById('root')).render(
-   <ThemeProvider theme={themeColors}>
-      <App />
-   </ThemeProvider>
+   <BrowserRouter>
+      <ThemeProvider theme={themeColors}>
+         <App />
+      </ThemeProvider>
+   </BrowserRouter>
 )
