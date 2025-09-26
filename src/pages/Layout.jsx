@@ -1,6 +1,6 @@
 import React from 'react'
 import { Header } from '../layouts/header/Header'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router'
 import { SignIn } from './SignIn'
 
 export const MainLayout = () => {
