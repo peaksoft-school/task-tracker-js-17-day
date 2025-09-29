@@ -36,7 +36,6 @@ function Main() {
    return (
       <ConteinerBoxMain>
          <Header status={true} />
-
          <Content>
             <TopBar>
                <H2Workspaces>Workspaces</H2Workspaces>
