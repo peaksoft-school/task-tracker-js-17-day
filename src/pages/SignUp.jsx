@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
-import { Box, Checkbox } from '@mui/material'
+import { Avatar, Box, Checkbox } from '@mui/material'
 import { Input } from '../components/UI/input/Input'
-import { Black, HideIcon, ShowIcon } from '../assets/AllExportIcon'
+import { Black, GoogleIcon, HideIcon, ShowIcon } from '../assets/AllExportIcon'
 import { AppButton } from '../components/UI/AppButton'
 import React from 'react'
 import { useNavigate } from 'react-router'
@@ -20,6 +20,20 @@ export const SignUp = () => {
             <Box>
                <StylesBoxInput>
                   <h2>Sign Un</h2>
+                  <StyledBoxGoogle>
+                     <StyledBox>
+                        <StyledAvatar>R</StyledAvatar>
+                        <Box>
+                           <StyledH3>Sign Up as Nazira</StyledH3>
+                           <StyledP>example@gmail.com</StyledP>
+                        </Box>
+                     </StyledBox>
+                     <StyledAvatarGoogle>
+                        <GoogleIcon />
+                     </StyledAvatarGoogle>
+                  </StyledBoxGoogle>
+                  <StyledP>or</StyledP>
+
                   <Input placeholder="Name" type="text" />
                   <Input placeholder="Surname" type="text" />
                   <Input placeholder="example@gmail.com" type="email" />
@@ -63,6 +77,43 @@ export const SignUp = () => {
       </StylesBox>
    )
 }
+
+const StyledBox = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'space-between',
+   gap: '12px',
+})
+
+const StyledBoxGoogle = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'space-between',
+   backgroundColor: '#f0f0f0',
+   padding: '11px 16px',
+   borderRadius: '8px',
+   minWidth: '321px',
+})
+
+const StyledH3 = styled('h3')({
+   fontWeight: '400',
+   fontSize: '16px',
+   color: '#b2b2b2',
+})
+
+const StyledP = styled('p')({
+   fontWeight: '400',
+   color: '#b2b2b2',
+})
+
+const StyledAvatarGoogle = styled(Avatar)({
+   backgroundColor: '#f0f0f0',
+})
+
+const StyledAvatar = styled(Avatar)({
+   backgroundColor: '#0580d1',
+})
+
 const StyledA = styled('a')({
    color: '#0079c0',
 })

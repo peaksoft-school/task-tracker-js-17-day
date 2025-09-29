@@ -1,49 +1,94 @@
 import { Box } from '@mui/material'
-import React from 'react'
 import { Input } from '../components/UI/input/Input'
+import { Black, HideIcon } from '../assets/AllExportIcon'
 import { AppButton } from '../components/UI/AppButton'
 import styled from '@emotion/styled'
 
 export const Passwordd = () => {
    return (
-      <StyledBox>
-         <StyledH2>Forgot password?</StyledH2>
-         <StyledP>
-            A link will be sent to your Email, follow the link sent to the mail
-         </StyledP>
-         <StyledInput placeholder="example@gmail.com" type="email" />
-         <StyledButtonBox>
-            <StylesButton>Send</StylesButton>
-         </StyledButtonBox>
-      </StyledBox>
+      <StylesBox>
+         <StylesBoxRight>
+            <StylesBoxLogo>
+               <Black />
+               Task Tracker
+            </StylesBoxLogo>
+            <Box>
+               <StylesBoxInput>
+                  <h2>Password</h2>
+                  <Input
+                     placeholder="Password"
+                     type="password"
+                     iconPosition="end"
+                     icon={<HideIcon />}
+                  />
+                  <Input
+                     placeholder="Repeat password"
+                     type="Password"
+                     iconPosition="end"
+                     icon={<HideIcon />}
+                  />
+
+                  <StyledButton>Log In</StyledButton>
+               </StylesBoxInput>
+            </Box>
+         </StylesBoxRight>
+         <StylesBoxLeft>
+            <StylesImg
+               src="src/assets/images/icon/imgbackraund/Rectangle 77.png"
+               alt=""
+            />
+         </StylesBoxLeft>
+      </StylesBox>
    )
 }
-const StyledInput = styled(Input)({
-   marginTop: '16px',
-   width: '100%',
+const StyledA = styled('a')({
+   color: '#0079c0',
 })
 
-const StyledH2 = styled('h2')({
-   fontSize: '24px',
-   fontWeight: '500',
+const StyledButton = styled(AppButton)({
+   padding: '8px 60px',
 })
 
-const StyledBox = styled(Box)({
-   padding: '20px',
-})
-
-const StyledP = styled('p')({
-   fontSize: '12px',
-   fontWeight: '400',
-   color: '#707070',
-})
-
-const StyledButtonBox = styled(Box)({
-   marginTop: '24px',
+const StylesBox = styled(Box)({
    display: 'flex',
-   justifyContent: 'end',
 })
 
-const StylesButton = styled(AppButton)({
-   width: '150px',
+const StylesBoxLeft = styled(Box)({
+   width: '40%',
+   height: '100vh',
+})
+
+const StylesImg = styled('img')({
+   width: '100%',
+   height: '100%',
+})
+
+const StylesBoxLogo = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   color: '#0580d1',
+   position: 'absolute',
+   top: '20px',
+   left: '20px',
+   gap: '8px',
+})
+
+const StylesBoxRight = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   flexDirection: 'column',
+   width: '50%',
+   height: '100vh',
+})
+
+const StylesBoxInput = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   flexDirection: 'column',
+   width: '321px',
+   height: '261px',
+   gap: '16px',
 })

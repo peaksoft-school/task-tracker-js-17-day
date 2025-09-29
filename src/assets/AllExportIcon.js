@@ -33,6 +33,7 @@ import StarIcon from './images/icon/system/Star.svg?react'
 import TemplateIcon from './images/icon/system/Template.svg?react'
 import WhitePliusIcon from './images/icon/system/Alerts, Warning, Signs Icon.svg?react'
 import Black from './images/icon/system/Black and White Collection 2.svg?react'
+import GoogleIcon from './images/icon/system/googleIkon.svg?react'
 
 
 export {
@@ -71,4 +72,5 @@ export {
    TemplateIcon,
    WhitePliusIcon,
    Black,
+   GoogleIcon,
 }
