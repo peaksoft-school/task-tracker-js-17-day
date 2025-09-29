@@ -4,7 +4,7 @@ import { Header } from './layouts/header/Header'
 function App() {
    return (
       <div>
-   <h1>Task Tracker</h1>
+         <Header status={true} />
       </div>
    )
 }
