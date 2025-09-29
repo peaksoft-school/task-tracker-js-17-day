@@ -1,20 +1,8 @@
-import { styled } from '@mui/material'
-import TableMui from './pages/text'
-import Workspaces from './pages/Main'
+import React from 'react'
+import DatePicker from './layouts/date-picker/DatePicker'
 
 function App() {
-   return (
-      <ConteinerMain>
-         {/* <TableMui /> */}
-         <Workspaces />
-      </ConteinerMain>
-   )
+   return <h1>Task Tracker</h1>
 }
 
 export default App
-const ConteinerMain = styled('div')({
-   height: '1000px',
-   display: 'flex',
-   alignItems: 'end',
-   border: '1px solid red',
-})
