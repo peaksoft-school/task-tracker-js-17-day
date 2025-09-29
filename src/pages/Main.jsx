@@ -35,7 +35,7 @@ const rows = [
 function Main() {
    return (
       <ConteinerBoxMain>
-         <Header />
+         <Header status={true} />
 
          <Content>
             <TopBar>
