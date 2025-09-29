@@ -1,128 +1,143 @@
-import * as React from 'react'
 import {
-   Box,
-   Button,
-   Typography,
    Avatar,
-   IconButton,
+   Box,
+   styled,
    Table,
    TableBody,
    TableCell,
-   TableContainer,
    TableHead,
    TableRow,
-   Paper,
-   styled,
 } from '@mui/material'
+import { Header } from '../layouts/header/Header'
+import { AppButton } from '../components/UI/AppButton'
 import {
    FavoriteIconstarBlue,
    FavoriteIconstarSilver,
 } from '../assets/AllExportIcon'
 
-// Данные
-const workspaces = [
-   { id: 1, name: 'Taigan', lead: 'Almaz ALmazov', favorite: true },
-   { id: 2, name: 'Shoppix', lead: 'Almaz ALmazov', favorite: false },
-   { id: 3, name: 'Task Tracker', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
-   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', favorite: false },
+const rows = [
+   { id: 1, name: 'Taigan', lead: 'Almaz ALmazov', fav: true },
+   { id: 2, name: 'Shoppix', lead: 'Almaz ALmazov', fav: false },
+   { id: 3, name: 'Task Tracker', lead: 'Almaz ALmazov', fav: false },
+   { id: 4, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 5, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 6, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 7, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 8, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 9, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 10, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 11, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 12, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 13, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
+   { id: 14, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
 ]
 
-export default function Main() {
+function Main() {
    return (
-      <BoxConteiner>
-         {/* Header */}
+      <ConteinerBoxMain>
+         <Header />
 
-         <HeaderBox>
-            <Typography variant="h6" fontWeight="bold">
-               Workspaces
-            </Typography>
-            <Button variant="contained" color="primary">
-               Create
-            </Button>
-         </HeaderBox>
+         <Content>
+            <TopBar>
+               <H2Workspaces>Workspaces</H2Workspaces>
+               <MainAppButton>Create</MainAppButton>
+            </TopBar>
 
-         {/* Table */}
-         <TableContainer component={Paper} sx={{ flex: 1 }}>
-            <Table>
-               <TableHead>
-                  <TableRow>
-                     <TableCell>№</TableCell>
-                     <TableCell>Name</TableCell>
-                     <TableCell>Lead</TableCell>
-                     <TableCell>Action</TableCell>
-                  </TableRow>
-               </TableHead>
-               <TableBody>
-                  {workspaces.map((ws) => (
-                     <TableRow key={ws.id}>
-                        <TableCell>{ws.id}</TableCell>
-                        <TableCell>
-                           <WorkspaceLink>{ws.name}</WorkspaceLink>
-                        </TableCell>
-                        <LeadCell>
-                           <Avatar
-                              src="https://i.pravatar.cc/40"
-                              alt={ws.lead}
-                              sx={{ width: 32, height: 32 }}
-                           />
-                           <Typography>{ws.lead}</Typography>
-                        </LeadCell>
-                        <TableCell>
-                           <IconButton>
-                              {ws.favorite ? (
+            <StyledTableContainer>
+               <Table stickyHeader>
+                  <TableHead>
+                     <TableRow>
+                        <NowemberTableCell>№</NowemberTableCell>
+                        <NameTableCell>Name</NameTableCell>
+                        <LeadTableCell>Lead</LeadTableCell>
+                        <ActionTableCell>Action</ActionTableCell>
+                     </TableRow>
+                  </TableHead>
+                  <TableBody>
+                     {rows.map((row) => (
+                        <TableRow key={row.id}>
+                           <TableCell>{row.id}</TableCell>
+                           <TableCell>
+                              <a href="#">{row.name}</a>
+                           </TableCell>
+                           <TableCell>
+                              <LeadBox>
+                                 <Avatar src="https://i.pravatar.cc/40" />
+                                 <span>{row.lead}</span>
+                              </LeadBox>
+                           </TableCell>
+                           <TableCell>
+                              {row.fav ? (
                                  <FavoriteIconstarBlue color="primary" />
                               ) : (
                                  <FavoriteIconstarSilver color="action" />
                               )}
-                           </IconButton>
-                        </TableCell>
-                     </TableRow>
-                  ))}
-               </TableBody>
-            </Table>
-         </TableContainer>
-      </BoxConteiner>
+                           </TableCell>
+                        </TableRow>
+                     ))}
+                  </TableBody>
+               </Table>
+            </StyledTableContainer>
+         </Content>
+      </ConteinerBoxMain>
    )
 }
 
-const BoxConteiner = styled(Box)({
-   width: '1360px',
-   height: '930px',
-   margin: '0 auto',
-   padding: 24, // 3 * 8px (MUI spacing)
-   backgroundColor: '#fff',
-   borderRadius: 16, // 2 * 8px (MUI spacing)
-   boxShadow: 3,
-   display: 'flex',
-   flexDirection: 'column',
+export default Main
+
+const ConteinerBoxMain = styled(Box)({
+   width: null,
 })
 
-const HeaderBox = styled(Box)({
+const Content = styled(Box)({
+   height: '930px',
+   margin: '16px 40px 10px 40px',
+})
+
+const TopBar = styled(Box)(() => ({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
-   marginBottom: 16, // mb: 2 * 8px
+   marginBottom: '20px',
+}))
+
+const H2Workspaces = styled('h2')({
+   margin: '20px 0px 0px 20px',
 })
 
-const WorkspaceLink = styled(Typography)({
-   color: '#1976d2', // primary.main
-   textDecoration: 'underline',
-   cursor: 'pointer',
-   display: 'inline-block',
+const MainAppButton = styled(AppButton)({
+   margin: '16px 16px 0px 0px ',
 })
 
-const LeadCell = styled(TableCell)({
+const StyledTableContainer = styled(Box)(() => ({
+   maxHeight: '700px', // фиксируем высоту для скролла
+   overflowY: 'auto',
+   '& th': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 2,
+      backgroundColor: '#fafafa', // фон, чтобы не смешивался при скролле
+   },
+}))
+
+const NowemberTableCell = styled(TableCell)({
+   width: '60px',
+})
+
+const NameTableCell = styled(TableCell)({
+   width: '791px',
+})
+
+const LeadTableCell = styled(TableCell)({
+   width: '340px',
+})
+
+const ActionTableCell = styled(TableCell)({
+   width: '169px',
+})
+
+const LeadBox = styled(Box)(() => ({
    display: 'flex',
    alignItems: 'center',
-   gap: 8, // 1 * 8px
-   height: '83px',
-})
+   gap: '10px',
+}))

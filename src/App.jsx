@@ -1,8 +1,11 @@
-import React from 'react'
-import DatePicker from './layouts/date-picker/DatePicker'
+import Main from './pages/Main'
 
 function App() {
-   return <h1>Task Tracker</h1>
+   return (
+      <>
+         <Main />
+      </>
+   )
 }
 
 export default App
