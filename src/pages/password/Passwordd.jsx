@@ -1,8 +1,9 @@
-import { Box } from '@mui/material'
-import { Input } from '../components/UI/input/Input'
-import { Black, HideIcon } from '../assets/AllExportIcon'
-import { AppButton } from '../components/UI/AppButton'
+import { Box, } from '@mui/material'
+
+import { Black, HideIcon } from '../../assets/AllExportIcon'
+import { AppButton } from '../../components/UI/AppButton'
 import styled from '@emotion/styled'
+import { Input } from '../../components/UI/input/Input'
 
 export const Passwordd = () => {
    return (

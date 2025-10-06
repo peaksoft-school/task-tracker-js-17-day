@@ -5,8 +5,17 @@ import { HideIcon, SearchIcon } from '../../../assets/AllExportIcon'
 import { blue, grey, red } from '@mui/material/colors'
 
 export const Input = forwardRef(function (
-   { error = false, iconPosition, icon = <SearchIcon />,eye = <HideIcon />, ...rest },
+   {
+      error = false,
+      iconPosition,
+      icon = <SearchIcon />,
+      eye = <HideIcon />,
+      value,
+      onChange,
+      type,
 
+      ...rest
+   },
 
    ref
 ) {
@@ -25,8 +34,10 @@ export const Input = forwardRef(function (
                   <InputAdornment position="end">{icon}</InputAdornment>
                ) : null
             }
-         
             fullWidth
+            value={value}
+            onChange={onChange}
+            type={type}
             {...rest}
          />
       </>

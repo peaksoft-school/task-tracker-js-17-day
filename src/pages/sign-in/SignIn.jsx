@@ -1,12 +1,40 @@
-import { Avatar, Box } from '@mui/material'
-import { Input } from '../components/UI/input/Input'
-import { Black, GoogleIcon, HideIcon } from '../assets/AllExportIcon'
-import { AppButton } from '../components/UI/AppButton'
+import { Avatar, Box, Typography } from '@mui/material'
+import { Input } from '../../components/UI/input/Input'
+import { Black, GoogleIcon, HideIcon } from '../../assets/AllExportIcon'
+import { AppButton } from '../../components/UI/AppButton'
 import styled from '@emotion/styled'
+import { useDispatch } from 'react-redux'
+import { useFormik } from 'formik'
+import * as yup from 'Yup'
 
 export const SignIn = () => {
+   const dispath = useDispatch()
+
+   const onSubmit = (values) => {
+      console.log(values)
+
+      dispath(AUTH_THUNK.signIN({ values }))
+   }
+
+   const signUpSchema = yup.object().shape({
+      email: yup.string().email().required('Email обязателен'),
+      password: yup
+         .string()
+         .required('Пароль обязателен')
+         .min(6, 'Пароль должен быть не менее 6 символов'),
+   })
+
+   const formik = useFormik({
+      initialValues: {
+         email: '',
+         password: '',
+      },
+      validationSchema: signUpSchema,
+      onSubmit,
+   })
+
    return (
-      <StylesBox>
+      <StylesBox onSubmit={formik.handleSubmit}>
          <StylesBoxRight>
             <StylesBoxLogo>
                <Black />
@@ -27,21 +55,45 @@ export const SignIn = () => {
                         <GoogleIcon />
                      </StyledAvatarGoogle>
                   </StyledBoxGoogle>
-                  <Input placeholder="example@gmail.com" type="email" />
+                  <Input
+                     placeholder="example@gmail.com"
+                     type="email"
+                     name="email"
+                     value={formik.values.email}
+                     onChange={formik.handleChange}
+                     error={
+                        formik.touched.email && Boolean(formik.errors.email)
+                     }
+                  />
+                  {formik.touched.email && formik.errors.email && (
+                     <p style={{ color: 'red' }}>{formik.errors.email}</p>
+                  )}
+
                   <Input
                      placeholder="Password"
                      type="password"
                      iconPosition="end"
+                     name="password"
+                     value={formik.values.password}
+                     onChange={formik.handleChange}
+                     error={
+                        formik.touched.password &&
+                        Boolean(formik.errors.password)
+                     }
                      icon={<HideIcon />}
                   />
+                  {formik.touched.password && formik.errors.password && (
+                     <p style={{ color: 'red' }}>{formik.errors.password}</p>
+                  )}
                   <StyledBoxFrogot>
-                     <p>Forgot Password ?</p>
+                     <Typography>Forgot Password ?</Typography>
                   </StyledBoxFrogot>
 
-                  <StyledButton>Log In</StyledButton>
-                  <p>
-                     Not a member? <StyledA href="">Sign up now</StyledA>
-                  </p>
+                  <StyledButton type="submit">Log In</StyledButton>
+                  <Typography>
+                     Not a member?{' '}
+                     <StyledA href="/sign-up">Sign up now</StyledA>
+                  </Typography>
                </StylesBoxInput>
             </Box>
          </StylesBoxRight>
@@ -105,7 +157,7 @@ const StyledButton = styled(AppButton)({
    padding: '8px 60px',
 })
 
-const StylesBox = styled(Box)({
+const StylesBox = styled('form')({
    display: 'flex',
 })
 

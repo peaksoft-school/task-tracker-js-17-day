@@ -1,12 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router'
-
 import { PrivateRoute } from './PrivateRoute'
 import UserRoute from './UserRoute'
 import AdminRoute from './AdminRoute'
 import { ROLES } from './routes'
-import { SignIn } from '../pages/SignIn'
-import { SignUp } from '../pages/SignUp'
-import { Passwordd } from '../pages/Passwordd'
+import { SignUp } from '../pages/sign-up/SignUp'
+import { SignIn } from '../pages/sign-in/SignIn'
+import { Passwordd } from '../pages/password/Passwordd'
 
 const AppRoutes = () => {
    return (
