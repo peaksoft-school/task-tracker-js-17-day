@@ -29,7 +29,7 @@ const rows = [
    { id: 11, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: true },
    { id: 12, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: false },
    { id: 13, name: 'Mobile UX-UI', lead: 'Almaz ALmazov', fav: true },
-
+   
 ]
 
 function Main() {
