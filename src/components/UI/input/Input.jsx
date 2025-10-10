@@ -1,11 +1,22 @@
 import { forwardRef } from 'react'
 import styled from '@emotion/styled'
 import { InputAdornment, InputBase } from '@mui/material'
-import { SearchIcon } from '../../../assets/AllExportIcon'
+import { HideIcon, SearchIcon } from '../../../assets/AllExportIcon'
 import { blue, grey, red } from '@mui/material/colors'
 
 export const Input = forwardRef(function (
-   { error = false, iconPosition, icon = <SearchIcon />, ...rest },
+   {
+      error = false,
+      iconPosition,
+      icon = <SearchIcon />,
+      eye = <HideIcon />,
+      value,
+      onChange,
+      type,
+
+      ...rest
+   },
+
    ref
 ) {
    return (
@@ -24,6 +35,9 @@ export const Input = forwardRef(function (
                ) : null
             }
             fullWidth
+            value={value}
+            onChange={onChange}
+            type={type}
             {...rest}
          />
       </>

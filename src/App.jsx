@@ -1,9 +1,20 @@
-import Main from './pages/Main'
+import React, { useEffect } from 'react'
+import AppRoutes from './routes/AppRoutes'
+import { useDispatch, useSelector } from 'react-redux'
+import { AUTH_THUNK } from './store/slices/auth/authThunk'
 
-function App() {
+const App = () => {
+   const dispath = useDispatch()
+   // const data = useSelector()
+
+   useEffect(() => {
+      dispath(AUTH_THUNK.getAllMembers({ id: 1 }))
+   })
+
    return (
       <>
-         <Main />
+         <AppRoutes />
+         {/* <h1>hello</h1> */}
       </>
    )
 }
