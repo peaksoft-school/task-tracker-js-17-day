@@ -1,40 +1,56 @@
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
-import { SignIn } from '../pages/SignIn'
-import { SignUp } from '../pages/SignUp'
+import { createBrowserRouter } from 'react-router-dom'
 import { PrivateRoute } from './PrivateRoute'
-import UserRoute from './UserRoute'
-import AdminRoute from './AdminRoute'
 import { ROLES } from './routes'
 
-const AppRoutes = () => {
-   return (
-      <Routes>
-         <Route path="/" element={<Navigate to="/sign-in" replace />} />
-         <Route path="/sign-in" element={<SignIn />} />
-         <Route path="/sign-up" element={<SignUp />} />
-
-         <Route
-            path="/user"
-            element={
-               <PrivateRoute
-                  roles={[ROLES.USER]}
-                  component={<UserRoute />}
-                  fallbackPhath={'/sign-in'}
-               />
-            }
+export const routes = createBrowserRouter([
+   {
+      path: '/',
+      element: (
+         <PrivateRoute
+            component={<h1>Sign-in</h1>}
+            roles={[ROLES.GUEST]}
+            fallBacPath="/mainPage"
          />
-         <Route
-            path="/admin"
-            element={
-               <PrivateRoute
-                  roles={[ROLES.ADMIN]}
-                  component={<AdminRoute />}
-                  fallbackPhath={'/sign-in'}
-               />
-            }
-         />
-      </Routes>
-   )
-}
+      ),
+   },
 
-export default AppRoutes
+   {
+      path: '/sign-up',
+      element: (
+         <PrivateRoute
+            component={<h1>Sign-up</h1>}
+            roles={[ROLES.GUEST]}
+            fallBacPath="/mainPage"
+         />
+      ),
+   },
+   {
+      path: `/forgotPassword/:id`,
+      element: (
+         <PrivateRoute
+            component={<h1>ResetPasswordPage</h1>}
+            roles={[ROLES.GUEST]}
+            fallBacPath="/"
+         />
+      ),
+   },
+   {
+      path: '/mainPage/',
+      element: (
+         <PrivateRoute
+            component={
+               <>
+                  <h1>Headers</h1>
+                  <h1>Workspaces</h1>
+               </>
+            }
+            roles={[ROLES.ADMIN, ROLES.USER]}
+            fallBacPath="/"
+         />
+      ),
+   },
+   {
+      path: '*',
+      element: <h1>Этой страницы не существует!!! </h1>,
+   },
+])
