@@ -9,6 +9,8 @@ import GraphicIcon from './images/icon/side panel/Graphic Icon.svg?react'
 import LayoutIcon from './images/icon/side panel/Layout Icon.svg?react'
 import PeopleIcon from './images/icon/side panel/People Icon.svg?react'
 import ToolsIcon from './images/icon/side panel/Tools Icon.svg?react'
+import MenuIconLeft from './images/icon/side panel/Menu Icon Left.svg?react'
+import MenuIconRight from './images/icon/side panel/Menu Icon Right.svg?react'
 //? system
 import ArchiveIcon from './images/icon/system/Archive.svg?react'
 import ArrowsIcon from './images/icon/system/Arrows Icon.svg?react'
@@ -44,6 +46,8 @@ export {
    LayoutIcon,
    PeopleIcon,
    ToolsIcon,
+   MenuIconLeft,
+   MenuIconRight,
    //? system
    ArchiveIcon,
    ArrowsIcon,
