@@ -15,3 +15,12 @@
    font-weight: 700; /* Bold */
    font-style: normal;
 }
+
+@font-face {
+  font-family: 'Cera Pro';
+  src: url('./CeraPro-Thin.woff2') format('woff2'),
+       url('./CeraPro-Thin.woff') format('woff'); /* опционально */
+  font-weight: 100; /* Thin — обычно 100 */
+  font-style: normal;
+  font-display: swap;
+}
