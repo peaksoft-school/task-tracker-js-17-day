@@ -1,4 +1,5 @@
-export const ROUTES = {
-   HOME: '/',
-   ALL_BOARDS: '/all-boards',
+export const ROLES = {
+   GUEST: 'GUEST',
+   ADMIN: 'ADMIN',
+   USER: 'USER',
 }
