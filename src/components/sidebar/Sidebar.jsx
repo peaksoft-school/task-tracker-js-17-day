@@ -1,6 +1,6 @@
-import { IconButton, styled } from '@mui/material'
-import { Title, AccountingLMS } from './index'
 import { useState } from 'react'
+import { IconButton, styled } from '@mui/material'
+import { Title, AccountingLMS } from '../../utils/constants/index'
 import {
    DownIcon,
    FilesAndFoldersIcon,
@@ -12,42 +12,37 @@ import {
    PlusIcon,
    ToolsIcon,
 } from '../../assets/AllExportIcon'
+import SidebarItem from './SidebarItem'
+import Section from './Section'
 
 export default function Sidebar() {
    const [open, setOpen] = useState(false)
-   const handleToggle = () => setOpen((prev) => !prev)
-
    const [activeIndex, setActiveIndex] = useState(null)
-   const [downAL, setDownAL] = useState({})
-   const toggleDownAL = (id) => {
-      setDownAL((prev) => ({
-         ...prev,
-         [id]: !prev[id],
-      }))
-   }
-
-   const [down, setUp] = useState(false)
-   const DownUpTitle = () => setUp((prev) => !prev)
-
    const [activeAL, setActiveAL] = useState(null)
+   const [downAL, setDownAL] = useState({})
+   const [showBoards, setShowBoards] = useState(false)
+
+   const toggleSidebar = () => setOpen((prev) => !prev)
+   const toggleAL = (id) => setDownAL((prev) => ({ ...prev, [id]: !prev[id] }))
+   const toggleBoards = () => setShowBoards((prev) => !prev)
 
    return (
       <SidebarContainer open={open}>
-         <TopSection open={open}>
-            <CircleIconButton onClick={handleToggle} open={open}>
+         <TopSection>
+            <CircleIconButton open={open} onClick={toggleSidebar}>
                {open ? (
-                  <ConteinerMiniLMS>
-                     <LeftIcon style={{ width: 24, height: 24 }} />
+                  <MiniLMS>
+                     <LeftIcon />
                      <LMSSpan>LMS</LMSSpan>
-                  </ConteinerMiniLMS>
+                  </MiniLMS>
                ) : (
                   <span>L</span>
                )}
             </CircleIconButton>
 
-            <NoRippleIconButton onClick={handleToggle}>
+            <MenuButton onClick={toggleSidebar}>
                <MenuIconRight />
-            </NoRippleIconButton>
+            </MenuButton>
          </TopSection>
 
          <Divider open={open} />
@@ -56,211 +51,125 @@ export default function Sidebar() {
             <LayoutIcon />
             {open && (
                <>
-                  <span style={{ marginLeft: 12 }}>Boards</span>
-                  <PlusIcon
-                     style={{
-                        width: '20px',
-                        height: '20px',
-                        marginLeft: '30px',
-                     }}
-                  />
-                  <DownIconButtonBoards open={open}>
-                     <DownIcon
-                        style={{ marginLeft: 7 }}
-                        onClick={DownUpTitle}
-                     />
-                  </DownIconButtonBoards>
+                  <LabelText>Boards</LabelText>
+                  <PlusIconWrapper>
+                     <PlusIcon />
+                  </PlusIconWrapper>
+                  <DownButton onClick={toggleBoards}>
+                     <DownIcon />
+                  </DownButton>
                </>
             )}
          </SelectedMenuItem>
 
-         {open && down && (
-            <TitleBoards>
+         {open && showBoards && (
+            <BoardsContainer>
                {Title.map((label, idx) => (
-                  <TitleMap
+                  <TitleItem
                      key={idx}
-                     label={label}
                      isActive={activeIndex === idx}
                      onClick={() => setActiveIndex(idx)}
-                  />
+                  >
+                     {label}
+                  </TitleItem>
                ))}
-            </TitleBoards>
+            </BoardsContainer>
          )}
 
          <Divider open={open} />
 
-         <MainIcons open={open}>
+         <MainIcons>
             <SidebarItem
-               id={122}
-               isActive={activeIndex === 122}
-               onClick={() => setActiveIndex(122)}
-               open={open}
                icon={<FilesAndFoldersIcon />}
                label="All issues"
                count="(267)"
+               isActive={activeIndex === 122}
+               onClick={() => setActiveIndex(122)}
+               open={open}
             />
             <SidebarItem
-               onClick={() => setActiveIndex(288)}
-               id={288}
-               isActive={activeIndex === 288}
-               open={open}
                icon={<PeopleIcon />}
                label="Participants"
                count="(17)"
+               isActive={activeIndex === 288}
+               onClick={() => setActiveIndex(288)}
+               open={open}
             />
             <SidebarItem
-               id={377}
-               onClick={() => setActiveIndex(377)}
-               open={open}
                icon={<ToolsIcon />}
                label="Setting"
+               isActive={activeIndex === 377}
+               onClick={() => setActiveIndex(377)}
+               open={open}
             />
          </MainIcons>
 
          <Divider open={open} />
 
-         <WorkSpaces>
-            <DivGraph>
-               <GraphIconButton open={open}>
+         <Workspaces>
+            <WorkspaceHeader>
+               <GraphicIconWrapper>
                   <GraphicIcon />
-               </GraphIconButton>
+               </GraphicIconWrapper>
                {open && (
                   <>
-                     <span style={{ marginLeft: 12, marginRight: 24 }}>
-                        Workspaces
-                     </span>
-                     <PlusIcon style={{ width: 20, height: 20 }} />
+                     <LabelText>Workspaces</LabelText>
+                     <PlusIconWrapper>
+                        <PlusIcon />
+                     </PlusIconWrapper>
                   </>
                )}
-            </DivGraph>
+            </WorkspaceHeader>
 
-            {AccountingLMS.map((label, idAL) => (
+            {AccountingLMS.map((label, id) => (
                <Section
-                  key={idAL}
-                  id={idAL}
+                  key={id}
+                  id={id}
                   label={label}
                   open={open}
-                  isActive={activeAL === idAL}
-                  onClick={() => setActiveAL(idAL)}
-                  downAL={!!downAL[idAL]}
-                  toggleDownAL={() => toggleDownAL(idAL)}
+                  downAL={!!downAL[id]}
+                  toggleDownAL={() => toggleAL(id)}
+                  isActive={activeAL === id}
+                  onClick={() => setActiveAL(id)}
                />
             ))}
-            <DicConteiner open={open}>
-               <DownIconButton>
-                  <DownIcon />
-               </DownIconButton>
-               {open && <span style={{ marginLeft: '12px' }}>Show more</span>}
-            </DicConteiner>
-         </WorkSpaces>
+
+            <ShowMore>
+               <DownIcon />
+               {open && <span>Show more</span>}
+            </ShowMore>
+         </Workspaces>
       </SidebarContainer>
    )
 }
 
-function TitleMap({ label, isActive, onClick }) {
-   return (
-      <DivTile isActive={isActive} onClick={onClick}>
-         {label}
-      </DivTile>
-   )
-}
-
-function SidebarItem({ icon, label, count, open, isActive, onClick }) {
-   return (
-      <InteriorConteinerSidebarItem
-         isActive={isActive}
-         onClick={onClick}
-         open={open}
-      >
-         <NoRippleBasicIconButton>{icon}</NoRippleBasicIconButton>
-         {open && (
-            <>
-               <span style={{ margin: '0 12px' }}>{label}</span>
-               {count && <span>{count}</span>}
-            </>
-         )}
-      </InteriorConteinerSidebarItem>
-   )
-}
-
-function Section({ id, label, open, downAL, toggleDownAL }) {
-   const isAccounting = label === 'Accounting'
-   const Wrapper = isAccounting ? SectionWrapperA : SectionWrapperL
-   const Text = isAccounting ? SpanAccounting : SpanLMS
-
-   return (
-      <>
-         <InteriorConteinerSection>
-            <Wrapper open={open}>
-               <span>{label[0]}</span>
-            </Wrapper>
-            {open && (
-               <>
-                  <Text>{label}</Text>
-                  <DivSectionDownIconButtton onClick={toggleDownAL}>
-                     <DownIcon />
-                  </DivSectionDownIconButtton>
-               </>
-            )}
-         </InteriorConteinerSection>
-
-         {open && downAL && (
-            <div>
-               <SidebarTechnicalPartAL
-                  id={id}
-                  icon={<LayoutIcon />}
-                  label="Boards"
-               />
-               <SidebarTechnicalPartAL
-                  id={id}
-                  icon={<PeopleIcon />}
-                  label="Participants"
-                  iconPlus={<PlusIcon />}
-               />
-               <SidebarTechnicalPartAL
-                  id={id}
-                  icon={<ToolsIcon />}
-                  label="Setting"
-               />
-            </div>
-         )}
-      </>
-   )
-}
-
-function SidebarTechnicalPartAL({ icon, label, iconPlus }) {
-   return (
-      <BoxAL>
-         <div>{icon}</div>
-         <span>{label}</span>
-         <DivPlusIcon>{iconPlus}</DivPlusIcon>
-      </BoxAL>
-   )
-}
-
-/* ---------- styled ---------- */
 const SidebarContainer = styled('div')(({ open }) => ({
-   overflow: 'auto',
    width: open ? 250 : 116,
+   transition: 'width 0.5s',
    height: '100vh',
-   background: 'rgba(248, 248, 248, 0.6)',
-   paddingTop: 93,
    display: 'flex',
    flexDirection: 'column',
-   scrollbarWidth: 'thin',
+   paddingTop: 93,
+   overflow: 'auto',
+   background: 'rgba(248,248,248,0.6)',
+   alignItems: 'center',
 }))
 
-const TopSection = styled('div')(({ open }) => ({
+const TopSection = styled('div')({
    display: 'flex',
    alignItems: 'center',
    marginLeft: 40,
-   marginBottom: open ? 22.5 : 17.5,
-}))
+   marginBottom: 22,
+})
 
 const CircleIconButton = styled('div')(({ open }) => ({
    borderRadius: 24,
-   backgroundColor: open ? null : 'rgba(0, 121, 191, 1)',
-   padding: open ? null : '5px 13px',
+   padding: open ? undefined : '5px 13px',
+   backgroundColor: open ? undefined : 'rgba(0,121,191,1)',
+   cursor: 'pointer',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
    '& span': {
       color: open ? 'black' : '#fff',
       fontSize: open ? 18 : 20,
@@ -268,18 +177,15 @@ const CircleIconButton = styled('div')(({ open }) => ({
    },
 }))
 
-const ConteinerMiniLMS = styled('div')({
+const MiniLMS = styled('div')({
    display: 'flex',
-   gap: 11,
    alignItems: 'center',
+   gap: 11,
 })
 
-const LMSSpan = styled('span')({
-   display: 'inline-block',
-   width: 135,
-})
+const LMSSpan = styled('span')({ width: 135 })
 
-const NoRippleIconButton = styled(IconButton)({
+const MenuButton = styled(IconButton)({
    width: 23,
    height: 22,
    padding: 0,
@@ -287,131 +193,74 @@ const NoRippleIconButton = styled(IconButton)({
    '& svg': { width: 20, height: 20 },
 })
 
-const DownIconButtonBoards = styled(IconButton)({
-   padding: 0,
-   width: 30,
-   height: 30,
-})
+const Divider = styled('div')(({ open }) => ({
+   width: open ? 170 : 36,
+   border: '1px solid rgba(224,224,224,1)',
+}))
 
 const SelectedMenuItem = styled('div')(({ open }) => ({
-   width: open ? 227 : 100,
+   width: open ? '100%' : 100,
    height: 37,
    borderRadius: '0 24px 24px 0',
-   background: 'rgba(58, 104, 131, 0.6)',
-   padding: open ? '8px 17px 8px 43px' : '8px 32px 9px 48px',
-   margin: '11.5px 0 20.5px 0',
    display: 'flex',
    alignItems: 'center',
+   justifyContent: 'center',
+   padding: open ? '8px 32px 8px 32px' : '8px 32px 9px 32px',
+   background: open ? 'rgba(58,104,131,0.6)' : undefined,
+   margin: '10px 0',
 }))
 
-const TitleBoards = styled('div')({
-   margin: '9px 0 19.5px 54px',
+const BoardsContainer = styled('div')({
+   margin: '10px 0',
+   justifyContent: 'center',
    display: 'flex',
    flexDirection: 'column',
-   borderLeft: '1px solid rgba(224, 224, 224, 1)',
-   minHeight: '200px',
+   borderLeft: '1px solid rgba(224,224,224,1)',
+   minHeight: 200,
 })
 
-const DivTile = styled('div')(({ isActive }) => ({
-   maxWidth: isActive ? '172px' : '54px',
-   borderRadius: isActive ? '0 24px 24px 0' : null,
-   background: isActive ? 'rgba(230, 234, 237, 1)' : null,
-   height: '36px',
+const TitleItem = styled('div')(({ isActive }) => ({
+   maxWidth: isActive ? 172 : 54,
+   borderRadius: isActive ? '0 24px 24px 0' : undefined,
+   background: isActive ? 'rgba(230,234,237,1)' : undefined,
+   height: 36,
    display: 'flex',
    alignItems: 'center',
-   paddingLeft: '21px',
+   padding: '0 21px',
+   cursor: 'pointer',
 }))
 
-const MainIcons = styled('div')(({ open }) => ({
+const MainIcons = styled('div')({
    display: 'flex',
    flexDirection: 'column',
-   margin: '20.5px 0 19.5px',
-   gap: open ? null : 20,
-   marginLeft: open ? null : 48,
-}))
-
-const InteriorConteinerSidebarItem = styled('div')(({ isActive, open }) => ({
-   display: 'flex',
-   alignItems: 'center',
-   width: isActive ? 227 : null,
-   background: open ? (isActive ? 'rgba(58, 104, 131, 0.6)' : null) : null,
-   borderRadius: open ? (isActive ? '0 24px 24px 0' : null) : null,
-   padding: open ? '8px 32px 9px 43px' : null,
-}))
-
-const NoRippleBasicIconButton = styled(IconButton)({
-   padding: 0,
-   '& svg': { width: 20, height: 20 },
-})
-
-const WorkSpaces = styled('div')({
-   marginTop: 21.5,
-   display: 'flex',
-   flexDirection: 'column',
+   margin: '20px 0',
    gap: 16,
 })
 
-const DivGraph = styled('div')({ display: 'flex' })
-
-const GraphIconButton = styled('div')(({ open }) => ({
-   width: 20,
-   height: 20,
-   marginLeft: open ? 44 : 47,
-}))
-
-const SectionWrapperL = styled('div')(({ open }) => ({
-   width: 27,
-   height: 27,
-   padding: '4px 9px 3px',
-   borderRadius: 16,
-   background: 'rgba(44, 177, 7, 1)',
-   marginLeft: open ? 40 : 44,
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   '& span': { color: '#fff' },
-}))
-
-const SectionWrapperA = styled(SectionWrapperL)({
-   padding: '4px 8px 3px',
-})
-
-const SpanAccounting = styled('div')({ margin: '0 37px 0 8px' })
-const SpanLMS = styled('div')({ margin: '0 83px 0 8px' })
-
-const Divider = styled('div')(({ open }) => ({
-   width: open ? 170 : 36,
-   border: '1px solid rgba(224, 224, 224, 1)',
-   marginLeft: 40,
-}))
-
-const InteriorConteinerSection = styled('div')({
-   display: 'flex',
-   alignItems: 'center',
-})
-
-const BoxAL = styled('div')({
-   display: 'flex',
-   alignItems: 'center',
-   marginLeft: 75,
-   gap: 8,
-})
-
-const DivPlusIcon = styled('div')({
-   '& svg': { width: 20, height: 20 },
+const PlusIconWrapper = styled('div')({
    marginLeft: 6,
+   '& svg': { width: 20, height: 20 },
 })
+const LabelText = styled('span')({ marginLeft: 12 })
 
-const DivSectionDownIconButtton = styled(IconButton)({ padding: 0 })
-
-const DicConteiner = styled('div')({
+const Workspaces = styled('div')({
+   marginTop: 21.5,
    display: 'flex',
+   flexDirection: 'column',
+   alignItems: 'center',
+   gap: 16,
 })
+const WorkspaceHeader = styled('div')({ display: 'flex', alignItems: 'center' })
 
-const DownIconButton = styled(IconButton)({
-   padding: 0,
+const GraphicIconWrapper = styled('div')({
    width: 20,
    height: 20,
-   marginLeft: 47,
+})
+
+const DownButton = styled(IconButton)({ padding: 0, marginLeft: 7 })
+
+const ShowMore = styled('div')({
    display: 'flex',
+   alignItems: 'center',
+   cursor: 'pointer',
 })

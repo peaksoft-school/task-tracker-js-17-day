@@ -1,11 +1,3 @@
-import Sidebar from './components/sidebar/Sidebar'
-
-const App = () => {
-   return (
-      <div>
-         <Sidebar />
-      </div>
-   )
-}
+const App = () => <h1>Task-Tracker</h1>
 
 export default App
