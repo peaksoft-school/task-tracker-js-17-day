@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { IconButton, styled } from '@mui/material'
-import { Title, AccountingLMS } from '../../utils/constants/index'
+import { Title, AccountingLMS } from '../../../utils/constants/index'
 import {
    DownIcon,
    FilesAndFoldersIcon,
@@ -11,7 +11,7 @@ import {
    PeopleIcon,
    PlusIcon,
    ToolsIcon,
-} from '../../assets/AllExportIcon'
+} from '../../../assets/AllExportIcon'
 import SidebarItem from './SidebarItem'
 import Section from './Section'
 

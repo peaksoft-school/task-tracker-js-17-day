@@ -6,7 +6,7 @@ import {
    PeopleIcon,
    PlusIcon,
    ToolsIcon,
-} from '../../assets/AllExportIcon'
+} from '../../../assets/AllExportIcon'
 
 function Section({ label, open, downAL, toggleDownAL, onClick }) {
    const isAccounting = label === 'Accounting'
