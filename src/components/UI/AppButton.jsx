@@ -6,7 +6,7 @@ export const AppButton = ({
    children,
    onClick,
    disabled,
-   type = 'button',
+   type = 'sabmit',
    ...rest
 }) => {
    const bluee = themeColors.palette.primary.blue

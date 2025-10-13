@@ -1,13 +1,16 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { PrivateRoute } from './PrivateRoute'
 import { ROLES } from './routes'
+import { SignIn } from '../pages/sign-in/SignIn'
+import { SignUp } from '../pages/sign-up/SignUp'
+import { ChangePassword } from '../pages/change-password/ChangePassword'
 
 export const routes = createBrowserRouter([
    {
       path: '/',
       element: (
          <PrivateRoute
-            component={<h1>Sign-in</h1>}
+            component={<SignIn />}
             roles={[ROLES.GUEST]}
             fallBacPath="/mainPage"
          />
@@ -18,24 +21,24 @@ export const routes = createBrowserRouter([
       path: '/sign-up',
       element: (
          <PrivateRoute
-            component={<h1>Sign-up</h1>}
+            component={<SignUp />}
             roles={[ROLES.GUEST]}
-            fallBacPath="/mainPage"
+            fallBacPath="/main-page"
          />
       ),
    },
    {
-      path: `/forgotPassword/:id`,
+      path: `/forgot-password/:id`,
       element: (
          <PrivateRoute
-            component={<h1>ResetPasswordPage</h1>}
+            component={<ChangePassword />}
             roles={[ROLES.GUEST]}
             fallBacPath="/"
          />
       ),
    },
    {
-      path: '/mainPage/',
+      path: '/main-page/',
       element: (
          <PrivateRoute
             component={

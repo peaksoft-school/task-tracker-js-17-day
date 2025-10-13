@@ -37,6 +37,9 @@ import DoneNotificationIcon from './images/icon/notificationIcons/Done.svg?react
 import ErrorNotificationIcon from './images/icon/notificationIcons/Error.svg?react'
 import WarningNotificationIcon from './images/icon/notificationIcons/Warning.svg?react'
 import WhitePliusIcon from './images/icon/system/Alerts, Warning, Signs Icon.svg?react'
+import Black from './images/icon/system/Black and White Collection 2.svg?react'
+import GoogleIcon from './images/icon/system/googleIkon.svg?react'
+
 
 export {
    //? arrows
@@ -79,4 +82,6 @@ export {
    ErrorNotificationIcon,
    WarningNotificationIcon,
    WhitePliusIcon,
+   Black,
+   GoogleIcon,
 }
