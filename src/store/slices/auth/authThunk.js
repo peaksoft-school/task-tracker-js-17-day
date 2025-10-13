@@ -4,6 +4,7 @@ import { axiosInstance } from '../../../configs/axiosinstance'
 const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-up', values)
+
       return data
    } catch (error) {
       console.log(error.massage)
@@ -13,13 +14,14 @@ const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
 const signIn = createAsyncThunk('auth/signIn', async ({ values }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-in', values)
+
       return data
    } catch (error) {
       console.log(error.massage)
    }
 })
 
-const password=createAsyncThunk('auth/password', async ({ values }) => {
+const password = createAsyncThunk('auth/password', async ({ values }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/password', values)
       return data
@@ -31,4 +33,5 @@ const password=createAsyncThunk('auth/password', async ({ values }) => {
 export const AUTH_THUNK = {
    signUP,
    signIn,
+   password,
 }
