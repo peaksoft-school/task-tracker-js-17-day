@@ -143,6 +143,8 @@ export const SignUp = () => {
                      placeholder="Repeat password"
                      type="password"
                      iconPosition="end"
+                     name="repeatPassword"
+                     onChange={formik.handleChange}
                      icon={<ShowIcon />}
                      error={
                         formik.touched.repeatPassword &&

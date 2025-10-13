@@ -6,6 +6,7 @@ import { ROLES } from './routes'
 import { SignUp } from '../pages/sign-up/SignUp'
 import { SignIn } from '../pages/sign-in/SignIn'
 import { Passwordd } from '../pages/password/Passwordd'
+import { Board } from '../pages/board/Board'
 
 const AppRoutes = () => {
    return (
@@ -35,6 +36,7 @@ const AppRoutes = () => {
                />
             }
          />
+         <Route path='/board' element={<Board/>} />   
       </Routes>
    )
 }
