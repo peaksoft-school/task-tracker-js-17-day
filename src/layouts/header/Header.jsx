@@ -56,6 +56,7 @@ export const Header = ({
       </header>
    )
 }
+
 const StylesBoxHeder = styled(Box)(({}) => ({
    display: 'flex',
    justifyContent: 'space-between',
