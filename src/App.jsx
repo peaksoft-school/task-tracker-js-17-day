@@ -1,12 +1,8 @@
-import React from 'react'
-import { Header } from './layouts/header/Header'
+import { RouterProvider } from 'react-router-dom'
+import { routes } from './routes/AppRoutes'
 
-function App() {
-   return (
-      <div>
-         <Header status={true} />
-      </div>
-   )
+const App = () => {
+   return <RouterProvider router={routes} />
 }
 
 export default App
