@@ -8,6 +8,7 @@ import Notify from '../../assets/images/icon/system/Notify.svg'
 import StrelkaDown from '../../assets/images/icon/arrows/down.svg'
 
 // const existsRoutes = [ROUTES.HOME, ROUTES.ALL_BOARDS] // роуты, для которых нужно показывать Header
+
 export const Header = ({ favouritesCount, notificationCount }) => {
    // if (!favouritesCount) return null // если нет избранных элементов, возвращаем null
    // const ctateHeders = 12 // количество заголовков, можно заменить на состояние или пропс

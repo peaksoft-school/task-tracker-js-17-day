@@ -1,11 +1,22 @@
-import { Box, } from '@mui/material'
-
-import { Black, HideIcon } from '../../assets/AllExportIcon'
+import { Box, styled, Typography } from '@mui/material'
+import { Black, HideIcon, ShowIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
-import styled from '@emotion/styled'
-import { Input } from '../../components/UI/input/Input'
+import { Input } from '../../components/UI/Input'
+import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
+import { useState } from 'react'
 
-export const Passwordd = () => {
+export const ChangePassword = () => {
+   const [showPassword, setShowPassword] = useState(false)
+
+   const [showRepitPassword, setShowRepitPassword] = useState(false)
+
+   const inputPassword = () => {
+      setShowPassword(!showPassword)
+   }
+   const inputRepitPassword = () => {
+      setShowRepitPassword(!showRepitPassword)
+   }
+
    return (
       <StylesBox>
          <StylesBoxRight>
@@ -13,35 +24,39 @@ export const Passwordd = () => {
                <Black />
                Task Tracker
             </StylesBoxLogo>
+
             <Box>
                <StylesBoxInput>
-                  <h2>Password</h2>
+                  <Typography variant="h2">Password</Typography>
+
                   <Input
                      placeholder="Password"
-                     type="password"
+                     type={showPassword ? 'text' : 'password'}
                      iconPosition="end"
-                     icon={<HideIcon />}
+                     onClick={inputPassword}
+                     icon={showPassword ? <ShowIcon /> : <HideIcon />}
                   />
+
                   <Input
                      placeholder="Repeat password"
-                     type="Password"
+                     type={showRepitPassword ? 'text' : 'password'}
+                     onClick={inputRepitPassword}
+                     icon={showRepitPassword ? <ShowIcon /> : <HideIcon />}
                      iconPosition="end"
-                     icon={<HideIcon />}
                   />
 
                   <StyledButton>Log In</StyledButton>
                </StylesBoxInput>
             </Box>
          </StylesBoxRight>
+
          <StylesBoxLeft>
-            <StylesImg
-               src="src/assets/images/icon/imgbackraund/Rectangle 77.png"
-               alt=""
-            />
+            <img src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
 }
+
 const StyledA = styled('a')({
    color: '#0079c0',
 })

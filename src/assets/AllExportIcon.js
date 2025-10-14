@@ -9,6 +9,8 @@ import GraphicIcon from './images/icon/side panel/Graphic Icon.svg?react'
 import LayoutIcon from './images/icon/side panel/Layout Icon.svg?react'
 import PeopleIcon from './images/icon/side panel/People Icon.svg?react'
 import ToolsIcon from './images/icon/side panel/Tools Icon.svg?react'
+import MenuIconLeft from './images/icon/side panel/Menu Icon Left.svg?react'
+import MenuIconRight from './images/icon/side panel/Menu Icon Right.svg?react'
 //? system
 import ArchiveIcon from './images/icon/system/Archive.svg?react'
 import ArrowsIcon from './images/icon/system/Arrows Icon.svg?react'
@@ -31,10 +33,12 @@ import SearchIcon from './images/icon/system/Search.svg?react'
 import ShowIcon from './images/icon/system/Show.svg?react'
 import StarIcon from './images/icon/system/Star.svg?react'
 import TemplateIcon from './images/icon/system/Template.svg?react'
+import DoneNotificationIcon from './images/icon/notificationIcons/Done.svg?react'
+import ErrorNotificationIcon from './images/icon/notificationIcons/Error.svg?react'
+import WarningNotificationIcon from './images/icon/notificationIcons/Warning.svg?react'
 import WhitePliusIcon from './images/icon/system/Alerts, Warning, Signs Icon.svg?react'
 import Black from './images/icon/system/Black and White Collection 2.svg?react'
 import GoogleIcon from './images/icon/system/googleIkon.svg?react'
-
 
 export {
    //? arrows
@@ -48,6 +52,8 @@ export {
    LayoutIcon,
    PeopleIcon,
    ToolsIcon,
+   MenuIconLeft,
+   MenuIconRight,
    //? system
    ArchiveIcon,
    ArrowsIcon,
@@ -70,6 +76,10 @@ export {
    ShowIcon,
    StarIcon,
    TemplateIcon,
+   //? notificationIcons
+   DoneNotificationIcon,
+   ErrorNotificationIcon,
+   WarningNotificationIcon,
    WhitePliusIcon,
    Black,
    GoogleIcon,
