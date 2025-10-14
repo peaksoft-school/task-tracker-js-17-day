@@ -20,7 +20,7 @@ axiosInstance.interceptors.request.use(
    (config) => {
       const updateConfig = { ...config }
 
-      const { token } = customStore.getState()?.auth
+      const { token } = customStore.getState().auth
 
       if (token) {
          updateConfig.headers.Authorization = `Bearer ${token}`
@@ -33,11 +33,12 @@ axiosInstance.interceptors.request.use(
       return Promise.reject(error)
    }
 )
-axiosInstance.interceptors.request.use(
-   (respons) => {
-      return Promise.resolve(respons)
+
+axiosInstance.interceptors.response.use(
+   (response) => {
+      return Promise.resolve(response)
    },
-   // перепроверка ошибки от бек
+
    (error) => {
       return Promise.reject(error)
    }

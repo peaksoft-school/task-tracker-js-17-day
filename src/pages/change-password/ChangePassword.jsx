@@ -1,11 +1,9 @@
-import { Box, } from '@mui/material'
-
+import { Box, styled, Typography } from '@mui/material'
 import { Black, HideIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
-import styled from '@emotion/styled'
-import { Input } from '../../components/UI/input/Input'
+import { Input } from '../../components/UI/Input'
 
-export const Passwordd = () => {
+export const ChangePassword = () => {
    return (
       <StylesBox>
          <StylesBoxRight>
@@ -13,15 +11,18 @@ export const Passwordd = () => {
                <Black />
                Task Tracker
             </StylesBoxLogo>
+
             <Box>
                <StylesBoxInput>
-                  <h2>Password</h2>
+                  <Typography variant="h2">Password</Typography>
+
                   <Input
                      placeholder="Password"
                      type="password"
                      iconPosition="end"
                      icon={<HideIcon />}
                   />
+
                   <Input
                      placeholder="Repeat password"
                      type="Password"
@@ -33,6 +34,7 @@ export const Passwordd = () => {
                </StylesBoxInput>
             </Box>
          </StylesBoxRight>
+
          <StylesBoxLeft>
             <StylesImg
                src="src/assets/images/icon/imgbackraund/Rectangle 77.png"
@@ -42,6 +44,7 @@ export const Passwordd = () => {
       </StylesBox>
    )
 }
+
 const StyledA = styled('a')({
    color: '#0079c0',
 })

@@ -1,38 +1,29 @@
+import storageSession from 'redux-persist/lib/storage/session'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { persistStore, persistReducer } from 'redux-persist'
 import { authSlice } from './slices/auth/authSlice'
-import storage from 'redux-persist/lib/storage'
-import persistReducer from 'redux-persist/es/persistReducer'
-import persistStore from 'redux-persist/es/persistStore'
-import {
-   FLUSH,
-   PAUSE,
-   PERSIST,
-   PURGE,
-   REGISTER,
-   REHYDRATE,
-} from 'redux-persist'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
 })
 
 const persistConfig = {
-   key: 'TASK-TRACER', 
-   storage,
+   key: 'BILINGUAL',
+   storage: storageSession,
+   whitelist: [authSlice.name],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
    reducer: persistedReducer,
+
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-         serializableCheck: {
-            ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-         },
+         serializableCheck: false,
       }),
 })
 
-const persistore = persistStore(store)
+const persistor = persistStore(store)
 
-export { store, persistore }
+export { store, persistor }

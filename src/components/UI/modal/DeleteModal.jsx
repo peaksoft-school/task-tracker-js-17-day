@@ -1,5 +1,4 @@
-import { Modal as MuiModal, Box, IconButton } from '@mui/material'
-import styled from '@emotion/styled'
+import { Modal as MuiModal, Box, IconButton, styled } from '@mui/material'
 import { ExitIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../UI/AppButton'
 

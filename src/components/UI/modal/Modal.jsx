@@ -1,5 +1,4 @@
-import { Modal as MuiModal, Box } from '@mui/material'
-import styled from '@emotion/styled'
+import { Modal as MuiModal, Box, styled } from '@mui/material'
 
 export const CustomModal = ({ children, isVisible, handleVisible }) => (
    <StyledModal
@@ -33,6 +32,7 @@ const ContentBox = styled(Box)({
    borderRadius: 10,
    background: '#fff',
    animation: 'fadeIn 0.25s ease-in-out',
+
    '@keyframes fadeIn': {
       from: { opacity: 0, transform: 'translateY(-6px)' },
       to: { opacity: 1, transform: 'translateY(0)' },

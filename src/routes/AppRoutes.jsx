@@ -1,42 +1,59 @@
-import { Navigate, Route, Routes } from 'react-router'
+import { createBrowserRouter } from 'react-router-dom'
 import { PrivateRoute } from './PrivateRoute'
-import UserRoute from './UserRoute'
-import AdminRoute from './AdminRoute'
 import { ROLES } from './routes'
-import { SignUp } from '../pages/sign-up/SignUp'
 import { SignIn } from '../pages/sign-in/SignIn'
-import { Passwordd } from '../pages/password/Passwordd'
+import { SignUp } from '../pages/sign-up/SignUp'
+import { ChangePassword } from '../pages/change-password/ChangePassword'
 
-const AppRoutes = () => {
-   return (
-      <Routes>
-         <Route path="/" element={<Navigate to="/sign-in" replace />} />
-         <Route path="/sign-in" element={<SignIn />} />
-         <Route path="/sign-up" element={<SignUp />} />
-         <Route path="/password" element={<Passwordd />} />
-
-         <Route
-            path="/user"
-            element={
-               <PrivateRoute
-                  roles={[ROLES.USER]}
-                  component={<UserRoute />}
-                  fallbackPhath={'/sign-in'}
-               />
-            }
+export const routes = createBrowserRouter([
+   {
+      path: '/',
+      element: (
+         <PrivateRoute
+            component={<SignIn />}
+            roles={[ROLES.GUEST]}
+            fallBacPath="/mainPage"
          />
-         <Route
-            path="/admin"
-            element={
-               <PrivateRoute
-                  roles={[ROLES.ADMIN]}
-                  component={<AdminRoute />}
-                  fallbackPhath={'/sign-in'}
-               />
-            }
-         />
-      </Routes>
-   )
-}
+      ),
+   },
 
-export default AppRoutes
+   {
+      path: '/sign-up',
+      element: (
+         <PrivateRoute
+            component={<SignUp />}
+            roles={[ROLES.GUEST]}
+            fallBacPath="/main-page"
+         />
+      ),
+   },
+   {
+      path: `/forgot-password/:id`,
+      element: (
+         <PrivateRoute
+            component={<ChangePassword />}
+            roles={[ROLES.GUEST]}
+            fallBacPath="/"
+         />
+      ),
+   },
+   {
+      path: '/main-page/',
+      element: (
+         <PrivateRoute
+            component={
+               <>
+                  <h1>Headers</h1>
+                  <h1>Workspaces</h1>
+               </>
+            }
+            roles={[ROLES.ADMIN, ROLES.USER]}
+            fallBacPath="/"
+         />
+      ),
+   },
+   {
+      path: '*',
+      element: <h1>Этой страницы не существует!!! </h1>,
+   },
+])
