@@ -1,21 +1,13 @@
-import { Avatar, Box, Typography } from '@mui/material'
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import { Input } from '../../components/UI/input/Input'
+import { Avatar, Box, Typography, styled } from '@mui/material'
+import { Input } from '../../components/UI/Input'
 import UserImage from '../../assets/images/icon/iconpeople/ikonmen.jpg'
 import Logo from '../../assets/images/icon/system/Black and White Collection 2.svg'
 import Notify from '../../assets/images/icon/system/Notify.svg'
 import StrelkaDown from '../../assets/images/icon/arrows/down.svg'
 
-// const existsRoutes = [ROUTES.HOME, ROUTES.ALL_BOARDS] // роуты, для которых нужно показывать Header
-
 export const Header = ({ favouritesCount, notificationCount }) => {
-   // if (!favouritesCount) return null // если нет избранных элементов, возвращаем null
-   // const ctateHeders = 12 // количество заголовков, можно заменить на состояние или пропс
-   // const isShowHeader = existsRoutes.includes(window.location.pathname) // проверяем, нужно ли показывать Header в зависимости от текущего пути
-   // if (!isShowHeader) return null // если Header не нужен, возвращаем null
+   const statusInput = status
 
-   const statusInput = status // можно заменить на состояние или пропс, чтобы управлять отображением инпута
    return (
       <header>
          <StylesBoxHeder>
@@ -58,7 +50,7 @@ const StylesBoxHeder = styled(Box)(({}) => ({
    display: 'flex',
    justifyContent: 'space-between',
    padding: '16px 40px',
-   backgroundColor:'#ffffff'
+   backgroundColor: '#ffffff',
 }))
 
 const StylesBoxOneHeader = styled(Box)(({}) => ({
