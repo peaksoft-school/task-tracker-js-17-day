@@ -27,7 +27,6 @@ export const SignUp = () => {
       handleChange,
       touched,
       errors,
-      onClickShowPassword,
    } = useFormik({
       initialValues: {
          name: '',

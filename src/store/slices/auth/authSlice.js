@@ -24,6 +24,7 @@ const authSlice = createSlice({
             state.userId = action.payload.userId
             state.isAuth = true
             state.isLoading = false
+            
          })
          .addCase(AUTH_THUNK.signUP.pending, (state) => {
             state.isLoading = true

@@ -9,8 +9,8 @@ import {
    PenselIcon,
    PeopleIcon,
    TemplateIcon,
-   ThreeDotsIcon,
-   TypographyIcon,
+   // ThreeDotsIcon,
+   // TypographyIcon,
 } from '../../assets/AllExportIcon'
 import styled from '@emotion/styled'
 import AddIcon from '@mui/icons-material/Add'
@@ -452,14 +452,14 @@ const StyledAvatar = styled(AppButton)(({}) => ({
    backgroundColor: '#ffffff',
    borderRadius: '50%',
    width: '32px',
-   height: '32px', 
-   minWidth: '32px', 
-   padding: 0, 
+   height: '32px',
+   minWidth: '32px',
+   padding: 0,
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',
    '&:hover': {
-     backgroundColor: '#E4E9F0',
+      backgroundColor: '#E4E9F0',
    },
 }))
 

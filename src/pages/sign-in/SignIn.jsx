@@ -12,11 +12,15 @@ import { useFormik } from 'formik'
 import { VALIDATION_SIGN_IN } from '../../utils/helpers/validation'
 import { useState } from 'react'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
+import { AUTH_THUNK } from '../../store/slices/auth/authThunk' 
+import { useNavigate } from 'react-router-dom'
 
 export const SignIn = () => {
    const dispatch = useDispatch()
+const navigate = useNavigate()
 
-   const onSubmit = (values) => dispatch(AUTH_THUNK.signIN({ values }))
+
+   const onSubmit = (values) => dispatch(AUTH_THUNK.signIn({ values,navigate }))
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {

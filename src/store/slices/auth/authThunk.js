@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
+import { useNavigate } from 'react-router-dom'
 
 const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
    try {
@@ -11,10 +12,10 @@ const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
    }
 })
 
-const signIn = createAsyncThunk('auth/signIn', async ({ values }) => {
+const signIn = createAsyncThunk('auth/signIn', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-in', values)
-
+      navigate('/board')
       return data
    } catch (error) {
       console.log(error.massage)

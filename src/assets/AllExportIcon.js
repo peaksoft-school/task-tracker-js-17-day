@@ -39,6 +39,12 @@ import WarningNotificationIcon from './images/icon/notificationIcons/Warning.svg
 import WhitePliusIcon from './images/icon/system/Alerts, Warning, Signs Icon.svg?react'
 import Black from './images/icon/system/Black and White Collection 2.svg?react'
 import GoogleIcon from './images/icon/system/googleIkon.svg?react'
+import CheckMarkIcon from './images/icon/system/CheckMark.svg?react'
+import CommunicationIcon from './images/icon/system/Communication Icon.svg?react'
+import HourglassIcon from './images/icon/system/Hourglass.svg?react'
+import NotifyIcon from './images/icon/system/Notify.svg?react'
+import PenselIcon from './images/icon/system/Pensel.svg?react'
+
 
 export {
    //? arrows
@@ -61,17 +67,22 @@ export {
    CalendarIcon,
    CheckIcon,
    ClockIcon,
+   CheckMarkIcon,
+   CommunicationIcon,
    CopyIcon,
    DeleteIcon,
    DoneIcon,
    EditIcon,
    ExitIcon,
    HideIcon,
+   HourglassIcon,
    LabelIcon,
    MemberIcon,
    MinusIcon,
    NotificationIcon,
+   NotifyIcon,
    PlusIcon,
+   PenselIcon,
    SearchIcon,
    ShowIcon,
    StarIcon,

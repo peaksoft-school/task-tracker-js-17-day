@@ -2,10 +2,11 @@ import { createBrowserRouter } from 'react-router-dom'
 import { PrivateRoute } from './PrivateRoute'
 import { ROLES } from './routes'
 import { SignIn } from '../pages/sign-in/SignIn'
-import { Board } from '../pages/board/Board'
+
 import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
 import { InnerPageBoard } from '../pages/board/InnerPageBoard'
+import Board from '../pages/board/Board'
 
 export const routes = createBrowserRouter([
    {
