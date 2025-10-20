@@ -27,7 +27,7 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                         Favourites {favouritesCount}{' '}
                         <img src={StrelkaDown} alt="" />
                      </Typography>
-                  )}
+                  )} 
                </StylesBoxOneHeaderDoucher>
             </StylesBoxOneHeader>
             <StylesBoxTwoHeader>
