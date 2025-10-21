@@ -13,6 +13,7 @@ export const Input = forwardRef(function (
       onChange,
       type,
       onClick,
+      placeholder=null,
 
       ...rest
    },
@@ -22,6 +23,7 @@ export const Input = forwardRef(function (
    return (
       <>
          <StyledInput
+         placeholder={placeholder}
             error={error}
             onClick={onClick} 
             inputRef={ref}
