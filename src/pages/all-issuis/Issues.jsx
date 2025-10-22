@@ -150,7 +150,6 @@ export default function IssuesPage() {
                            isVisible={isDataModalOpen}
                            handleVisible={handlDataModalVisible}
                         >
-
                            {/* === End Date Picker === */}
                            <LocalizationProvider
                               dateAdapter={AdapterDayjs}
