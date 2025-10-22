@@ -15,4 +15,19 @@ const workSpaceById = createAsyncThunk(
    }
 )
 
-export const BOARD_THUNK = { workSpaceById }
+const boardPost = createAsyncThunk('api/boards', async (req) => {
+   const { name, description, backgroundUrl, workspaceId = 1 } = req
+   console.log(req)
+   try {
+      const { data } = await axiosInstance.post(
+         `api/boards?workspaceId=${workspaceId}`,
+         req
+      )
+
+      return data
+   } catch (error) {
+      console.log(error.massage)
+   }
+})
+
+export const BOARD_THUNK = { workSpaceById, boardPost }

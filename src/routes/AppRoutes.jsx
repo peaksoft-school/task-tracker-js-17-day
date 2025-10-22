@@ -60,11 +60,11 @@ export const routes = createBrowserRouter([
 
    {
       path: '/board',
-      element:  <Board/>,
+      element: <Board />,
    },
    {
       path: '/InnerPage-board',
-      element:  <InnerPageBoard/>,
+      element: <InnerPageBoard />,
    },
 
    {

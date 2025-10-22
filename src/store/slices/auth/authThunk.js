@@ -1,13 +1,23 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
 import { useNavigate } from 'react-router-dom'
+import { showNotification } from '../../../utils/helpers/notification'
 
 const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-up', values)
-
+      showNotification({
+         title: 'Success',
+         message: 'Успешная регистрация!',
+         type: 'success',
+      })
       return data
    } catch (error) {
+      showNotification({
+         title: 'error',
+         message: 'You have successfully registered!',
+         type: 'error',
+      })
       console.log(error.massage)
    }
 })
@@ -16,8 +26,19 @@ const signIn = createAsyncThunk('auth/signIn', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-in', values)
       navigate('/board')
+      showNotification({
+         title: 'Success',
+         message: 'Успешная регистрация!',
+         type: 'success',
+      })
       return data
    } catch (error) {
+      console.log(error)
+      showNotification({
+         title: 'error',
+         message: error?.response?.data.message || 'something went wrong',
+         type: 'error',
+      })
       console.log(error.massage)
    }
 })

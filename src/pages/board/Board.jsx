@@ -94,7 +94,7 @@ export default function Board() {
                   <StyledCardModal>
                      {backgroundImages.slice(0, 3).map((bgItem) => {
                         return (
-                           <StyledCardModalImg>
+                           <StyledCardModalImg > 
                               <StyledImg src={bgItem.bg} alt="background" />
                            </StyledCardModalImg>
                         )
@@ -263,6 +263,10 @@ const StyledBoxColors = styled(Box)(({ colors }) => ({
    borderRadius: '8px',
    display: 'inline-block',
    marginRight: '8px',
+   '&:hover': {
+      transform: 'scale(1.05)',
+      cursor: 'pointer',
+   },
 }))
 
 const ModalBox = styled(CustomModal)({
@@ -284,6 +288,10 @@ const StyledCardModal = styled(Box)({
 
 const StyledCardModalImg = styled(Box)({
    gap: '16px',
+   '&:hover': {
+      transform: 'scale(1.05)',
+      cursor: 'pointer',
+   },
 })
 
 const StyledCardBoard = styled(Box)({
