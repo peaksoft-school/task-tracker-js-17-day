@@ -11,13 +11,16 @@ import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
+import { useNavigate } from 'react-router-dom'
 
 export const SignUp = () => {
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
    const dispatch = useDispatch()
+   const navigate = useNavigate()
 
-   const onSubmit = (values) => dispatch(AUTH_THUNK.signUP({ values }))
+   const onSubmit = (values) =>
+      dispatch(AUTH_THUNK.signUP({ values, navigate }))
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {

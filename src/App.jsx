@@ -1,11 +1,6 @@
-import Issues from './pages/all-issuis/Issues'
+import { RouterProvider } from 'react-router-dom'
+import { routes } from './routes/AppRoutes'
 
-const App = () => {
-   return (
-      <>
-         <Issues />
-      </>
-   )
-}
+const App = () => <RouterProvider router={routes} />
 
 export default App

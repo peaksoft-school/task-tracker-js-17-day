@@ -1,5 +1,3 @@
-import React from 'react'
-import styled from '@emotion/styled'
 import {
    Avatar,
    AvatarGroup,
@@ -11,14 +9,12 @@ import {
    TableContainer,
    TableHead,
    TableRow,
+   styled,
 } from '@mui/material'
-import { Header } from '../../layouts/header/Header'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
+import { Header } from '../../layouts/header/Header'
 import { CalendarIcon, DownIcon } from '../../assets/AllExportIcon'
 
-// ============================
-// 🔹 Data Setup
-// ============================
 function createData(
    created,
    period,
@@ -74,9 +70,6 @@ const rows = [
    ),
 ]
 
-// ============================
-// 🔹 Main Component
-// ============================
 export default function IssuesPage() {
    return (
       <StyledBackground>
@@ -84,7 +77,6 @@ export default function IssuesPage() {
          <MainLayout>
             <Sidebar />
             <IssuesContainer component={Paper}>
-               {/* === Filter Section === */}
                <FilterSection>
                   <FilterHeader>
                      <FilterTitle>
@@ -92,25 +84,25 @@ export default function IssuesPage() {
                      </FilterTitle>
                      <FilterControls>
                         <StartDateButton>
-                           00.00.00{' '}
+                           00.00.00
                            <span>
                               <CalendarIcon />
                            </span>
                         </StartDateButton>
                         <EndDateButton>
-                           до{' '}
+                           до
                            <span>
                               <CalendarIcon />
                            </span>
                         </EndDateButton>
                         <LabelsSelect>
-                           All Labels{' '}
+                           All Labels
                            <span>
                               <DownIcon />
                            </span>
                         </LabelsSelect>
                         <AssigneeSelect>
-                           Assignee{' '}
+                           Assignee
                            <span>
                               <DownIcon />
                            </span>
@@ -128,7 +120,6 @@ export default function IssuesPage() {
                   </TotalBox>
                </FilterSection>
 
-               {/* === Table === */}
                <TableIssues>
                   <TableHeadGrayLine>
                      <TableRow>
@@ -192,16 +183,12 @@ export default function IssuesPage() {
    )
 }
 
-// ============================
-// 🔹 Styled Components
-// ============================
-
-// Layout
 const StyledBackground = styled('div')({
    backgroundColor: '#537081',
    minHeight: '100vh',
 })
 const MainLayout = styled(Box)({ display: 'flex' })
+
 const IssuesContainer = styled(TableContainer)({
    width: '91.9%',
    margin: '12px 24px 12px 20px',
@@ -209,20 +196,22 @@ const IssuesContainer = styled(TableContainer)({
    background: 'rgba(248, 248, 248, 0.9)',
 })
 
-// Filter
 const FilterSection = styled(Box)({ margin: '22px 0 0 16px' })
+
 const FilterHeader = styled(Box)({
    width: '80%',
    height: '36px',
    display: 'flex',
    alignItems: 'center',
 })
+
 const FilterTitle = styled(Box)({
    minWidth: '134px',
    height: '25px',
    display: 'flex',
    alignItems: 'center',
    marginRight: '33px',
+
    '& p': {
       fontWeight: 500,
       fontSize: '20px',
@@ -230,18 +219,22 @@ const FilterTitle = styled(Box)({
       color: '#0d0d0d',
    },
 })
+
 const FilterControls = styled(Box)({
    width: '90%',
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'space-between',
 })
+
 const TotalBox = styled(Box)({
    width: '80px',
    height: '24px',
+
    '& span': {
       color: 'rgba(145,145,145,1)',
       fontSize: '16px',
+
       '& span': {
          color: 'white',
          background: 'rgba(178,178,178,1)',
@@ -251,20 +244,29 @@ const TotalBox = styled(Box)({
    },
 })
 
-// Table
 const TableIssues = styled(Table)({
    borderCollapse: 'collapse',
    width: '100%',
    tableLayout: 'fixed',
-   '& thead': { display: 'table', width: '100%', tableLayout: 'fixed' },
-   '& tbody tr': { display: 'table', width: '100%', tableLayout: 'fixed' },
+
+   '& thead': {
+      display: 'table',
+      width: '100%',
+      tableLayout: 'fixed',
+   },
+
+   '& tbody tr': {
+      display: 'table',
+      width: '100%',
+      tableLayout: 'fixed',
+   },
 })
+
 const TableHeadGrayLine = styled(TableHead)({
    width: '100%',
    borderBottom: '1px solid rgba(215,215,215,1)',
 })
 
-// Header cells
 const baseHeaderCell = {
    border: 'none !important',
    height: '44px',
@@ -276,52 +278,62 @@ const baseHeaderCell = {
    textAlign: 'left',
    verticalAlign: 'middle',
 }
+
 const StyledTableCellCreated = styled(TableCell)({
    ...baseHeaderCell,
    width: '8.37%',
 })
+
 const StyledTableCellPeriod = styled(TableCell)({
    ...baseHeaderCell,
    width: '6.97%',
 })
+
 const StyledTableCellCreator = styled(TableCell)({
    ...baseHeaderCell,
    width: '11%',
 })
+
 const StyledTableCellColumn = styled(TableCell)({
    ...baseHeaderCell,
    width: '11%',
 })
+
 const StyledTableCellAssignee = styled(TableCell)({
    ...baseHeaderCell,
    width: '10%',
 })
+
 const StyledTableCellLabels = styled(TableCell)({
    ...baseHeaderCell,
    width: '11%',
 })
+
 const StyledTableCellChecklist = styled(TableCell)({
    ...baseHeaderCell,
    width: '8%',
 })
+
 const StyledTableCellDescription = styled(TableCell)({
    ...baseHeaderCell,
    width: '32%',
 })
 
-// Body
 const StyledTableBody = styled(TableBody)({
    display: 'block',
    maxHeight: '766px',
    overflowY: 'auto',
    overflowX: 'hidden',
    width: '100%',
+
    '&::-webkit-scrollbar': { width: '6px' },
+
    '&::-webkit-scrollbar-thumb': {
       backgroundColor: 'rgba(180,180,180,0.5)',
       borderRadius: '8px',
    },
 })
+
 const StyledTableRow = styled(TableRow)({
    transition: 'background 0.2s ease',
    verticalAlign: 'top',

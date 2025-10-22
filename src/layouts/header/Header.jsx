@@ -5,8 +5,6 @@ import Logo from '../../assets/images/icon/system/Black and White Collection 2.s
 import Notify from '../../assets/images/icon/system/Notify.svg'
 import StrelkaDown from '../../assets/images/icon/arrows/down.svg'
 
-// const existsRoutes = [ROUTES.HOME, ROUTES.ALL_BOARDS] // роуты, для которых нужно показывать Header
-
 export const Header = ({ favouritesCount, notificationCount }) => {
    const statusInput = status
 
@@ -27,7 +25,7 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                         Favourites {favouritesCount}{' '}
                         <img src={StrelkaDown} alt="" />
                      </Typography>
-                  )} 
+                  )}
                </StylesBoxOneHeaderDoucher>
             </StylesBoxOneHeader>
             <StylesBoxTwoHeader>
@@ -53,6 +51,7 @@ const StylesBoxHeder = styled(Box)(({}) => ({
    justifyContent: 'space-between',
    padding: '16px 40px',
    backgroundColor: '#ffffff',
+   box
 }))
 
 const StylesBoxOneHeader = styled(Box)(({}) => ({
