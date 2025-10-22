@@ -11,8 +11,10 @@ import { backgroundImages } from '../../assets/backgroundImg/background'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
+import { useParams } from 'react-router-dom'
 
 export default function Board() {
+   const { workSpaceById } = useParams()
    const dispatch = useDispatch()
    const { boards, loading } = useSelector((state) => state.board)
 
@@ -39,8 +41,13 @@ export default function Board() {
    }
 
    useEffect(() => {
-      dispatch(BOARD_THUNK.workSpaceById({ workspaceId: 1 }))
+      dispatch(BOARD_THUNK.boardPost({ workspaceId: workSpaceById }))
    }, [dispatch])
+   const boardPostParams = {
+      name: 'we',
+      description: 'we',
+      backgroundUrl: 'kdkd',
+   }
 
    return (
       <Box>
@@ -62,16 +69,23 @@ export default function Board() {
                   boards.map((item) => {
                      return (
                         <StyledCardBoard key={item.id}>
-                           {backgroundImages.map((bgItem) => {
+                           <CardBoard
+                              name={item.name}
+                              background={item.backgroundUrl}
+                              fevered={item.fevered}
+                              description={item.description}
+                           />
+                           {/* {backgroundImages.map((bgItem, i) => {
                               return (
                                  <CardBoard
+                                    key={i}
                                     name={item.name}
                                     background={bgItem.bg}
                                     fevered={item.fevered}
                                     description={item.description}
                                  />
                               )
-                           })}
+                           })} */}
                         </StyledCardBoard>
                      )
                   })
@@ -92,9 +106,9 @@ export default function Board() {
                      <StyledA onClick={handlerSerBackImg}>See more</StyledA>
                   </StyledBoxSeeMore>
                   <StyledCardModal>
-                     {backgroundImages.slice(0, 3).map((bgItem) => {
+                     {backgroundImages.slice(0, 3).map((bgItem, i) => {
                         return (
-                           <StyledCardModalImg > 
+                           <StyledCardModalImg key={i}>
                               <StyledImg src={bgItem.bg} alt="background" />
                            </StyledCardModalImg>
                         )
@@ -105,14 +119,23 @@ export default function Board() {
                      <Styledtypography>Colors</Styledtypography>
                      <StyledA onClick={handlerSerBackColor}>See more</StyledA>
                   </StyledBoxSeeMore>
-                  {Colors.map((items) => {
+                  {Colors.map((items, i) => {
                      return (
-                        <StyledBoxColors colors={items.color}></StyledBoxColors>
+                        <StyledBoxColors
+                           key={i}
+                           colors={items.color}
+                        ></StyledBoxColors>
                      )
                   })}
                   <StyledBoxButtons>
                      <StyledButtonWhite>Cancel</StyledButtonWhite>
-                     <AppButton>Create board</AppButton>
+                     <AppButton
+                        onClick={() =>
+                           dispatch(BOARD_THUNK.boardPost(boardPostParams))
+                        }
+                     >
+                        Create board
+                     </AppButton>
                   </StyledBoxButtons>
                </Box>
             </ModalBox>
