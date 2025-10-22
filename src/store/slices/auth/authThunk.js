@@ -1,9 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
 
-const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
+const signUP = createAsyncThunk('auth/signUp', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-up', values)
+
+      navigate('/main-page')
 
       return data
    } catch (error) {
@@ -11,9 +13,11 @@ const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
    }
 })
 
-const signIn = createAsyncThunk('auth/signIn', async ({ values }) => {
+const signIn = createAsyncThunk('auth/signIn', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-in', values)
+
+      navigate('/main-page')
 
       return data
    } catch (error) {
@@ -30,8 +34,18 @@ const password = createAsyncThunk('auth/password', async ({ values }) => {
    }
 })
 
+const getAllMembers = createAsyncThunk('auth/getAll', async ({ id }) => {
+   try {
+      const { data } = await axiosInstance.get(`/api/workspaces/${id}`)
+      return data
+   } catch (error) {
+      console.error(error.massage)
+   }
+})
+
 export const AUTH_THUNK = {
    signUP,
    signIn,
+   getAllMembers,
    password,
 }

@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
 })
 
 const persistConfig = {
-   key: 'BILINGUAL',
+   key: 'TASK-TRACKER',
    storage: storageSession,
    whitelist: [authSlice.name],
 }

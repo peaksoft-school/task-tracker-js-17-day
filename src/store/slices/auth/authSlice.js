@@ -9,6 +9,8 @@ const initialState = {
    isAuth: false,
    isLoading: false,
    userId: null,
+
+   workspaceMembers: [],
 }
 
 const authSlice = createSlice({
@@ -42,6 +44,16 @@ const authSlice = createSlice({
             state.isLoading = true
          })
          .addCase(AUTH_THUNK.signIn.rejected, (state) => {
+            state.isLoading = false
+         })
+
+         .addCase(AUTH_THUNK.getAllMembers.fulfilled, (state, action) => {
+            state.workspaceMembers = action.payload
+         })
+         .addCase(AUTH_THUNK.getAllMembers.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(AUTH_THUNK.getAllMembers.rejected, (state) => {
             state.isLoading = false
          })
    },

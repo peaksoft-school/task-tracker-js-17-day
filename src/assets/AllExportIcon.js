@@ -3,6 +3,9 @@ import LeftIcon from './images/icon/arrows/left.svg?react'
 import RightIcon from './images/icon/arrows/right.svg?react'
 import UpIcon from './images/icon/arrows/up.svg?react'
 import DownIcon from './images/icon/arrows/down.svg?react'
+// ? favoriteIcon
+import FavoriteIconstarBlue from './images/icon/favoriteIcon/favoriteIconstarBlue.svg?react'
+import FavoriteIconstarSilver from './images/icon/favoriteIcon/favoriteIconstarSilver.svg?react'
 //? side panel
 import FilesAndFoldersIcon from './images/icon/side panel/Files and Folders Icon.svg?react'
 import GraphicIcon from './images/icon/side panel/Graphic Icon.svg?react'
@@ -47,6 +50,9 @@ export {
    RightIcon,
    UpIcon,
    DownIcon,
+   // ? favoriteIcon
+   FavoriteIconstarBlue,
+   FavoriteIconstarSilver,
    //? side panel
    FilesAndFoldersIcon,
    GraphicIcon,
