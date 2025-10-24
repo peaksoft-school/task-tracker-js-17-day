@@ -10,13 +10,15 @@ export const axiosInstance = axios.create({
    },
 })
 
+// redax store 
 let customStore
-
+// store это с main.jsx приходит данные что было доступ со всего проекта
 export const injectStore = (store) => {
    customStore = store
 }
 
-axiosInstance.interceptors.request.use(
+// отправлять request в бекенд 
+axiosInstance.interceptors.request.use( 
    (config) => {
       const updateConfig = { ...config }
 
@@ -33,7 +35,7 @@ axiosInstance.interceptors.request.use(
       return Promise.reject(error)
    }
 )
-
+// получать response данные с бекенда 
 axiosInstance.interceptors.response.use(
    (response) => {
       return Promise.resolve(response)
