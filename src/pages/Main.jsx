@@ -18,16 +18,11 @@ import {
 } from '../assets/AllExportIcon'
 import { getWorkspaces } from '../store/slices/workspaces/WorkspacesThunk'
 
-// 📢 ФУНКЦИЯ-МАППЕР для приведения API-данных к формату компонента
 const mapApiToComponentData = (apiItem) => ({
    id: apiItem.id,
-
-   name: apiItem.name, // Объединяем userName и userFullName, или берем полное имя
-
+   name: apiItem.name,
    lead: apiItem.userFullName || apiItem.userName || 'Unknown Lead',
-
-   fav: apiItem.favorite, // Дополнительное поле для аватара лида
-
+   fav: apiItem.favorite,
    urlPhoto: apiItem.urlPhoto,
 })
 
@@ -35,9 +30,7 @@ function Main() {
    const dispatch = useDispatch()
    const {
       list: rawWorkspaces,
-
       isLoading,
-
       error,
    } = useSelector((state) => state.workspaces)
    const token = useSelector((state) => state.auth.token)
@@ -53,7 +46,6 @@ function Main() {
    if (isLoading && rows.length === 0) {
       return <p>Загрузка воркспейсов...</p>
    }
-
    if (error) {
       return <p>Ошибка при загрузке: {error.message || 'Неизвестная ошибка'}</p>
    }
@@ -119,17 +111,13 @@ const ConteinerBoxMain = styled(Box)({
 
 const Content = styled(Box)({
    height: '930px',
-
    margin: '16px 40px 10px 40px',
 })
 
 const TopBar = styled(Box)(() => ({
    display: 'flex',
-
    justifyContent: 'space-between',
-
    alignItems: 'center',
-
    marginBottom: '20px',
 }))
 
@@ -143,16 +131,11 @@ const MainAppButton = styled(AppButton)({
 
 const StyledTableContainer = styled(Box)(() => ({
    maxHeight: '700px', // фиксируем высоту для скролла
-
    overflowY: 'auto',
-
    '& th': {
       position: 'sticky',
-
       top: 0,
-
       zIndex: 2,
-
       backgroundColor: '#fafafa',
    },
 }))
@@ -175,8 +158,6 @@ const ActionTableCell = styled(TableCell)({
 
 const LeadBox = styled(Box)(() => ({
    display: 'flex',
-
    alignItems: 'center',
-
    gap: '10px',
 }))
