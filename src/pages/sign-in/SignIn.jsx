@@ -12,15 +12,17 @@ import { useFormik } from 'formik'
 import { VALIDATION_SIGN_IN } from '../../utils/helpers/validation'
 import { useState } from 'react'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
-import { AUTH_THUNK } from '../../store/slices/auth/authThunk' 
+import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router-dom'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, provider } from '../../configs/firebase'
 
 export const SignIn = () => {
    const dispatch = useDispatch()
-const navigate = useNavigate()
+   const navigate = useNavigate()
 
-
-   const onSubmit = (values) => dispatch(AUTH_THUNK.signIn({ values,navigate }))
+   const onSubmit = (values) =>
+      dispatch(AUTH_THUNK.signIn({ values, navigate }))
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
@@ -36,6 +38,20 @@ const navigate = useNavigate()
       setShowPassword(!showPassword)
    }
 
+   const hndlerGoogel = async () => {
+      await signInWithPopup(auth, provider)
+         .then((response) => {
+            dispatch(
+               AUTH_THUNK.authWithGoogle({
+                  tokenId: response?.user?.accessToken,
+               })
+            )
+         })
+         .catch((error) => {
+            return error
+         })
+   }
+
    return (
       <StylesBox onSubmit={handleSubmit}>
          <StylesBoxRight>
@@ -47,7 +63,7 @@ const navigate = useNavigate()
             <StylesBoxInput>
                <Typography fontSize={18}>Sign In</Typography>
 
-               <StyledBoxGoogle>
+               <StyledBoxGoogle onClick={hndlerGoogel}>
                   <StyledBox>
                      <StyledAvatar>R</StyledAvatar>
 
@@ -128,7 +144,7 @@ const StylesBoxLeft = styled(Box)({
 })
 
 const StylesA = styled('a')({
-   color:"#393939"
+   color: '#393939',
 })
 
 const StylesBoxLogo = styled(Box)({

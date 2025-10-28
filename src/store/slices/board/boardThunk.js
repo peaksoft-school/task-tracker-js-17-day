@@ -1,33 +1,59 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
+import { axiosInstanceFile } from '../../../configs/axiosInstanceFile'
 
 const workSpaceById = createAsyncThunk(
    'board/workSpaceById',
-   async ({ workspaceId }) => {
+
+   async ({ workspaceId = 1 }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
-            `api/boards/workspace/${workspaceId}`
+            `/api/boards/workspace/${workspaceId}`
          )
          return data
       } catch (error) {
-         console.log(error.massage)
+         return rejectWithValue(error.response?.data || error.message)
       }
    }
 )
 
-const boardPost = createAsyncThunk('api/boards', async (req) => {
-   const { name, description, backgroundUrl, workspaceId = 1 } = req
-   console.log(req)
+const boardPost = createAsyncThunk(
+   'board/boardPost',
+
+   async (
+      { name, description, backgroundUrl, workspaceId },
+      { rejectWithValue }
+   ) => {
+      try {
+         const body = { name, description, backgroundUrl }
+         const { data } = await axiosInstance.post(
+            `/api/boards?workspaceId=${workspaceId}`,
+            body
+         )
+         return data
+      } catch (error) {
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
+const uploadImage = createAsyncThunk('board/uploadImage', async (file) => {
    try {
-      const { data } = await axiosInstance.post(
-         `api/boards?workspaceId=${workspaceId}`,
-         req
+      const formData = new FormData()
+
+      formData.append('files', file)
+
+      const { data } = await axiosInstanceFile.post(
+         '/api/s3file/upload',
+         formData
       )
 
       return data
    } catch (error) {
-      console.log(error.massage)
+      console.log(error)
    }
 })
 
-export const BOARD_THUNK = { workSpaceById, boardPost }
+
+
+export const BOARD_THUNK = { workSpaceById, boardPost, uploadImage, }

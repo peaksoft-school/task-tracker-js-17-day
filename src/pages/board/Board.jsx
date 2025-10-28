@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from '@mui/material'
+import { Box, styled, Typography, CircularProgress } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from '../../layouts/header/Header'
@@ -7,51 +7,100 @@ import { CardBoard } from './CardBoard'
 import { BOARD_THUNK } from '../../store/slices/board/boardThunk'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import { backgroundImages } from '../../assets/backgroundImg/background'
-
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
 import { useParams } from 'react-router-dom'
+import CheckIcon from '@mui/icons-material/Check'
 
 export default function Board() {
-   const { workSpaceById } = useParams()
+   const { boards, loading, bgUrl } = useSelector((state) => state.board)
    const dispatch = useDispatch()
-   const { boards, loading } = useSelector((state) => state.board)
 
    const [boardsImg, setBoardsImg] = useState(false)
-
    const [backgroundImg, setBackgroundImg] = useState(false)
+   const [backgroundColorModal, setBackgroundColorModal] = useState(false)
+   const [backgroundModalImages, setBackgroundModalImages] = useState(false)
+   const [backgroundModalColors, setBackgroundModalColors] = useState(false)
 
-   const [backgroundColor, setBackgroundColor] = useState(false)
+   // === Локальные стейты ===
+   const [name, setName] = useState('')
+   const [selectedItem, setSelectedItem] = useState(null)
+   const [selectedBg, setSelectedBg] = useState(null)
+   const [loadingItem, setLoadingItem] = useState(null)
 
-   console.log(boardsImg, 'dld')
-   console.log(backgroundImg, 'img')
-   console.log(backgroundColor, 'clo')
+   // === Обработчик названия ===
+   const handlerName = (e) => setName(e.target.value)
 
-   const handlerSerImg = () => {
-      setBoardsImg((prev) => !prev)
+   // === Клик по фото ===
+   const handlerClickIdBackImg = async (selectedImage) => {
+      try {
+         setLoadingItem(selectedImage)
+         const response = await fetch(selectedImage)
+         const blob = await response.blob()
+         const file = new File([blob], 'background.jpg', { type: blob.type })
+         const result = await dispatch(BOARD_THUNK.uploadImage(file))
+
+         if (result.payload && result.payload[0]) {
+            // просто сохраняем URL фото
+            setSelectedBg({ type: 'image', value: result.payload[0] })
+            setSelectedItem(selectedImage)
+         }
+      } catch (error) {
+         console.error('Ошибка при загрузке изображения:', error)
+      } finally {
+         setLoadingItem(null)
+      }
    }
 
-   const handlerSerBackImg = () => {
-      setBackgroundImg((prev) => !prev)
+   // === Клик по цвету ===
+   const handlerClickIdColor = (selectedColor) => {
+      // просто сохраняем цвет
+      setSelectedBg({ type: 'color', value: selectedColor })
+      setSelectedItem(selectedColor)
    }
 
-   const handlerSerBackColor = () => {
-      setBackgroundColor((prev) => !prev)
+   // === Создание доски ===
+   const handleCreateBoard = async () => {
+      if (!name.trim()) {
+         alert('Введите название доски!')
+         return
+      }
+
+      const body = {
+         name,
+         description: 'Created from modal',
+         workspaceId: 1,
+      }
+
+      // передаём нужное поле в зависимости от типа фона
+      if (selectedBg?.type === 'color') {
+         body.backgroundColor = selectedBg.value
+      } else if (selectedBg?.type === 'image') {
+         body.backgroundUrl = selectedBg.value
+      }
+
+      try {
+         await dispatch(BOARD_THUNK.boardPost(body))
+         setBoardsImg(false)
+         setSelectedBg(null)
+         setSelectedItem(null)
+         setName('')
+      } catch (error) {
+         console.error('Ошибка при создании доски:', error)
+      }
    }
 
-   useEffect(() => {
-      dispatch(BOARD_THUNK.boardPost({ workspaceId: workSpaceById }))
-   }, [dispatch])
-   const boardPostParams = {
-      name: 'we',
-      description: 'we',
-      backgroundUrl: 'kdkd',
-   }
+   // === Управление модалками ===
+   const handlerSerImg = () => setBoardsImg((prev) => !prev)
+   const handlerSerBackImg = () => setBackgroundImg((prev) => !prev)
+   const handlerSerBackColor = () => setBackgroundColorModal((prev) => !prev)
+   const handlerModelImg = () => setBackgroundModalImages((prev) => !prev)
+   const handlerModelColor = () => setBackgroundModalColors((prev) => !prev)
 
    return (
-      <Box>
-         <Header />
+      <>
+         <Header favouritesCount={10} />
          <StyledBoxBoards>
             <Box>
                <Sidebar />
@@ -63,77 +112,90 @@ export default function Board() {
                      + Create new board
                   </AppButton>
                </StyledBoxHeaders>
+
                {loading ? (
                   <Typography>Loading...</Typography>
                ) : (
-                  boards.map((item) => {
-                     return (
-                        <StyledCardBoard key={item.id}>
-                           <CardBoard
-                              name={item.name}
-                              background={item.backgroundUrl}
-                              fevered={item.fevered}
-                              description={item.description}
-                           />
-                           {/* {backgroundImages.map((bgItem, i) => {
-                              return (
-                                 <CardBoard
-                                    key={i}
-                                    name={item.name}
-                                    background={bgItem.bg}
-                                    fevered={item.fevered}
-                                    description={item.description}
-                                 />
-                              )
-                           })} */}
-                        </StyledCardBoard>
-                     )
-                  })
+                  <StyledCardBoard>
+                     {boards.map((item) => (
+                        <CardBoard
+                           key={item.id}
+                           name={item.name}
+                           background={item.backgroundUrl}
+                           fevered={item.fevered}
+                           description={item.description}
+                        />
+                     ))}
+                  </StyledCardBoard>
                )}
             </Box>
          </StyledBoxBoards>
 
+         {/* === Модалка создания доски === */}
          {boardsImg && (
             <ModalBox isVisible={boardsImg} handleVisible={handlerSerImg}>
                <Box>
                   <StyledModalTypography>
                      Create new board
                   </StyledModalTypography>
-                  <StyledInput placeholder="Board title*" />
+                  <StyledInput
+                     value={name}
+                     onChange={handlerName}
+                     placeholder="Board title*"
+                  />
+
                   <StyledTypography>Add background</StyledTypography>
+
+                  {/* === Фото === */}
                   <StyledBoxSeeMore>
                      <Styledtypography>Photo</Styledtypography>
-                     <StyledA onClick={handlerSerBackImg}>See more</StyledA>
+                     <StyledA onClick={handlerModelImg}>See more</StyledA>
                   </StyledBoxSeeMore>
+
                   <StyledCardModal>
-                     {backgroundImages.slice(0, 3).map((bgItem, i) => {
-                        return (
-                           <StyledCardModalImg key={i}>
-                              <StyledImg src={bgItem.bg} alt="background" />
-                           </StyledCardModalImg>
-                        )
-                     })}
+                     {backgroundImages.slice(0, 3).map((bgItem) => (
+                        <StyledCardModalImg
+                           key={bgItem}
+                           onClick={() => handlerClickIdBackImg(bgItem)}
+                        >
+                           <StyledImg src={bgItem} alt="background" />
+
+                           {selectedItem === bgItem &&  (
+                              <StyledOverlay>
+                                 <CheckIcon />
+                              </StyledOverlay>
+                           )}
+                        </StyledCardModalImg>
+                     ))}
                   </StyledCardModal>
 
+                  {/* === Цвета === */}
                   <StyledBoxSeeMore>
                      <Styledtypography>Colors</Styledtypography>
-                     <StyledA onClick={handlerSerBackColor}>See more</StyledA>
+                     <StyledA onClick={handlerModelColor}>See more</StyledA>
                   </StyledBoxSeeMore>
-                  {Colors.map((items, i) => {
-                     return (
+
+                  <StyledColorsBox>
+                     {Colors.map((color) => (
                         <StyledBoxColors
-                           key={i}
-                           colors={items.color}
-                        ></StyledBoxColors>
-                     )
-                  })}
+                           key={color}
+                           onClick={() => handlerClickIdColor(color)}
+                           colors={color}
+                        >
+                           {selectedItem === color && (
+                              <StyledOverlay>
+                                 <CheckIcon />
+                              </StyledOverlay>
+                           )}
+                        </StyledBoxColors>
+                     ))}
+                  </StyledColorsBox>
+
                   <StyledBoxButtons>
-                     <StyledButtonWhite>Cancel</StyledButtonWhite>
-                     <AppButton
-                        onClick={() =>
-                           dispatch(BOARD_THUNK.boardPost(boardPostParams))
-                        }
-                     >
+                     <StyledButtonWhite onClick={handlerSerImg}>
+                        Cancel
+                     </StyledButtonWhite>
+                     <AppButton onClick={handleCreateBoard}>
                         Create board
                      </AppButton>
                   </StyledBoxButtons>
@@ -141,44 +203,70 @@ export default function Board() {
             </ModalBox>
          )}
 
-         {backgroundImg && (
+         {backgroundModalImages && (
             <StyledModalBakg
-               isVisible={backgroundImg}
-               handleVisible={handlerSerBackImg}
+               isVisible={backgroundModalImages}
+               handleVisible={handlerModelImg}
             >
                <Box>
                   <StyledModalTypography>Photo</StyledModalTypography>
                   <StyledBoxModalsBack>
-                     {backgroundImages.map((bgItem) => {
-                        return <StyledBoxBg bg={bgItem.bg}></StyledBoxBg>
-                     })}
+                     {' '}
+                     {backgroundImages.map((bgItem) => (
+                        <StyledBoxBg
+                           key={bgItem}
+                           onClick={() => handlerClickIdBackImg(bgItem)}
+                           bg={bgItem}
+                        />
+                     ))}
                   </StyledBoxModalsBack>
                </Box>
             </StyledModalBakg>
          )}
 
-         {backgroundColor && (
+         {backgroundModalColors && (
             <ModalBox
-               isVisible={backgroundColor}
-               handleVisible={handlerSerBackColor}
+               isVisible={backgroundModalColors}
+               handleVisible={handlerModelColor}
             >
                <Box>
+                  {' '}
                   <StyledModalTypography>Colors</StyledModalTypography>
                   <StyledBoxModalsColors>
-                     {Colors.map((items) => {
-                        return (
-                           <StyledColorsModal
-                              colors={items.color}
-                           ></StyledColorsModal>
-                        )
-                     })}
+                     {Colors.map((items) => (
+                        <StyledColorsModal
+                           key={items}
+                           onClick={() => handlerClickIdColor(items)}
+                           colors={items}
+                        />
+                     ))}
                   </StyledBoxModalsColors>
                </Box>
             </ModalBox>
          )}
-      </Box>
+      </>
    )
 }
+
+const StyledOverlay = styled(Box)({
+   position: 'absolute',
+   top: 0,
+   left: 0,
+   width: '100%',
+   height: '100%',
+   borderRadius: '8px',
+   backgroundColor: 'rgba(0, 0, 0, 0.3)',
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   color: 'white',
+})
+
+const StyledColorsBox = styled(Box)({
+   display: 'flex',
+   justifyContent: 'space-between',
+})
+
 const StyledModalBakg = styled(CustomModal)({
    marginLeft: '200px',
 })
@@ -211,6 +299,7 @@ const StyledColorsModal = styled(Box)(({ colors }) => ({
    width: '79px',
    height: '40px',
    borderRadius: '8px',
+   position: 'relative',
    '&:hover': {
       transform: 'scale(1.05)',
       cursor: 'pointer',
@@ -266,6 +355,7 @@ const StyledBoxButtons = styled(Box)({
    justifyContent: 'end',
    alignItems: 'center',
    gap: '8px',
+   marginTop: '24px',
 })
 
 const StyledBoxSeeMore = styled(Box)({
@@ -280,11 +370,12 @@ const StyledInput = styled(Input)({
 })
 
 const StyledBoxColors = styled(Box)(({ colors }) => ({
+   position: 'relative',
    backgroundColor: colors,
    width: '59px',
    height: '31px',
    borderRadius: '8px',
-   display: 'inline-block',
+   display: 'flex',
    marginRight: '8px',
    '&:hover': {
       transform: 'scale(1.05)',
@@ -310,6 +401,7 @@ const StyledCardModal = styled(Box)({
 })
 
 const StyledCardModalImg = styled(Box)({
+   position: 'relative',
    gap: '16px',
    '&:hover': {
       transform: 'scale(1.05)',
@@ -318,7 +410,7 @@ const StyledCardModalImg = styled(Box)({
 })
 
 const StyledCardBoard = styled(Box)({
-   display: ' grid',
+   display: 'grid',
    gridTemplateColumns: '1fr 1fr 1fr 1fr',
    gap: '16px',
    marginTop: '16px',

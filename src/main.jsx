@@ -8,8 +8,10 @@ import { Provider } from 'react-redux'
 import { persistor, store } from './store/store.js'
 import { injectStore } from './configs/axiosinstance.js'
 import { PersistGate } from 'redux-persist/integration/react'
+import { injectStoreFile } from './configs/axiosInstanceFile.js'
 
 injectStore(store)
+injectStoreFile(store)
 
 createRoot(document.getElementById('root')).render(
    <Provider store={store}>

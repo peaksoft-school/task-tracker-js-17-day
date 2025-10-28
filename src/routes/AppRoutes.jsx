@@ -7,6 +7,7 @@ import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
 import { InnerPageBoard } from '../pages/board/InnerPageBoard'
 import Board from '../pages/board/Board'
+import { Profile } from '../pages/profile/Profile'
 
 export const routes = createBrowserRouter([
    {
@@ -61,6 +62,10 @@ export const routes = createBrowserRouter([
    {
       path: '/board',
       element: <Board />,
+   },
+   {
+      path: '/profile',
+      element: <Profile />,
    },
    {
       path: '/InnerPage-board',

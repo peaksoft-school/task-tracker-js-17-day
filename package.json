@@ -20,6 +20,7 @@
       "@reduxjs/toolkit": "^2.9.0",
       "axios": "^1.12.2",
       "dayjs": "^1.11.18",
+      "firebase": "^12.4.0",
       "formik": "^2.4.6",
       "react": "^19.0.0",
       "react-dom": "^19.0.0",

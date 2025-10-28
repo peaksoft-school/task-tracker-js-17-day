@@ -184,7 +184,7 @@ export const SignUp = () => {
          </StylesBoxRight>
 
          <StylesBoxLeft>
-            <StylesImg src={BackgroundImage} alt="" />
+            <img src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
@@ -200,10 +200,6 @@ const StylesBoxLeft = styled(Box)({
    height: '100vh',
 })
 
-const StylesImg = styled('img')({
-   width: '100%',
-   height: '100%',
-})
 
 const StylesBoxLogo = styled(Box)({
    display: 'flex',

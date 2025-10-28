@@ -15,7 +15,7 @@ const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
    } catch (error) {
       showNotification({
          title: 'error',
-         message: 'You have successfully registered!',
+         message: error?.response?.data.message || 'something went wrong',
          type: 'error',
       })
       console.log(error.massage)
@@ -52,8 +52,21 @@ const password = createAsyncThunk('auth/password', async ({ values }) => {
    }
 })
 
+const authWithGoogle = createAsyncThunk(
+   'auth/authWithGoogle',
+
+   async ({ tokenId }) => {
+      try {
+         await axiosInstance.post('/api/auth/google', { tokenId })
+      } catch (error) {
+         console.log(error.massage)
+      }
+   }
+)
+
 export const AUTH_THUNK = {
    signUP,
    signIn,
    password,
+   authWithGoogle,
 }

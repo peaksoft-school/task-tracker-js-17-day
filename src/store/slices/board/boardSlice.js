@@ -5,6 +5,7 @@ export const initialState = {
    boards: [],
    loading: false,
    error: null,
+   bgUrl: null,
 }
 
 export const boardSlice = createSlice({
@@ -25,7 +26,7 @@ export const boardSlice = createSlice({
             state.loading = false
             state.error = action.error.message
          })
-         .addCase('/api/boards?workspaceId', (state, action) => {
+         .addCase('/api/boards/workspaceId', (state, action) => {
             state.name = action.payload.name
             state.description = action.payload.description
             state.backgroundUrl = action.payload.backgroundUrl
@@ -33,13 +34,22 @@ export const boardSlice = createSlice({
          .addCase(BOARD_THUNK.boardPost.pending, (state) => {
             state.loading = true
          })
-         .addCase(BOARD_THUNK.boardPost.rejected, (state, action) => {
+         .addCase(BOARD_THUNK.boardPost.rejected, (state) => {
             state.loading = false
-            state.boards.push(action.payload)
          })
          .addCase(BOARD_THUNK.boardPost.fulfilled, (state, action) => {
             state.loading = false
             state.boards.push(action.payload)
+         })
+         .addCase(BOARD_THUNK.uploadImage.pending, (state) => {
+            state.loading = true
+         })
+         .addCase(BOARD_THUNK.uploadImage.rejected, (state) => {
+            state.loading = false
+         })
+         .addCase(BOARD_THUNK.uploadImage.fulfilled, (state, action) => {
+            state.loading = false
+            state.bgUrl = action.payload
          })
    },
 })
