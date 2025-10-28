@@ -19,7 +19,6 @@ import {
 import { getWorkspaces } from '../store/slices/workspaces/WorkspacesThunk'
 
 // 📢 ФУНКЦИЯ-МАППЕР для приведения API-данных к формату компонента
-
 const mapApiToComponentData = (apiItem) => ({
    id: apiItem.id,
 
