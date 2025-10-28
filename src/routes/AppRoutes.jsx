@@ -1,42 +1,51 @@
-import { Navigate, Route, Routes } from 'react-router'
-import { PrivateRoute } from './PrivateRoute'
-import UserRoute from './UserRoute'
-import AdminRoute from './AdminRoute'
+import { createBrowserRouter } from 'react-router-dom'
 import { ROLES } from './routes'
-import { SignUp } from '../pages/sign-up/SignUp'
 import { SignIn } from '../pages/sign-in/SignIn'
-import { Passwordd } from '../pages/password/Passwordd'
+import { SignUp } from '../pages/sign-up/SignUp'
+import { ChangePassword } from '../pages/change-password/ChangePassword'
+import IssuesPage from '../pages/all-issuis/Issues'
+import PrivateRoute from './PrivateRoute'
 
-const AppRoutes = () => {
-   return (
-      <Routes>
-         <Route path="/" element={<Navigate to="/sign-in" replace />} />
-         <Route path="/sign-in" element={<SignIn />} />
-         <Route path="/sign-up" element={<SignUp />} />
-         <Route path="/password" element={<Passwordd />} />
-
-         <Route
-            path="/user"
-            element={
-               <PrivateRoute
-                  roles={[ROLES.USER]}
-                  component={<UserRoute />}
-                  fallbackPhath={'/sign-in'}
-               />
+export const routes = createBrowserRouter([
+   {
+      path: '/',
+      element: <SignIn />,
+   },
+   {
+      path: '/sign-up',
+      element: <SignUp />,
+   },
+   {
+      path: '/forgot-password/:id',
+      element: <ChangePassword />,
+   },
+   {
+      path: '/main-page',
+      element: (
+         <PrivateRoute
+            Component={
+               <>
+                  <h1>Headers</h1>
+                  <h1>Workspaces</h1>
+               </>
             }
+            isAllowed={true}
+            fallBacPath="/"
          />
-         <Route
-            path="/admin"
-            element={
-               <PrivateRoute
-                  roles={[ROLES.ADMIN]}
-                  component={<AdminRoute />}
-                  fallbackPhath={'/sign-in'}
-               />
-            }
+      ),
+   },
+   {
+      path: '/all-issuis',
+      element: (
+         <PrivateRoute
+            Component={<IssuesPage />}
+            isAllowed={true}
+            fallBacPath="/"
          />
-      </Routes>
-   )
-}
-
-export default AppRoutes
+      ),
+   },
+   {
+      path: '*',
+      element: <h1>Этой страницы не существует!!!</h1>,
+   },
+])

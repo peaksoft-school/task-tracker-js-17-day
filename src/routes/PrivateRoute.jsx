@@ -1,11 +1,11 @@
-import React from 'react'
-import { Navigate } from 'react-router'
+import { Navigate } from 'react-router-dom'
 
-export const PrivateRoute = ({ roles, component, fallbackPhath }) => {
-   const role = 'USER'
-   const allowedRole = roles.includes(role)
+const PrivateRoute = ({ Component, fallbackPath, isAllowed }) => {
+   if (!isAllowed) {
+      return <Navigate to={fallbackPath} replace />
+   }
 
-   if (!allowedRole) return <Navigate to={fallbackPhath} />
-
-   return component
+   return Component
 }
+
+export default PrivateRoute

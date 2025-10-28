@@ -1,22 +1,6 @@
-import React, { useEffect } from 'react'
-import AppRoutes from './routes/AppRoutes'
-import { useDispatch, useSelector } from 'react-redux'
-import { AUTH_THUNK } from './store/slices/auth/authThunk'
+import { RouterProvider } from 'react-router-dom'
+import { routes } from './routes/AppRoutes'
 
-const App = () => {
-   const dispath = useDispatch()
-   // const data = useSelector()
-
-   useEffect(() => {
-      dispath(AUTH_THUNK.getAllMembers({ id: 1 }))
-   })
-
-   return (
-      <>
-         <AppRoutes />
-         {/* <h1>hello</h1> */}
-      </>
-   )
-}
+const App = () => <RouterProvider router={routes} />
 
 export default App

@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { persistStore, persistReducer } from 'redux-persist'
 import { authSlice } from './slices/auth/authSlice'
 import storage from 'redux-persist/lib/storage'
 import persistReducer from 'redux-persist/es/persistReducer'
 import persistStore from 'redux-persist/es/persistStore'
-import { workspacesReducer } from './slices/workspaces/WorkspacesSlice'
 import {
    FLUSH,
    PAUSE,
@@ -27,14 +27,13 @@ const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 const store = configureStore({
    reducer: persistedReducer,
+
    middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
-         serializableCheck: {
-            ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-         },
+         serializableCheck: false,
       }),
 })
 
-const persistore = persistStore(store)
+const persistor = persistStore(store)
 
-export { store, persistore }
+export { store, persistor }

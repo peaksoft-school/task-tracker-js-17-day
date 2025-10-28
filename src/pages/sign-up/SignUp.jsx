@@ -1,46 +1,28 @@
-import styled from '@emotion/styled'
-import { Avatar, Box, Checkbox, Typography } from '@mui/material'
-import { Input } from '../../components/UI/input/Input'
+import { Avatar, Box, Checkbox, Typography, styled } from '@mui/material'
+import { Input } from '../../components/UI/Input'
+import { AppButton } from '../../components/UI/AppButton'
 import {
    Black,
    GoogleIcon,
    HideIcon,
    ShowIcon,
 } from '../../assets/AllExportIcon'
-import { AppButton } from '../../components/UI/AppButton'
-import React from 'react'
-import { useNavigate } from 'react-router'
 import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
-import * as yup from 'Yup'
+import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
+import { useNavigate } from 'react-router-dom'
 
 export const SignUp = () => {
-   const navigate = useNavigate()
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
-   const dispath = useDispatch()
 
-   const signUpSchema = yup.object().shape({
-      name: yup.string().required('Имя обязательно'),
-      lastName: yup.string().required('Фамилия обязательна'),
-      email: yup.string().email().required('Email обязателен'),
-      password: yup
-         .string()
-         .required('Пароль обязателен')
-         .min(6, 'Пароль должен быть не менее 6 символов'),
-      repeatPassword: yup
-         .string()
-         .required('Повторите пароль')
-         .oneOf([yup.ref('password')], 'Пароли должны совпадать'),
-   })
+   const dispatch = useDispatch()
+   const navigate = useNavigate()
 
-   // const onSubmit = (values) => {
-   //    console.log(values)
+   const onSubmit = (values) =>
+      dispatch(AUTH_THUNK.signUP({ values, navigate }))
 
-   //    dispath(AUTH_THUNK.signUP({ values }))
-   // }
-
-   const formik = useFormik({
+   const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
          name: '',
          lastName: '',
@@ -48,135 +30,142 @@ export const SignUp = () => {
          password: '',
          repeatPassword: '',
       },
-      validationSchema: signUpSchema,
-      onSubmit: (values) => {
-         console.log(values, 'values')
-         dispath(AUTH_THUNK.signUP(values))
-      },
+
+      validationSchema: VALIDATION_SIGN_UP,
+      onSubmit,
    })
-   console.log(signUpSchema, 'dl')
+
    return (
-      <StylesBox onSubmit={formik.handleSubmit}>
+      <StylesBox onSubmit={handleSubmit}>
          <StylesBoxRight>
             <StylesBoxLogo>
                <Black />
                Task Tracker
             </StylesBoxLogo>
-            <Box>
-               <StylesBoxInput>
-                  <h2>Sign Un</h2>
-                  <StyledBoxGoogle>
-                     <StyledBox>
-                        <StyledAvatar>R</StyledAvatar>
-                        <Box>
-                           <StyledH3>Sign Up as Nazira</StyledH3>
 
-                           <StyledP>example@gmail.com</StyledP>
-                        </Box>
-                     </StyledBox>
-                     <StyledAvatarGoogle>
-                        <GoogleIcon />
-                     </StyledAvatarGoogle>
-                  </StyledBoxGoogle>
+            <StylesBoxInput>
+               <Typography fontSize={18}>Sign Up</Typography>
 
-                  <StyledP>or</StyledP>
+               <StyledBoxGoogle>
+                  <StyledBox>
+                     <StyledAvatar>R</StyledAvatar>
 
+                     <Box>
+                        <StyledH3>Sign Up as Nazira</StyledH3>
+                        <StyledP>example@gmail.com</StyledP>
+                     </Box>
+                  </StyledBox>
+
+                  <StyledAvatarGoogle>
+                     <GoogleIcon />
+                  </StyledAvatarGoogle>
+               </StyledBoxGoogle>
+
+               <StyledP>or</StyledP>
+
+               <InputWrapper>
                   <Input
                      placeholder="Name"
                      type="text"
-                     value={formik.values.name}
-                     onChange={formik.handleChange}
                      name="name"
-                     error={formik.touched.name && Boolean(formik.errors.name)}
+                     value={values.name}
+                     onChange={handleChange}
+                     error={touched.name && Boolean(errors.name)}
                   />
-                  {formik.touched.name && formik.errors.name && (
-                     <p style={{ color: 'red' }}>{formik.errors.name}</p>
-                  )}
+                  <ErrorText>
+                     {touched.name && errors.name ? errors.name : ' '}
+                  </ErrorText>
+               </InputWrapper>
 
+               <InputWrapper>
                   <Input
                      placeholder="Surname"
                      type="text"
-                     value={formik.values.lastName}
-                     onChange={formik.handleChange}
                      name="lastName"
-                     error={
-                        formik.touched.lastName &&
-                        Boolean(formik.errors.lastName)
-                     }
+                     value={values.lastName}
+                     onChange={handleChange}
+                     error={touched.lastName && Boolean(errors.lastName)}
                   />
-                  {formik.touched.lastName && formik.errors.lastName && (
-                     <p style={{ color: 'red' }}>{formik.errors.lastName}</p>
-                  )}
+                  <ErrorText>
+                     {touched.lastName && errors.lastName
+                        ? errors.lastName
+                        : ' '}
+                  </ErrorText>
+               </InputWrapper>
 
+               <InputWrapper>
                   <Input
                      placeholder="example@gmail.com"
                      type="email"
-                     value={formik.values.email}
-                     onChange={formik.handleChange}
                      name="email"
-                     error={
-                        formik.touched.email && Boolean(formik.errors.email)
-                     }
+                     value={values.email}
+                     onChange={handleChange}
+                     error={touched.email && Boolean(errors.email)}
                   />
-                  {formik.touched.email && formik.errors.email && (
-                     <p style={{ color: 'red' }}>{formik.errors.email}</p>
-                  )}
+                  <ErrorText>
+                     {touched.email && errors.email ? errors.email : ' '}
+                  </ErrorText>
+               </InputWrapper>
 
+               <InputWrapper>
                   <Input
                      placeholder="Password"
                      type="password"
                      iconPosition="end"
                      icon={<HideIcon />}
-                     value={formik.values.password}
-                     onChange={formik.handleChange}
                      name="password"
-                     error={
-                        formik.touched.password &&
-                        Boolean(formik.errors.password)
-                     }
+                     value={values.password}
+                     onChange={handleChange}
+                     error={touched.password && Boolean(errors.password)}
                   />
-                  {formik.touched.password && formik.errors.password && (
-                     <p style={{ color: 'red' }}>{formik.errors.password}</p>
-                  )}
+                  <ErrorText>
+                     {touched.password && errors.password
+                        ? errors.password
+                        : ' '}
+                  </ErrorText>
+               </InputWrapper>
 
+               <InputWrapper>
                   <Input
                      placeholder="Repeat password"
                      type="password"
                      iconPosition="end"
                      icon={<ShowIcon />}
+                     name="repeatPassword"
+                     value={values.repeatPassword}
+                     onChange={handleChange}
                      error={
-                        formik.touched.repeatPassword &&
-                        Boolean(formik.errors.repeatPassword)
+                        touched.repeatPassword && Boolean(errors.repeatPassword)
                      }
                   />
-                  {formik.touched.repeatPassword &&
-                     formik.errors.repeatPassword && (
-                        <p style={{ color: 'red' }}>
-                           {formik.errors.repeatPassword}
-                        </p>
-                     )}
+                  <ErrorText>
+                     {touched.repeatPassword && errors.repeatPassword
+                        ? errors.repeatPassword
+                        : ' '}
+                  </ErrorText>
+               </InputWrapper>
 
-                  <StylesBoxCheckbox>
-                     <Checkbox
-                        {...label}
-                        defaultChecked
-                        sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
-                     />
-                     <StylesP>
-                        Creating an account means you,re okay with our Terms of
-                        Service, Privacy Policy.
-                     </StylesP>
-                  </StylesBoxCheckbox>
+               <StylesBoxCheckbox>
+                  <Checkbox
+                     {...label}
+                     defaultChecked
+                     sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
+                  />
+                  <StylesP>
+                     Creating an account means you’re okay with our Terms of
+                     Service, Privacy Policy.
+                  </StylesP>
+               </StylesBoxCheckbox>
 
-                  <StyledButton>Sign Up</StyledButton>
+               <StyledButton type="submit">Sign Up</StyledButton>
 
-                  <Typography>
-                     You already have an account?{' '}
-                     <StyledA href="/sign-in">Log In</StyledA>
-                  </Typography>
-               </StylesBoxInput>
-            </Box>
+               <Typography>
+                  You already have an account?
+                  <StyledA href="/">Log In</StyledA>
+               </Typography>
+            </StylesBoxInput>
          </StylesBoxRight>
+
          <StylesBoxLeft>
             <StylesImg
                src="src/assets/images/icon/imgbackraund/Rectangle 77.png"
@@ -186,6 +175,41 @@ export const SignUp = () => {
       </StylesBox>
    )
 }
+
+const StylesBox = styled('form')({
+   display: 'flex',
+   fontFamily: 'Cera Pro, sans-serif',
+})
+
+const StylesBoxLeft = styled(Box)({
+   width: '40%',
+   height: '100vh',
+})
+
+const StylesImg = styled('img')({
+   width: '100%',
+   height: '100%',
+})
+
+const StylesBoxLogo = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   color: '#0580d1',
+   position: 'absolute',
+   top: '20px',
+   left: '20px',
+   gap: '8px',
+})
+
+const StylesBoxRight = styled(Box)({
+   display: 'flex',
+   alignItems: 'center',
+   justifyContent: 'center',
+   flexDirection: 'column',
+   width: '50%',
+   height: '100vh',
+})
 
 const StyledBox = styled(Box)({
    display: 'flex',
@@ -201,7 +225,8 @@ const StyledBoxGoogle = styled(Box)({
    backgroundColor: '#f0f0f0',
    padding: '11px 16px',
    borderRadius: '8px',
-   minWidth: '321px',
+   width: '100%',
+   cursor: 'pointer',
 })
 
 const StyledH3 = styled('h3')({
@@ -240,50 +265,26 @@ const StylesBoxCheckbox = styled(Box)({
    display: 'flex',
    alignItems: 'center',
    gap: '8px',
-   width: '350px',
-   height: '100%',
-})
-
-const StylesBox = styled('form')({
-   display: 'flex',
-})
-
-const StylesBoxLeft = styled(Box)({
-   width: '40%',
-   height: '100vh',
-})
-
-const StylesImg = styled('img')({
    width: '100%',
-   height: '100%',
-})
-
-const StylesBoxLogo = styled(Box)({
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center',
-   color: '#0580d1',
-   position: 'absolute',
-   top: '20px',
-   left: '20px',
-   gap: '8px',
-})
-
-const StylesBoxRight = styled(Box)({
-   display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center',
-   flexDirection: 'column',
-   width: '50%',
-   height: '100vh',
 })
 
 const StylesBoxInput = styled(Box)({
    display: 'flex',
-   alignItems: 'center',
-   justifyContent: 'center',
    flexDirection: 'column',
+   alignItems: 'center',
    width: '321px',
-   height: '261px',
-   gap: '16px',
+   gap: '8px',
+})
+
+const InputWrapper = styled(Box)({
+   width: '100%',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '4px',
+})
+
+const ErrorText = styled(Typography)({
+   color: 'red',
+   minHeight: '16px',
+   fontSize: '12px',
 })

@@ -1,22 +1,16 @@
-import { Avatar, Box, Typography } from '@mui/material'
-import React from 'react'
-import styled from '@emotion/styled'
-import { Input } from '../../components/UI/input/Input'
+import { Avatar, Box, Typography, styled } from '@mui/material'
+import { Input } from '../../components/UI/Input'
 import UserImage from '../../assets/images/icon/iconpeople/ikonmen.jpg'
 import Logo from '../../assets/images/icon/system/Black and White Collection 2.svg'
 import Notify from '../../assets/images/icon/system/Notify.svg'
 import StrelkaDown from '../../assets/images/icon/arrows/down.svg'
 
-// const existsRoutes = [ROUTES.HOME, ROUTES.ALL_BOARDS] // роуты, для которых нужно показывать Header
 export const Header = ({ favouritesCount, notificationCount }) => {
-   // if (!favouritesCount) return null // если нет избранных элементов, возвращаем null
-   // const ctateHeders = 12 // количество заголовков, можно заменить на состояние или пропс
-   // const isShowHeader = existsRoutes.includes(window.location.pathname) // проверяем, нужно ли показывать Header в зависимости от текущего пути
-   // if (!isShowHeader) return null // если Header не нужен, возвращаем null
+   const statusInput = status
 
    return (
       <header>
-         <StylesDivHeder>
+         <StylesBoxHeder>
             <StylesBoxOneHeader>
                <StylesTypography variant="h6" component="div">
                   <StylesTypographyBox>
@@ -35,7 +29,10 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                </StylesBoxOneHeaderDoucher>
             </StylesBoxOneHeader>
             <StylesBoxTwoHeader>
-               <StylesInpurt placeholder="Search" iconPosition="start" />
+               {statusInput && (
+                  <StylesInpurt placeholder="Search" iconPosition="start" />
+               )}
+
                <StylesBoxImg>
                   <StylesImg src={Notify} alt="'notify'" />
                   <StylesNonotificationBox>
@@ -44,13 +41,17 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                </StylesBoxImg>
                <StylesImgUser alt="Remy Sharp" src={UserImage} />
             </StylesBoxTwoHeader>
-         </StylesDivHeder>
+         </StylesBoxHeder>
       </header>
    )
 }
-const StylesDivHeder = styled(Box)(({}) => ({
+
+const StylesBoxHeder = styled(Box)(({}) => ({
    display: 'flex',
    justifyContent: 'space-between',
+   padding: '16px 40px',
+   backgroundColor: '#ffffff',
+   box
 }))
 
 const StylesBoxOneHeader = styled(Box)(({}) => ({
