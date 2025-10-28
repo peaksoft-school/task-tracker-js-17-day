@@ -5,6 +5,7 @@ import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
 import IssuesPage from '../pages/all-issuis/Issues'
 import PrivateRoute from './PrivateRoute'
+import Main from '../pages/Main'
 
 export const routes = createBrowserRouter([
    {
@@ -25,8 +26,7 @@ export const routes = createBrowserRouter([
          <PrivateRoute
             Component={
                <>
-                  <h1>Headers</h1>
-                  <h1>Workspaces</h1>
+                  <Main />
                </>
             }
             isAllowed={true}
