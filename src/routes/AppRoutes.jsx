@@ -3,6 +3,8 @@ import { ROLES } from './routes'
 import { SignIn } from '../pages/sign-in/SignIn'
 import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
+import Main from '../pages/Main'
+import Issues from '../pages/all-issuis/Issues'
 
 export const routes = createBrowserRouter([
    {
@@ -35,7 +37,7 @@ export const routes = createBrowserRouter([
       path: '/all-issuis',
       element: (
          <PrivateRoute
-            Component={<IssuesPage />}
+            Component={<Issues />}
             isAllowed={true}
             fallBacPath="/"
          />
