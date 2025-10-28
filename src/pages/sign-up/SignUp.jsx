@@ -13,6 +13,7 @@ import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
 import { useState } from 'react'
+import { auth, provider } from '../../configs/firebase'
 
 export const SignUp = () => {
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
@@ -21,13 +22,7 @@ export const SignUp = () => {
 
    const onSubmit = (values) => dispatch(AUTH_THUNK.signUP({ values }))
 
-   const {
-      handleSubmit,
-      values,
-      handleChange,
-      touched,
-      errors,
-   } = useFormik({
+   const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
          name: '',
          lastName: '',
@@ -50,6 +45,21 @@ export const SignUp = () => {
       setShowRepitPassword(!showRepitPassword)
    }
 
+   const hndlerGoogel = async () => {
+      await signInWithPopup(auth, provider)
+         .then((response) => {
+            dispatch(
+               AUTH_THUNK.authWithGoogle({
+                  tokenId: response?.user?.accessToken,
+               })
+            )
+            console.log('dl')
+         })
+         .catch((error) => {
+            return error
+         })
+   }
+
    return (
       <StylesBox onSubmit={handleSubmit}>
          <StylesBoxRight>
@@ -61,7 +71,7 @@ export const SignUp = () => {
             <StylesBoxInput>
                <Typography fontSize={18}>Sign Up</Typography>
 
-               <StyledBoxGoogle>
+               <StyledBoxGoogle onClick={hndlerGoogel}>
                   <StyledBox>
                      <StyledAvatar>R</StyledAvatar>
 
@@ -127,8 +137,13 @@ export const SignUp = () => {
                      placeholder="Password"
                      type={showPassword ? 'text' : 'password'}
                      iconPosition="end"
-                     onClick={inputPassword}
-                     icon={showPassword ? <ShowIcon /> : <HideIcon />}
+                     icon={
+                        showPassword ? (
+                           <ShowIcon onClick={inputPassword} />
+                        ) : (
+                           <HideIcon onClick={inputPassword} />
+                        )
+                     }
                      name="password"
                      value={values.password}
                      onChange={handleChange}
@@ -148,8 +163,13 @@ export const SignUp = () => {
                      iconPosition="end"
                      name="repeatPassword"
                      onChange={handleChange}
-                     onClick={inputRepitPassword}
-                     icon={showRepitPassword ? <ShowIcon /> : <HideIcon />}
+                     icon={
+                        showRepitPassword ? (
+                           <ShowIcon onClick={inputRepitPassword} />
+                        ) : (
+                           <HideIcon onClick={inputRepitPassword} />
+                        )
+                     }
                      value={values.repeatPassword}
                      error={
                         touched.repeatPassword && Boolean(errors.repeatPassword)
@@ -199,7 +219,6 @@ const StylesBoxLeft = styled(Box)({
    width: '40%',
    height: '100vh',
 })
-
 
 const StylesBoxLogo = styled(Box)({
    display: 'flex',

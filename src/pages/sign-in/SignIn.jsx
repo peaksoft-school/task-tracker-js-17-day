@@ -98,11 +98,16 @@ export const SignIn = () => {
                      type={showPassword ? 'text' : 'password'}
                      iconPosition="end"
                      name="password"
-                     onClick={inputPassword}
                      value={values.password}
                      onChange={handleChange}
                      error={touched.password && Boolean(errors.password)}
-                     icon={showPassword ? <ShowIcon /> : <HideIcon />}
+                     icon={
+                        showPassword ? (
+                           <ShowIcon onClick={inputPassword} />
+                        ) : (
+                           <HideIcon onClick={inputPassword} />
+                        )
+                     }
                   />
                   <ErrorText>
                      {touched.password && errors.password
