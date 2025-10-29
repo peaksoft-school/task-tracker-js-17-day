@@ -1,0 +1,36 @@
+import { createSlice } from '@reduxjs/toolkit'
+import { MAIN_THUNK } from './MainThunk'
+
+const initialState = {
+   // initialState ==> это и есть state
+
+   isloading: false, // состояния загрузки  false
+   main: [], // это для сохраниение данных приходящих бекенда
+   error: null,
+} //данные с бекенда , первоначальное состояние
+
+const mainSlice = createSlice({
+   name: 'main',
+   initialState, // первоначальное состояние
+   reducers: {}, // тут только локальные функции пишется
+
+   extraReducers: (builder) => {
+      builder
+         .addCase(MAIN_THUNK.getAllMain.pending, (state) => {
+            // initialState ==> это и есть state
+            state.isloading = true // тут сотояние загрузки включается
+         }) // кайсыл запросту кандай соостояниясыннда надо обрабатывать
+         .addCase(MAIN_THUNK.getAllMain.fulfilled, (state, action) => {
+            // fulfilled === "успешно" state состояние келет а если бир нерсе кайтарсак то бизге action деген нерсе келет
+            state.isloading = false
+            state.main = action.payload
+         })
+         .addCase(MAIN_THUNK.getAllMain.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.error //показать ошибку от бекенда
+         })
+      // зарпос get
+   }, //запростордун состояния ларын обработка кылыш учун
+})
+
+export { mainSlice }

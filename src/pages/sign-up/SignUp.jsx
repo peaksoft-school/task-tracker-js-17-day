@@ -11,16 +11,16 @@ import { useFormik } from 'formik'
 import { useDispatch } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
-import { useNavigate } from 'react-router-dom'
+import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
+import { useState } from 'react'
+import { auth, provider } from '../../configs/firebase'
 
 export const SignUp = () => {
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
    const dispatch = useDispatch()
-   const navigate = useNavigate()
 
-   const onSubmit = (values) =>
-      dispatch(AUTH_THUNK.signUP({ values, navigate }))
+   const onSubmit = (values) => dispatch(AUTH_THUNK.signUP({ values }))
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
@@ -34,6 +34,31 @@ export const SignUp = () => {
       validationSchema: VALIDATION_SIGN_UP,
       onSubmit,
    })
+   const [showPassword, setShowPassword] = useState(false)
+
+   const [showRepitPassword, setShowRepitPassword] = useState(false)
+
+   const inputPassword = () => {
+      setShowPassword(!showPassword)
+   }
+   const inputRepitPassword = () => {
+      setShowRepitPassword(!showRepitPassword)
+   }
+
+   const hndlerGoogel = async () => {
+      await signInWithPopup(auth, provider)
+         .then((response) => {
+            dispatch(
+               AUTH_THUNK.authWithGoogle({
+                  tokenId: response?.user?.accessToken,
+               })
+            )
+            console.log('dl')
+         })
+         .catch((error) => {
+            return error
+         })
+   }
 
    return (
       <StylesBox onSubmit={handleSubmit}>
@@ -46,7 +71,7 @@ export const SignUp = () => {
             <StylesBoxInput>
                <Typography fontSize={18}>Sign Up</Typography>
 
-               <StyledBoxGoogle>
+               <StyledBoxGoogle onClick={hndlerGoogel}>
                   <StyledBox>
                      <StyledAvatar>R</StyledAvatar>
 
@@ -110,9 +135,15 @@ export const SignUp = () => {
                <InputWrapper>
                   <Input
                      placeholder="Password"
-                     type="password"
+                     type={showPassword ? 'text' : 'password'}
                      iconPosition="end"
-                     icon={<HideIcon />}
+                     icon={
+                        showPassword ? (
+                           <ShowIcon onClick={inputPassword} />
+                        ) : (
+                           <HideIcon onClick={inputPassword} />
+                        )
+                     }
                      name="password"
                      value={values.password}
                      onChange={handleChange}
@@ -128,12 +159,18 @@ export const SignUp = () => {
                <InputWrapper>
                   <Input
                      placeholder="Repeat password"
-                     type="password"
+                     type={showRepitPassword ? 'text' : 'password'}
                      iconPosition="end"
-                     icon={<ShowIcon />}
                      name="repeatPassword"
-                     value={values.repeatPassword}
                      onChange={handleChange}
+                     icon={
+                        showRepitPassword ? (
+                           <ShowIcon onClick={inputRepitPassword} />
+                        ) : (
+                           <HideIcon onClick={inputRepitPassword} />
+                        )
+                     }
+                     value={values.repeatPassword}
                      error={
                         touched.repeatPassword && Boolean(errors.repeatPassword)
                      }
@@ -152,7 +189,7 @@ export const SignUp = () => {
                      sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                   />
                   <StylesP>
-                     Creating an account means you’re okay with our Terms of
+                     Creating an account means you're okay with our Terms of
                      Service, Privacy Policy.
                   </StylesP>
                </StylesBoxCheckbox>
@@ -167,10 +204,7 @@ export const SignUp = () => {
          </StylesBoxRight>
 
          <StylesBoxLeft>
-            <StylesImg
-               src="src/assets/images/icon/imgbackraund/Rectangle 77.png"
-               alt=""
-            />
+            <img src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
@@ -184,11 +218,6 @@ const StylesBox = styled('form')({
 const StylesBoxLeft = styled(Box)({
    width: '40%',
    height: '100vh',
-})
-
-const StylesImg = styled('img')({
-   width: '100%',
-   height: '100%',
 })
 
 const StylesBoxLogo = styled(Box)({

@@ -2,11 +2,11 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import { authSlice } from './slices/auth/authSlice'
 import storage from 'redux-persist/lib/storage'
-import { workspacesReducer } from './slices/workspaces/WorkspacesSlice'
+import { mainSlice } from './slices/workspaces/MainSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
-   workspaces: workspacesReducer,
+   [mainSlice.name]: mainSlice.reducer,
 })
 
 const persistConfig = {

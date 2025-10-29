@@ -1,4 +1,3 @@
-import React, { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
    Avatar,
@@ -16,39 +15,19 @@ import {
    FavoriteIconstarBlue,
    FavoriteIconstarSilver,
 } from '../assets/AllExportIcon'
-import { getWorkspaces } from '../store/slices/workspaces/WorkspacesThunk'
-
-const mapApiToComponentData = (apiItem) => ({
-   id: apiItem.id,
-   name: apiItem.name,
-   lead: apiItem.userFullName || apiItem.userName || 'Unknown Lead',
-   fav: apiItem.favorite,
-   urlPhoto: apiItem.urlPhoto,
-})
+import { useEffect } from 'react'
+import { MAIN_THUNK } from '../store/slices/workspaces/MainThunk'
 
 function Main() {
-   const dispatch = useDispatch()
-   const {
-      list: rawWorkspaces,
-      isLoading,
-      error,
-   } = useSelector((state) => state.workspaces)
-   const token = useSelector((state) => state.auth.token)
-   useEffect(() => {
-      if (token) {
-         dispatch(getWorkspaces({ token }))
-      }
-   }, [dispatch, token])
+   const { token } = useSelector((state) => state.auth)
+   const { main } = useSelector((state) => state.main)
 
-   const rows = useMemo(() => {
-      return rawWorkspaces.map(mapApiToComponentData)
-   }, [rawWorkspaces])
-   if (isLoading && rows.length === 0) {
-      return <p>Загрузка воркспейсов...</p>
-   }
-   if (error) {
-      return <p>Ошибка при загрузке: {error.message || 'Неизвестная ошибка'}</p>
-   }
+   const dispach = useDispatch()
+   // get запрос должен работать
+
+   useEffect(() => {
+      dispach(MAIN_THUNK.getAllMain({ token })) // это сигнал мы отправляем
+   }, [])
 
    return (
       <ConteinerBoxMain>
@@ -56,7 +35,7 @@ function Main() {
          <Content>
             <TopBar>
                <H2Workspaces>Workspaces</H2Workspaces>
-               <MainAppButton>Create</MainAppButton>{' '}
+               <MainAppButton>Create</MainAppButton>
             </TopBar>
             <StyledTableContainer>
                <Table stickyHeader>
@@ -69,7 +48,7 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {rows.map((row) => (
+                     {main.map((row) => (
                         <TableRow key={row.id}>
                            <TableCell>{row.id}</TableCell>
                            <TableCell>
@@ -130,7 +109,7 @@ const MainAppButton = styled(AppButton)({
 })
 
 const StyledTableContainer = styled(Box)(() => ({
-   maxHeight: '700px', // фиксируем высоту для скролла
+   maxHeight: '700px',
    overflowY: 'auto',
    '& th': {
       position: 'sticky',
