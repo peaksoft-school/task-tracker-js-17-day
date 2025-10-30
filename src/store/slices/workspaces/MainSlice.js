@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { MAIN_THUNK } from './MainThunk'
+import { MAIN_THUNK } from './mainThunk'
 
 const initialState = {
    // initialState ==> это и есть state

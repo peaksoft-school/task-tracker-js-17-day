@@ -9,20 +9,25 @@ import {
    TableHead,
    TableRow,
 } from '@mui/material'
-import { Header } from '../layouts/header/Header'
-import { AppButton } from '../components/UI/AppButton'
+import { Header } from '../../layouts/header/Header'
+import { AppButton } from '../../components/UI/AppButton'
 import {
    FavoriteIconstarBlue,
    FavoriteIconstarSilver,
-} from '../assets/AllExportIcon'
-import { useEffect } from 'react'
-import { MAIN_THUNK } from '../store/slices/workspaces/MainThunk'
+} from '../../assets/AllExportIcon'
+import { useEffect, useState } from 'react'
+import { MAIN_THUNK } from '../../store/slices/workspaces/mainThunk'
+import { CustomModal } from '../../components/UI/modal/Modal'
+import CreateModal from './mainModal/CreateModal'
 
 function Main() {
    const { token } = useSelector((state) => state.auth)
-   const { main } = useSelector((state) => state.main)
+   // const { main } = useSelector((state) => state.main)
 
    const dispach = useDispatch()
+   const [CrateModal, setCrateModal] = useState(false)
+   const OpenModalCrate = () => setCrateModal((prev) => !prev)
+
    // get запрос должен работать
 
    useEffect(() => {
@@ -35,7 +40,13 @@ function Main() {
          <Content>
             <TopBar>
                <H2Workspaces>Workspaces</H2Workspaces>
-               <MainAppButton>Create</MainAppButton>
+               <MainAppButton onClick={OpenModalCrate}>Create</MainAppButton>
+               <CustomModalCrate
+                  isVisible={CrateModal}
+                  handleVisible={OpenModalCrate}
+               >
+                  <CreateModal />
+               </CustomModalCrate>
             </TopBar>
             <StyledTableContainer>
                <Table stickyHeader>
@@ -48,7 +59,7 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {main.map((row) => (
+                     {/* {main.map((row) => (
                         <TableRow key={row.id}>
                            <TableCell>{row.id}</TableCell>
                            <TableCell>
@@ -73,7 +84,7 @@ function Main() {
                               )}
                            </TableCell>
                         </TableRow>
-                     ))}
+                     ))} */}
                   </TableBody>
                </Table>
             </StyledTableContainer>
@@ -107,6 +118,8 @@ const H2Workspaces = styled('h2')({
 const MainAppButton = styled(AppButton)({
    margin: '16px 16px 0px 0px ',
 })
+
+const CustomModalCrate = styled(CustomModal)({})
 
 const StyledTableContainer = styled(Box)(() => ({
    maxHeight: '700px',
