@@ -1,5 +1,5 @@
-import { Box, styled, Typography, CircularProgress } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import { Box, styled, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from '../../layouts/header/Header'
 import { AppButton } from '../../components/UI/AppButton'
@@ -10,11 +10,10 @@ import { backgroundImages } from '../../assets/backgroundImg/background'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
-import { useParams } from 'react-router-dom'
 import CheckIcon from '@mui/icons-material/Check'
 
 export default function Board() {
-   const { boards, loading, bgUrl } = useSelector((state) => state.board)
+   const { boards, loading } = useSelector((state) => state.board)
    const dispatch = useDispatch()
 
    const [boardsImg, setBoardsImg] = useState(false)
@@ -160,7 +159,7 @@ export default function Board() {
                         >
                            <StyledImg src={bgItem} alt="background" />
 
-                           {selectedItem === bgItem &&  (
+                           {selectedItem === bgItem && (
                               <StyledOverlay>
                                  <CheckIcon />
                               </StyledOverlay>
