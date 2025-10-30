@@ -3,10 +3,12 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import { authSlice } from './slices/auth/authSlice'
 import { boardSlice } from './slices/board/boardSlice'
+import { profileSlice } from './profile/profileSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [boardSlice.name]: boardSlice.reducer,
+   [profileSlice.name]: profileSlice.reducer,
 })
 
 const persistConfig = {

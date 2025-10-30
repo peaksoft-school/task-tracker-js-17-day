@@ -41,12 +41,15 @@ export const SignIn = () => {
    const hndlerGoogel = async () => {
       await signInWithPopup(auth, provider)
          .then((response) => {
+            console.log(response.user.accessToken)
+
             dispatch(
                AUTH_THUNK.authWithGoogle({
-                  tokenId: response?.user?.accessToken,
+                  idToken: response?.user?.accessToken,navigate
                })
             )
          })
+
          .catch((error) => {
             return error
          })

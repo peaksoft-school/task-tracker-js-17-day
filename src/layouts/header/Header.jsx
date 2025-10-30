@@ -4,9 +4,16 @@ import UserImage from '../../assets/images/icon/iconpeople/ikonmen.jpg'
 import Logo from '../../assets/images/icon/system/Black and White Collection 2.svg'
 import Notify from '../../assets/images/icon/system/Notify.svg'
 import StrelkaDown from '../../assets/images/icon/arrows/down.svg'
+import {  useNavigate } from 'react-router-dom'
 
 export const Header = ({ favouritesCount, notificationCount }) => {
    const statusInput = status
+   const navigate = useNavigate()
+
+   const hendlerNavigateUser = () => {
+      navigate('/profile')
+      console.log('click')
+   }
 
    return (
       <header>
@@ -39,7 +46,11 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                      {notificationCount}
                   </StylesNonotificationBox>
                </StylesBoxImg>
-               <StylesImgUser alt="Remy Sharp" src={UserImage} />
+               <StylesImgUser
+                  onClick={hendlerNavigateUser}
+                  alt="Remy Sharp"
+                  src={UserImage}
+               />
             </StylesBoxTwoHeader>
          </StylesBoxHeder>
       </header>
@@ -119,6 +130,7 @@ const StylesImgUser = styled(Avatar)(({}) => ({
    width: '32px',
    height: '32px',
    backgroundPosition: 'center',
+   cursor: 'pointer',
 }))
 
 const StylesInpurt = styled(Input)(({}) => ({
