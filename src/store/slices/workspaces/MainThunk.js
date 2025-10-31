@@ -15,4 +15,29 @@ const getAllMain = createAsyncThunk('post/getAllMain', async ({ token }) => {
    }
 })
 
-export const MAIN_THUNK = { getAllMain }
+const createWorkSpace = createAsyncThunk(
+   'post/createWorkSpace',
+
+   async ({ data }) => {
+      try {
+         await axiosInstance.get('/api/workspaces', data)
+
+         // clous кылып жвбв
+      } catch (error) {
+         console.error(error)
+      }
+   }
+)
+
+const modalCreateWorkSpase = createAsyncThunk(
+   'post/modalCreateWorkSpase',
+   async ({ data }) => {
+      try {
+         await axiosInstance.post('/api/workspaces', data)
+      } catch (error) {
+         console.log(error)
+      }
+   }
+)
+
+export const MAIN_THUNK = { getAllMain, createWorkSpace, modalCreateWorkSpase }

@@ -22,7 +22,7 @@ import CreateModal from './mainModal/CreateModal'
 
 function Main() {
    const { token } = useSelector((state) => state.auth)
-   // const { main } = useSelector((state) => state.main)
+   const { main } = useSelector((state) => state.main)
 
    const dispach = useDispatch()
    const [CrateModal, setCrateModal] = useState(false)
@@ -45,7 +45,7 @@ function Main() {
                   isVisible={CrateModal}
                   handleVisible={OpenModalCrate}
                >
-                  <CreateModal />
+                  <CreateModal onClose={OpenModalCrate} />
                </CustomModalCrate>
             </TopBar>
             <StyledTableContainer>
@@ -59,7 +59,7 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {/* {main.map((row) => (
+                     {main.map((row) => (
                         <TableRow key={row.id}>
                            <TableCell>{row.id}</TableCell>
                            <TableCell>
@@ -67,24 +67,20 @@ function Main() {
                            </TableCell>
                            <TableCell>
                               <LeadBox>
-                                 <Avatar
-                                    src={
-                                       row.urlPhoto ||
-                                       'https://i.pravatar.cc/40'
-                                    }
-                                 />
+                                 <Avatar src={row.urlPhoto} />
                                  <span>{row.lead}</span>
                               </LeadBox>
                            </TableCell>
                            <TableCell>
-                              {row.fav ? (
+                              {/* {row.fav ? (
                                  <FavoriteIconstarBlue color="primary" />
                               ) : (
                                  <FavoriteIconstarSilver color="action" />
-                              )}
+                              )} */}
+                              <FavoriteIconstarBlue color="primary" />
                            </TableCell>
                         </TableRow>
-                     ))} */}
+                     ))}
                   </TableBody>
                </Table>
             </StyledTableContainer>

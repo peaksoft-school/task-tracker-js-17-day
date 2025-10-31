@@ -15,6 +15,7 @@ const mainSlice = createSlice({
    reducers: {}, // тут только локальные функции пишется
 
    extraReducers: (builder) => {
+      // зарпос get
       builder
          .addCase(MAIN_THUNK.getAllMain.pending, (state) => {
             // initialState ==> это и есть state
@@ -29,7 +30,18 @@ const mainSlice = createSlice({
             state.isloading = false
             state.error = action.error //показать ошибку от бекенда
          })
-      // зарпос get
+
+         // post
+         .addCase(MAIN_THUNK.modalCreateWorkSpase.pending, (state) => {
+            state.isloading = true
+         })
+         .addCase(MAIN_THUNK.modalCreateWorkSpase.fulfilled, (state) => {
+            state.isloading = false
+         })
+         .addCase(MAIN_THUNK.modalCreateWorkSpase.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.error
+         })
    }, //запростордун состояния ларын обработка кылыш учун
 })
 

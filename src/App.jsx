@@ -4,8 +4,8 @@ import Main from './pages/mainWorkSpace/Main'
 
 const App = () => (
    <>
-      {/* <RouterProvider router={routes} /> */}
-      <Main/>
+      <RouterProvider router={routes} />
+      {/* <Main/> */}
    </>
 )
 

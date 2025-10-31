@@ -1,37 +1,96 @@
+// import React, { useState } from 'react'
 import styled from '@emotion/styled'
-import { Box, Input, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { AppButton } from '../../../components/UI/AppButton'
+import { useForm } from 'react-hook-form'
+import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
+import { useDispatch } from 'react-redux'
 
-function CreateModal() {
+function CreateModal({ onClose }) {
+   const dispatch = useDispatch()
+
+   const {
+      register,
+      handleSubmit,
+      formState: { errors }, // Получаем объект ошибок
+   } = useForm({
+      defaultValues: {
+         // Можно задать значения по умолчанию
+         name: '',
+         email: '',
+      },
+   })
+
+   const onSubmit = async (data) => {
+      // 👈 Добавили async и блок {}
+      const finalData = {
+         ...data,
+         role: 'OWNER',
+      }
+
+      console.log('Дааные формы :', finalData)
+
+      try {
+         // Диспатч сюда: вызываем thunk и передаем ему объект { data: finalData }
+         // .unwrap() позволяет нам дождаться результата промиса
+         await dispatch(
+            MAIN_THUNK.modalCreateWorkSpase({ data: finalData })
+         ).unwrap()
+
+         // onClose() вызывается ТОЛЬКО после успешной отправки!
+         onClose()
+      } catch (error) {
+         // Здесь можно обработать ошибку (например, показать тост)
+         console.error('Ошибка при создании рабочего пространства:', error)
+      }
+   }
+
    return (
-      <ContainerModalCreate>
-         {/* Заголовок */}
+      <ContainerModalCreate onSubmit={handleSubmit(onSubmit)}>
          <LabelTitle variant="h6">Create a new workspace</LabelTitle>
 
-         {/* Контейнер для полей ввода */}
          <InputContainer>
-            {/* Поле для имени */}
             <InputGroup>
                <Label htmlFor="workspace-name">Name of the workspace*</Label>
-               <InputText id="workspace-name" type="text" placeholder="Name" />
+               <InputTextName
+                  id="workspace-name"
+                  type="text"
+                  placeholder="Name"
+                  // 💡 name: 'name' — это то, как RHF будет называть это поле в объекте данных
+                  {...register('name', { required: 'Имя обязательно' })} // потключает register иправило валидации
+               />
+
+               {/* выводим ошибки если оно есть  */}
+               {errors.name && (
+                  <ErrorMessage>{errors.name.message}</ErrorMessage>
+               )}
             </InputGroup>
 
-            {/* Поле для email */}
             <InputGroup sx={{ mt: 2.5 }}>
                <Label htmlFor="member-email">Invite a member</Label>
                <InputText
                   id="member-email"
                   type="email"
                   placeholder="example@gmail.com"
+                  // 💡 name: 'email'
+                  {...register('email', {
+                     pattern: {
+                        value: /^\S+@\S+$/i,
+                        massage: 'ведите конкреттный email',
+                     },
+                  })}
                />
+               {errors.email && (
+                  <ErrorMessage>{errors.email.message}</ErrorMessage>
+               )}
             </InputGroup>
          </InputContainer>
 
-         {/* Контейнер для кнопок */}
          <ContainerButton>
-            <CancelButton>Cancel</CancelButton>
-            {/* Кнопка Create по умолчанию неактивна (disabled) и имеет темный фон */}
-            <CreateButton disabled>Create</CreateButton>
+            <CancelButton onClick={onClose} type="button">
+               Cancel
+            </CancelButton>
+            <CreateButton type="submit">Create</CreateButton>
          </ContainerButton>
       </ContainerModalCreate>
    )
@@ -39,9 +98,9 @@ function CreateModal() {
 
 export default CreateModal
 
-const ContainerModalCreate = styled(Box)({
+const ContainerModalCreate = styled('form')({
    width: '361px',
-   height: '260px',
+   minHeight: '260px',
 })
 
 const LabelTitle = styled(Typography)({
@@ -66,12 +125,30 @@ const InputGroup = styled(Box)({
 const Label = styled('label')({
    width: '159px',
    height: '18px',
-
    fontSize: '14px',
    color: 'rgba(145, 145, 145, 1)',
    fontWeight: 400,
    marginBottom: '6px',
    display: 'block',
+})
+
+const InputTextName = styled('input')({
+   width: '100%',
+   padding: '10px 12px',
+   fontSize: '16px',
+   border: '1px solid #ddd',
+   borderRadius: '8px',
+   outline: 'none',
+   boxSizing: 'border-box',
+   '&:focus': {
+      borderColor: '#007bff',
+   },
+})
+
+const ErrorMessage = styled(Typography)({
+   color: 'red',
+   fontSize: '12px',
+   marginTop: '4px',
 })
 
 const InputText = styled('input')({
@@ -90,31 +167,29 @@ const InputText = styled('input')({
 const ContainerButton = styled(Box)({
    display: 'flex',
    justifyContent: 'flex-end',
-   gap: '10px', // Расстояние между кнопками
+   gap: '10px',
    marginTop: '20px',
 })
 
 const CancelButton = styled(AppButton)({
-   backgroundColor: '#e0e0e0', // Светло-серый
+   backgroundColor: '#e0e0e0',
    color: '#555',
    '&:hover': {
       backgroundColor: '#d5d5d5',
    },
 })
 
-const CreateButton = styled(AppButton)({
-   backgroundColor: 'rgba(178, 178, 178, 1)', // Темно-серый (для disabled)
+const CreateButton = styled(AppButton)(({ disabled }) => ({
+   backgroundColor: disabled ? 'rgba(178, 178, 178, 1)' : '#007bff',
    color: '#ffffff',
    '&:disabled': {
-      // Стили неактивной кнопки на изображении
-      backgroundColor: '#a0a0a0',
+      backgroundColor: 'rgba(178, 178, 178, 1)',
       cursor: 'not-allowed',
+      color: '#ffffff',
    },
-   // Убираем, если кнопка активна:
    '&:not(:disabled)': {
-      backgroundColor: '#007bff',
       '&:hover': {
          backgroundColor: '#0056b3',
       },
    },
-})
+}))
