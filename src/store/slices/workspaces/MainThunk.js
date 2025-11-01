@@ -15,16 +15,34 @@ const getAllMain = createAsyncThunk('post/getAllMain', async ({ token }) => {
    }
 })
 
-const createWorkSpace = createAsyncThunk(
-   'post/createWorkSpace',
-
-   async ({ data }) => {
+const getAllBoards = createAsyncThunk(
+   'get/getAllBoards',
+   async ({ id }, { rejectWithValue }) => {
       try {
-         await axiosInstance.get('/api/workspaces', data)
-
-         // clous кылып жвбв
+         const { data } = await axiosInstance.get(`api/boards/workspace/${id}`)
+         return data
       } catch (error) {
-         console.error(error)
+         console.error('ошибка при переходе на старницу бордс', error)
+         return rejectWithValue(error.response.data)
+      }
+   }
+)
+
+const favoritesWorkSpase = createAsyncThunk(
+   'post/favoritesWorkSpase',
+   // примнимает workspaceId вместо data
+   async ({ id, token }, { dispatch }) => {
+      try {
+         const response = await axiosInstance.post(
+            `/api/favorites/workspace/${id}`
+         )
+
+         dispatch(getAllMain({ token }))
+
+         return response.data
+      } catch (error) {
+         console.error('ошибка при перключение избранного :', error)
+         throw error
       }
    }
 )
@@ -33,11 +51,16 @@ const modalCreateWorkSpase = createAsyncThunk(
    'post/modalCreateWorkSpase',
    async ({ data }) => {
       try {
-         await axiosInstance.post('/api/workspaces', data)
+         await axiosInstance.post(`/api/workspaces`, data)
       } catch (error) {
          console.log(error)
       }
    }
 )
 
-export const MAIN_THUNK = { getAllMain, createWorkSpace, modalCreateWorkSpase }
+export const MAIN_THUNK = {
+   getAllMain,
+   favoritesWorkSpase,
+   modalCreateWorkSpase,
+   getAllBoards,
+}

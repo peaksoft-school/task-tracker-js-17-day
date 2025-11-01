@@ -19,21 +19,38 @@ import { useEffect, useState } from 'react'
 import { MAIN_THUNK } from '../../store/slices/workspaces/mainThunk'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import CreateModal from './mainModal/CreateModal'
+import { useNavigate } from 'react-router-dom'
 
 function Main() {
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
 
    const dispach = useDispatch()
+   const navigate = useNavigate()
+
    const [CrateModal, setCrateModal] = useState(false)
    const OpenModalCrate = () => setCrateModal((prev) => !prev)
 
-   // get запрос должен работать
-
    useEffect(() => {
-      dispach(MAIN_THUNK.getAllMain({ token })) // это сигнал мы отправляем
+      dispach(MAIN_THUNK.getAllMain({ token }))
    }, [])
 
+   const handleFavoriteToogle = (id) => {
+      dispach(MAIN_THUNK.favoritesWorkSpase({ id, token }))
+   }
+
+   const openoardMain = (id) => {
+      dispach(MAIN_THUNK.getAllBoards({ id }))
+         .unwrap()
+         .then(() => {
+            navigate(`/workspace/${id}/boards`)
+         })
+         .catch((error) => {
+            console.error('Ошибка при переходе к доскам:', error)
+         })
+   }
+
+   console.log(main)
    return (
       <ConteinerBoxMain>
          <Header status={true} />
@@ -59,28 +76,34 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {main.map((row) => (
-                        <TableRow key={row.id}>
-                           <TableCell>{row.id}</TableCell>
-                           <TableCell>
-                              <a href="#">{row.name}</a>
-                           </TableCell>
-                           <TableCell>
-                              <LeadBox>
-                                 <Avatar src={row.urlPhoto} />
-                                 <span>{row.lead}</span>
-                              </LeadBox>
-                           </TableCell>
-                           <TableCell>
-                              {/* {row.fav ? (
-                                 <FavoriteIconstarBlue color="primary" />
-                              ) : (
-                                 <FavoriteIconstarSilver color="action" />
-                              )} */}
-                              <FavoriteIconstarBlue color="primary" />
-                           </TableCell>
-                        </TableRow>
-                     ))}
+                     {main &&
+                        main.map((row, i) => (
+                           <TableRow key={row.id}>
+                              <TableCell>{i + 1}</TableCell>
+                              <TableCell>
+                                 <a onClick={() => openoardMain(row.id)}>
+                                    {row.name}
+                                 </a>
+                              </TableCell>
+                              <TableCell>
+                                 <LeadBox>
+                                    <Avatar src={row.urlPhoto} />
+                                    <span>{row.lead}</span>
+                                 </LeadBox>
+                              </TableCell>
+                              <TableCell>
+                                 <FavoriteIconBox
+                                    onClick={() => handleFavoriteToogle(row.id)}
+                                 >
+                                    {row.favorite ? (
+                                       <FavoriteIconstarBlue color="primary" />
+                                    ) : (
+                                       <FavoriteIconstarSilver color="action" />
+                                    )}
+                                 </FavoriteIconBox>
+                              </TableCell>
+                           </TableRow>
+                        ))}
                   </TableBody>
                </Table>
             </StyledTableContainer>
@@ -149,3 +172,7 @@ const LeadBox = styled(Box)(() => ({
    alignItems: 'center',
    gap: '10px',
 }))
+
+const FavoriteIconBox = styled(Box)({
+   cursor: 'pointer',
+})
