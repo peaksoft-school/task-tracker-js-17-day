@@ -14,7 +14,6 @@ createRoot(document.getElementById('root')).render(
    <Provider store={store}>
       <ThemeProvider theme={themeColors}>
          <App />
-
          <Notification />
       </ThemeProvider>
    </Provider>
