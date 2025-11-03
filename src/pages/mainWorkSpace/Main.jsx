@@ -76,7 +76,7 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {main &&
+                     {main && main.length > 0 ? (
                         main.map((row, i) => (
                            <TableRow key={row.id}>
                               <TableCell>{i + 1}</TableCell>
@@ -103,7 +103,27 @@ function Main() {
                                  </FavoriteIconBox>
                               </TableCell>
                            </TableRow>
-                        ))}
+                        ))
+                     ) : (
+                        <TableRow>
+                           <TableCell colSpan={4} align="center">
+                              <Box sx={{ padding: '40px' }}>
+                                 <p>
+                                    <ImgData
+                                       src="https://cdn-icons-png.flaticon.com/512/7466/7466073.png"
+                                       alt="нету данных"
+                                    />
+                                 </p>
+                                 <h3 style={{ marginTop: '10px' }}>
+                                    Нет данных
+                                 </h3>
+                                 <p style={{ color: '#666' }}>
+                                    У вас пока нет рабочих пространств.
+                                 </p>
+                              </Box>
+                           </TableCell>
+                        </TableRow>
+                     )}
                   </TableBody>
                </Table>
             </StyledTableContainer>
@@ -113,6 +133,7 @@ function Main() {
 }
 
 export default Main
+const ImgData = styled('img')({})
 
 const ConteinerBoxMain = styled(Box)({
    width: null,

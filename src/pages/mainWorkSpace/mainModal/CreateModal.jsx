@@ -4,10 +4,12 @@ import { Box, Typography } from '@mui/material'
 import { AppButton } from '../../../components/UI/AppButton'
 import { useForm } from 'react-hook-form'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 function CreateModal({ onClose }) {
    const dispatch = useDispatch()
+
+   const { token } = useSelector((state) => state.auth)
 
    const {
       register,
@@ -21,23 +23,14 @@ function CreateModal({ onClose }) {
    })
 
    const onSubmit = async (data) => {
-      // 👈 Добавили async и блок {}
       const finalData = {
          ...data,
          role: 'OWNER',
       }
 
-      console.log('Дааные формы :', finalData)
-
-      try {
-         await dispatch(
-            MAIN_THUNK.modalCreateWorkSpase({ data: finalData })
-         ).unwrap()
-
-         onClose()
-      } catch (error) {
-         console.error('Ошибка при создании рабочего пространства:', error)
-      }
+      dispatch(
+         MAIN_THUNK.modalCreateWorkSpase({ data: finalData, onClose, token })
+      )
    }
 
    return (
@@ -51,7 +44,7 @@ function CreateModal({ onClose }) {
                   id="workspace-name"
                   type="text"
                   placeholder="Name"
-                  {...register('name', { required: 'Имя обязательно' })} 
+                  {...register('name', { required: 'Имя обязательно' })}
                />
 
                {errors.name && (

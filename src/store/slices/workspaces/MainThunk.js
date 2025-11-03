@@ -46,11 +46,16 @@ const favoritesWorkSpase = createAsyncThunk(
 
 const modalCreateWorkSpase = createAsyncThunk(
    'post/modalCreateWorkSpase',
-   async ({ data }) => {
+   async ({ data, onClose, token }, { rejectWithValue, dispatch }) => {
       try {
          await axiosInstance.post(`/api/workspaces`, data)
+
+         onClose()
+
+         dispatch(getAllMain({ token }))
       } catch (error) {
          console.log(error)
+         rejectWithValue(error.message)
       }
    }
 )

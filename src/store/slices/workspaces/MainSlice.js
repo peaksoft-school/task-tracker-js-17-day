@@ -43,7 +43,7 @@ const mainSlice = createSlice({
          .addCase(MAIN_THUNK.favoritesWorkSpase.fulfilled, (state, action) => {
             state.isloading = false
 
-            const { workSpaceId, favorite } = action.payload
+            const { favorite } = action.payload
 
             const index = state.main.findIndex()
 
@@ -59,7 +59,7 @@ const mainSlice = createSlice({
          .addCase(MAIN_THUNK.getAllBoards.pending, (state) => {
             state.isloading = true
          })
-         .addCase(MAIN_THUNK.getAllBoards.fulfilled, (state, action) => {
+         .addCase(MAIN_THUNK.getAllBoards.fulfilled, (state) => {
             state.isloading = false
          })
          .addCase(MAIN_THUNK.getAllBoards.rejected, (state, action) => {
