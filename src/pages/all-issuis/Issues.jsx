@@ -1,126 +1,92 @@
-import React, { useState, useMemo } from 'react'
-import { Paper } from '@mui/material'
+import React, { useState, useMemo, useEffect } from 'react'
+import { Paper, Box, CircularProgress } from '@mui/material' 
 import { Header } from '../../layouts/header/Header'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
-
-// 1. Импортируем наши новые компоненты
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { IssuesFilterBar } from './IssuesFilterBar'
 import { IssuesTable } from './IssuesTable'
-// 2. Импортируем моковые данные (allRows - это rows из твоего старого файла)
-import { rows as allRows } from './issues.data'
-// 3. Импортируем стили
 import { StyledBackground, MainLayout, IssuesContainer } from './issues.styles'
+import { ISSUES_THUNK } from '../../store/slices/issuses/IssusesThunk'
+
+// Хелпер для конвертации цвета из API в HEX (для <Label>)
+const mapApiColorToHex = (colorType) => {
+   const colors = {
+      RED: '#EB5A46',
+      GREEN: '#61BD4F',
+      BLUE: '#0079BF',
+      ORANGE: '#EB8900',
+      // Добавь остальные цвета по необходимости
+   }
+   return colors[colorType] || '#82ca9d' // Цвет по умолчанию
+}
 
 export default function Issues() {
-   // 4. Вся логика фильтрации ЖИВЕТ ЗДЕСЬ, В РОДИТЕЛЕ
+   const dispatch = useDispatch()
+   const { boardId } = useParams() // 👈 Получаем ID доски из URL
+
+   // 5. Получаем "сырые" данные и статус загрузки из Redux
+   const { issues: rawIssues, isLoading } = useSelector((state) => state.issues)
+
+   // 6. Состояния для фильтров (остаются здесь)
    const [startDate, setStartDate] = useState(null)
    const [endDate, setEndDate] = useState(null)
-   // Добавляем стейты для остальных фильтров
-   const [selectedLabels, setSelectedLabels] = useState([])
-   const [selectedAssignees, setSelectedAssignees] = useState([])
+   const [selectedLabels, setSelectedLabels] = useState([]) // Ожидаем массив ID
+   const [selectedAssignees, setSelectedAssignees] = useState([]) // Ожидаем массив ID
    const [showWithChecklist, setShowWithChecklist] = useState(false)
 
-   // 5. Расширенная логика фильтрации
-   const filteredRows = useMemo(() => {
-      return allRows.filter((row) => {
-         // --- Фильтр по дате ---
-         const rowDate = dayjs(row.created)
-         let isAfterStart = true
-         let isBeforeEnd = true
+   // 7. useEffect для загрузки данных при изменении фильтров
+   useEffect(() => {
+      // API ожидает один ID, а не массив.
+      // Если API поддерживает массив, измени `labelId` на `labelIds`
+      // и передавай `selectedLabels` (аналогично для assignee).
+      // Пока что берем только первый элемент из массива.
+      const filterParams = {
+         boardId,
+         startDate,
+         endDate,
+         labelId: selectedLabels[0], // 👈 Внимание: API принимает 1 ID
+         assigneeId: selectedAssignees[0], // 👈 Внимание: API принимает 1 ID
+         hasChecklist: showWithChecklist,
+      }
 
-         if (startDate) {
-            isAfterStart =
-               rowDate.isAfter(startDate, 'day') ||
-               rowDate.isSame(startDate, 'day')
-         }
-         if (endDate) {
-            isBeforeEnd =
-               rowDate.isBefore(endDate, 'day') ||
-               rowDate.isSame(endDate, 'day')
-         }
-
-         // --- Фильтр по Ярлыкам (Labels) ---
-         // (Предполагаем, что 'NO_LABEL' - это строка, которую ты будешь
-         //  добавлять в `selectedLabels`, если нажат чекбокс "No labels")
-         const byLabel =
-            selectedLabels.length === 0
-               ? true // Если ничего не выбрано, показываем все
-               : (() => {
-                    // Проверяем, хочет ли пользователь "No labels" И у ряда нет labels
-                    if (
-                       selectedLabels.includes('NO_LABEL') &&
-                       row.labels.length === 0
-                    ) {
-                       return true
-                    }
-                    // Проверяем, есть ли у ряда хотя бы один из выбранных цветных ярлыков
-                    if (
-                       row.labels.some((label) =>
-                          selectedLabels.includes(label)
-                       )
-                    ) {
-                       return true
-                    }
-                    return false // Не совпало ни одно условие
-                 })()
-
-         // --- Фильтр по Исполнителям (Assignee) ---
-         // (Предполагаем, что 'UNASSIGNED' - строка для "Unassigned")
-         // ВНИМАНИЕ: Твои моковые данные для `row.assignee` - это ['/avatars/1.png', ...].
-         // Эта логика НЕ СРАБОТАЕТ, т.к. фильтр выбирает по email или ID.
-         // Я ВРЕМЕННО использую `row.creator` для примера.
-         // Когда `row.assignee` будет содержать email'ы или ID, ты должен будешь
-         // изменить `row.creator` на `row.assignee.some(a => ...)`
-         const byAssignee =
-            selectedAssignees.length === 0
-               ? true // Если никто не выбран, показываем всех
-               : (() => {
-                    if (
-                       selectedAssignees.includes('UNASSIGNED') &&
-                       row.assignee.length === 0 // Используем `assignee` для проверки на "Unassigned"
-                    ) {
-                       return true
-                    }
-                    // TODO: Замени `row.creator` на правильную логику
-                    // когда `row.assignee` будет содержать ID или email
-                    if (selectedAssignees.includes(row.creator)) {
-                       return true
-                    }
-                    return false
-                 })()
-
-         // --- Фильтр по Чек-листу (Checklist) ---
-         // (Если `showWithChecklist` = true, показываем только ряды,
-         // где `row.checklist` не пустой)
-         const byChecklist = !showWithChecklist
-            ? true
-            : row.checklist && row.checklist.length > 0
-
-         // --- Возвращаем результат ---
-         return (
-            isAfterStart && isBeforeEnd && byLabel && byAssignee && byChecklist
-         )
-      })
+      dispatch(ISSUES_THUNK.getFilteredIssues(filterParams))
    }, [
+      dispatch,
+      boardId,
       startDate,
       endDate,
       selectedLabels,
       selectedAssignees,
       showWithChecklist,
-      allRows,
-   ]) // 5.1 Обновляем зависимости useMemo
+   ])
 
+   // 8. useMemo для ТРАНСФОРМАЦИИ данных из API в формат для IssuesTable
+   const transformedRows = useMemo(() => {
+      if (!rawIssues) return []
+
+      return rawIssues.map((row) => ({
+         // Поля, которые ожидает IssuesTable:   <-- Поля из API
+         created: dayjs(row.createdDate).format('DD.MM.YYYY'), // Форматируем дату
+         period: row.period,
+         creator: row.creatorEmail,
+         column: row.columnTitle,
+         assignee: row.assignees.map((a) => a.avatarUrl), // Превращаем массив объектов в массив URL
+         labels: row.labels.map((l) => mapApiColorToHex(l.colorType)), // Превращаем в массив цветов
+         checklist: row.checklistProgress, // (API отдает "3/5", что совпадает)
+         description: row.description,
+      }))
+   }, [rawIssues])
    return (
       <StyledBackground>
          <Header />
          <MainLayout>
             <Sidebar />
             <IssuesContainer component={Paper}>
-               {/* 6. Передаем все сеттеры и значения в FilterBar */}
                <IssuesFilterBar
-                  rowsLength={filteredRows.length}
+                  rowsLength={transformedRows.length}
                   startDate={startDate}
                   setStartDate={setStartDate}
                   endDate={endDate}
@@ -134,8 +100,20 @@ export default function Issues() {
                   setShowWithChecklist={setShowWithChecklist}
                />
 
-               {/* 7. Передаем отфильтрованные данные в Таблицу */}
-               <IssuesTable rows={filteredRows} />
+               {isLoading ? (
+                  <Box
+                     sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '400px',
+                     }}
+                  >
+                     <CircularProgress />
+                  </Box>
+               ) : (
+                  <IssuesTable rows={transformedRows} /> // 👈 Передаем трансф. данные
+               )}
             </IssuesContainer>
          </MainLayout>
       </StyledBackground>

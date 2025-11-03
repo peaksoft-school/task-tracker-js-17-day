@@ -4,6 +4,7 @@ import { SignIn } from '../pages/sign-in/SignIn'
 import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
 import Main from '../pages/Main'
+import PrivateRoute from './PrivateRoute'
 import Issues from '../pages/all-issuis/Issues'
 
 export const routes = createBrowserRouter([

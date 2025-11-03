@@ -26,7 +26,7 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useState } from 'react'
-import { rows } from './issues.data'
+// import { rows } from './issues.data'
 
 export const IssuesFilterBar = ({
    rowsLength,
@@ -301,7 +301,7 @@ export const IssuesFilterBar = ({
          </FilterHeader>
          <TotalBox>
             <span>
-               Total: <span>{rows.length}</span>
+               Total: <span>{rowsLength}</span>
             </span>
          </TotalBox>
       </FilterSection>
