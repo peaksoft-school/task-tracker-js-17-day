@@ -6,6 +6,7 @@ const profileSlice = createAsyncThunk(
    async (_, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(`/api/profile`)
+
          return data
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)

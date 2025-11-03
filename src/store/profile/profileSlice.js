@@ -18,6 +18,7 @@ export const profileSlice = createSlice({
          .addCase(PROFILE_THUNK.profileSlice.fulfilled, (state, action) => {
             state.isLoading = false
             state.profileFul = action.payload
+            console.log('✅ Получено из API:', action.payload)
             
          })
          .addCase(PROFILE_THUNK.profileSlice.rejected, (state) => {

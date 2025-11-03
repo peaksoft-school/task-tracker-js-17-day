@@ -1,19 +1,60 @@
-import { Avatar, Box, Typography, styled } from '@mui/material'
+import { Avatar, Box, Link, Typography, styled } from '@mui/material'
 import { Input } from '../../components/UI/Input'
 import UserImage from '../../assets/images/icon/iconpeople/ikonmen.jpg'
 import Logo from '../../assets/images/icon/system/Black and White Collection 2.svg'
 import Notify from '../../assets/images/icon/system/Notify.svg'
 import StrelkaDown from '../../assets/images/icon/arrows/down.svg'
-import {  useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { useEffect, useState } from 'react'
+import { FAVORITE_COUNT_THUNK } from '../../store/favoriteCount/favoriteThunk'
+import { CustomModal } from '../../components/UI/modal/Modal'
 
 export const Header = ({ favouritesCount, notificationCount }) => {
    const statusInput = status
    const navigate = useNavigate()
+   const { boardCount, isLoading } = useSelector((state) => state.favoriteCount)
+   const dispatch = useDispatch()
 
+   const [modalFavorites, setModalFavorites] = useState(false)
+   const [modalNotify, setModalNotify] = useState(false)
+   const [modalUser, setModalUser] = useState(false)
+
+   const [favorites, setFavorites] = useState()
+   const boardCounts = boardCount.boardCount
+   const workspaceCounts = boardCount.workspaceCount
+
+   useEffect(() => {
+      dispatch(FAVORITE_COUNT_THUNK.favoriteCountThunk())
+   }, [dispatch])
+
+   useEffect(() => {
+      if (favouritesCount === 'boardCount') {
+         setFavorites(boardCounts)
+      } else if (favouritesCount === 'workspaceCount') {
+         setFavorites(workspaceCounts)
+      }
+   }, [favouritesCount, boardCounts, workspaceCounts])
    const hendlerNavigateUser = () => {
       navigate('/profile')
-      console.log('click')
+
    }
+   const hendlerNavigateLogOut = () => {
+      navigate(-1)
+   }
+
+   const hendlerFavorites = () => {
+      setModalFavorites((prev) => !prev)
+   }
+   const hendlerNotify = () => {
+      setModalNotify((prev) => !prev)
+   }
+   const hedlerUser = () => {
+      setModalUser((prev) => !prev)
+   }
+   console.log(favorites, 'lf')
+
+   console.log(boardCount.boardCount, 'hhhh')
 
    return (
       <header>
@@ -27,11 +68,31 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                </StylesTypography>
 
                <StylesBoxOneHeaderDoucher>
-                  {favouritesCount !== 0 && (
-                     <Typography>
-                        Favourites {favouritesCount}{' '}
+                  {favorites && favorites > 0 && (
+                     <StyledTypography onClick={hendlerFavorites}>
+                        Favourites({favorites})
                         <img src={StrelkaDown} alt="" />
-                     </Typography>
+                     </StyledTypography>
+                  )}
+                  {modalFavorites && (
+                     <CustomModal
+                        isVisible={modalFavorites}
+                        handleVisible={hendlerFavorites}
+                     >
+                        <Box>
+                           <Typography>Favourites</Typography>
+                           <Box>
+                              <Box>
+                                 <img src="" alt="" />
+                                 <Box>
+                                    <Typography>Title</Typography>
+                                    <Typography>Board</Typography>
+                                 </Box>
+                              </Box>
+                              <Box>strs</Box>
+                           </Box>
+                        </Box>
+                     </CustomModal>
                   )}
                </StylesBoxOneHeaderDoucher>
             </StylesBoxOneHeader>
@@ -41,21 +102,97 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                )}
 
                <StylesBoxImg>
-                  <StylesImg src={Notify} alt="'notify'" />
+                  <StylesImg
+                     onClick={hendlerNotify}
+                     src={Notify}
+                     alt="'notify'"
+                  />
+                  {modalNotify && (
+                     <StyledModal
+                        isVisible={modalNotify}
+                        handleVisible={hendlerNotify}
+                     >
+                        <StyledBoxModal>
+                           <Box>
+                              <Typography>Notification</Typography>
+                              <Link>Mark as read</Link>
+                           </Box>
+                           <Box>
+                              <Box>
+                                 <StyledBoxNonotificationKrug></StyledBoxNonotificationKrug>
+                                 <Box>bak</Box>
+                              </Box>
+                              <Box>
+                                 <Box>avatar</Box>
+                                 <Box>strelka</Box>
+                              </Box>
+                           </Box>
+                        </StyledBoxModal>
+                     </StyledModal>
+                  )}
                   <StylesNonotificationBox>
                      {notificationCount}
                   </StylesNonotificationBox>
                </StylesBoxImg>
                <StylesImgUser
-                  onClick={hendlerNavigateUser}
+                  onClick={hedlerUser}
                   alt="Remy Sharp"
                   src={UserImage}
                />
+               {modalUser && (
+                  <CustomModal isVisible={modalUser} handleVisible={hedlerUser}>
+                     <StyledUserProfile>
+                        <StyledTypographyProfile onClick={hendlerNavigateUser}>
+                           Profile
+                        </StyledTypographyProfile>
+                        <StyledTypographyProfile onClick={hendlerNavigateLogOut}>
+                           Logout
+                        </StyledTypographyProfile>
+                     </StyledUserProfile>
+                  </CustomModal>
+               )}
             </StylesBoxTwoHeader>
          </StylesBoxHeder>
       </header>
    )
 }
+const StyledTypographyProfile = styled(Typography)(({}) => ({
+   display: 'flex',
+   alignItems: 'center',
+   gap: '10px',
+   marginBottom: '5px',
+   cursor: 'pointer',
+}))
+
+const StyledUserProfile = styled(Box)(({}) => ({
+   width: '100px',
+   height: '50px',
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+   flexDirection: 'column',
+}))
+
+const StyledBoxModal = styled(Box)(({}) => ({
+   width: '400px',
+   height: '300px',
+}))
+
+const StyledModal = styled(CustomModal)(({}) => ({
+   width: '400px',
+   height: '300px',
+}))
+
+const StyledBoxNonotificationKrug = styled(Box)(({}) => ({
+   widows: '7px',
+   height: '7px',
+   borderRadius: '50%',
+   backgroundColor: '#0079bf',
+}))
+
+const StyledTypography = styled(Typography)(({}) => ({
+   cursor: 'pointer',
+}))
 
 const StylesBoxHeder = styled(Box)(({}) => ({
    display: 'flex',
@@ -107,6 +244,7 @@ const StylesImg = styled('img')(({}) => ({
    marginRight: '8px',
    position: 'absolute',
    color: 'white',
+   cursor: 'pointer',
 }))
 
 const StylesNonotificationBox = styled(Box)(({}) => ({

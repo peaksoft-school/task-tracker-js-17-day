@@ -17,6 +17,7 @@ import { useNavigate } from 'react-router-dom'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, provider } from '../../configs/firebase'
 
+
 export const SignIn = () => {
    const dispatch = useDispatch()
    const navigate = useNavigate()
@@ -38,22 +39,25 @@ export const SignIn = () => {
       setShowPassword(!showPassword)
    }
 
-   const hndlerGoogel = async () => {
-      await signInWithPopup(auth, provider)
-         .then((response) => {
-            console.log(response.user.accessToken)
-
-            dispatch(
-               AUTH_THUNK.authWithGoogle({
-                  idToken: response?.user?.accessToken,navigate
-               })
-            )
-         })
-
-         .catch((error) => {
-            return error
-         })
-   }
+   const handlerGoogle = async () => {
+      try {
+        const response = await signInWithPopup(auth, provider)
+        const idToken = await response.user.getIdToken() // <-- вот это важно!
+    
+        console.log('Firebase ID Token:', idToken)
+    
+        dispatch(
+          AUTH_THUNK.authWithGoogle({
+            idToken,
+            navigate,
+          })
+        )
+      } catch (error) {
+        console.error('Google login error:', error)
+      }
+    }
+  
+    
 
    return (
       <StylesBox onSubmit={handleSubmit}>
@@ -66,7 +70,7 @@ export const SignIn = () => {
             <StylesBoxInput>
                <Typography fontSize={18}>Sign In</Typography>
 
-               <StyledBoxGoogle onClick={hndlerGoogel}>
+               <StyledBoxGoogle onClick={handlerGoogle}>
                   <StyledBox>
                      <StyledAvatar>R</StyledAvatar>
 

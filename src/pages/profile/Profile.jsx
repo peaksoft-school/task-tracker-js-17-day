@@ -16,7 +16,7 @@ export const Profile = () => {
    useEffect(() => {
       dispatch(PROFILE_THUNK.profileSlice())
    }, [])
-   console.log(data.profileFul, 'data profile')
+   console.log(data, 'data profile')
 
    const [showPassword, setShowPassword] = useState(false)
    const [showRepitPassword, setShowRepitPassword] = useState(false)
@@ -100,7 +100,7 @@ export const Profile = () => {
                         </StyledBoxInvolvedNumber>
                      </StyledBoxInvolved>
 
-                     <Box>
+                     <StyledBoxWorkspace>
                         {data.profileFul?.workspaces?.map((el) => (
                            <StyledBoxAvatar key={el.id}>
                               <Box>
@@ -115,7 +115,7 @@ export const Profile = () => {
                               </Box>
                            </StyledBoxAvatar>
                         ))}
-                     </Box>
+                     </StyledBoxWorkspace>
                   </Box>
                )}
             </StyledBoxPortfolio>
@@ -123,6 +123,12 @@ export const Profile = () => {
       </Box>
    )
 }
+const StyledBoxWorkspace = styled(Box)({
+   display: 'grid',
+   gridTemplateColumns: 'repeat(2, 1fr)',
+   gap: '20px',
+})
+
 const StyledAvatarName = styled(Avatar)({
    backgroundColor: '#2E7DCC',
    width: 64,

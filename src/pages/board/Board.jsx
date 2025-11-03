@@ -1,4 +1,4 @@
-import { Box, styled, Typography } from '@mui/material'
+import { Box, CircularProgress, styled, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from '../../layouts/header/Header'
@@ -41,7 +41,6 @@ export default function Board() {
          const result = await dispatch(BOARD_THUNK.uploadImage(file))
 
          if (result.payload && result.payload[0]) {
-            // просто сохраняем URL фото
             setSelectedBg({ type: 'image', value: result.payload[0] })
             setSelectedItem(selectedImage)
          }
@@ -99,7 +98,7 @@ export default function Board() {
 
    return (
       <>
-         <Header favouritesCount={10} />
+         <Header favouritesCount="workspaceCount" />
          <StyledBoxBoards>
             <Box>
                <Sidebar />
@@ -159,7 +158,12 @@ export default function Board() {
                         >
                            <StyledImg src={bgItem} alt="background" />
 
-                           {selectedItem === bgItem && (
+                           {loadingItem === bgItem && (
+                              <StyledOverlay>
+                                 <CircularProgress size={24} color="inherit" />
+                              </StyledOverlay>
+                           )}
+                           {selectedItem === bgItem && !loadingItem && (
                               <StyledOverlay>
                                  <CheckIcon />
                               </StyledOverlay>
@@ -181,6 +185,11 @@ export default function Board() {
                            onClick={() => handlerClickIdColor(color)}
                            colors={color}
                         >
+                           {loadingItem === color && (
+                              <StyledOverlay>
+                                 <CircularProgress size={24} color="inherit" />
+                              </StyledOverlay>
+                           )}
                            {selectedItem === color && (
                               <StyledOverlay>
                                  <CheckIcon />
@@ -254,7 +263,7 @@ const StyledOverlay = styled(Box)({
    width: '100%',
    height: '100%',
    borderRadius: '8px',
-   backgroundColor: 'rgba(0, 0, 0, 0.3)',
+   backgroundColor: 'rgba(249, 242, 242, 0.3)',
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',

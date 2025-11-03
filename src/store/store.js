@@ -4,11 +4,13 @@ import { persistStore, persistReducer } from 'redux-persist'
 import { authSlice } from './slices/auth/authSlice'
 import { boardSlice } from './slices/board/boardSlice'
 import { profileSlice } from './profile/profileSlice'
+import { favoriteCountSlice } from './favoriteCount/favoriteCountSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [boardSlice.name]: boardSlice.reducer,
    [profileSlice.name]: profileSlice.reducer,
+   [favoriteCountSlice.name]: favoriteCountSlice.reducer,
 })
 
 const persistConfig = {
