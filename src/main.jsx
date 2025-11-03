@@ -5,9 +5,9 @@ import Notification from './components/Notification.jsx'
 import { ThemeProvider } from '@mui/material'
 import { themeColors } from './styles/appColors.js'
 import { Provider } from 'react-redux'
-import { store, persistor } from './store' // убедитесь, что persistor экспортируется
 import { injectStore } from './configs/axiosinstance.js'
 import { PersistGate } from 'redux-persist/integration/react'
+import { persistor, store } from './store/store.js'
 // import { injectStoreFile } from './configs/axiosInstanceFile.js'
 
 injectStore(store)

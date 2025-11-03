@@ -1,9 +1,10 @@
 import React from 'react'
+import Sidebar from '../components/UI/sidebar/Sidebar'
 
 function BoardsPage() {
    return (
       <div>
-         <h1>hello</h1>
+         <Sidebar />
       </div>
    )
 }
