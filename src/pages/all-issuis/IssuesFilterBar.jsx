@@ -26,7 +26,6 @@ import { DateCalendar } from '@mui/x-date-pickers/DateCalendar'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { useState } from 'react'
-// import { rows } from './issues.data'
 
 export const IssuesFilterBar = ({
    rowsLength,
@@ -70,7 +69,6 @@ export const IssuesFilterBar = ({
    const [startAnchorEl, setStartAnchorEl] = useState(null)
    const [endAnchorEl, setEndAnchorEl] = useState(null)
 
-   // --- Обработчики для "Start Date" ---
    const handleStartClick = (event) => {
       setStartAnchorEl(event.currentTarget)
    }
@@ -79,7 +77,6 @@ export const IssuesFilterBar = ({
    }
    const isStartOpen = Boolean(startAnchorEl)
 
-   // --- Обработчики для "End Date" ---
    const handleEndClick = (event) => {
       setEndAnchorEl(event.currentTarget)
    }
@@ -94,7 +91,6 @@ export const IssuesFilterBar = ({
                <p>View all issues</p>
             </FilterTitle>
             <FilterControls>
-               {/* ================== Start Date ================== */}
                <StartDateButton onClick={handleStartClick}>
                   {startDate ? startDate.format('DD.MM.YY') : '00.00.00'}
                   <span>
@@ -131,7 +127,6 @@ export const IssuesFilterBar = ({
                   </LocalizationProvider>
                </Popover>
 
-               {/* ================== End Date ================== */}
                <EndDateButton onClick={handleEndClick}>
                   {endDate ? endDate.format('DD.MM.YY') : 'До'}
                   <span>
@@ -168,7 +163,6 @@ export const IssuesFilterBar = ({
                   </LocalizationProvider>
                </Popover>
 
-               {/* Labels ----------Btn------------- Labels */}
                <LabelsSelect
                   aria-describedby={labelsPopoverId}
                   onClick={handleLabelsClick}
@@ -178,19 +172,16 @@ export const IssuesFilterBar = ({
                      <DownIcon />
                   </span>
                </LabelsSelect>
-               {/* Labels ----------Popover (ВМЕСТО MODAL)------------- Labels -----------*/}
                <Popover
                   id={labelsPopoverId}
-                  open={isLabelsOpen} // 👈 ОБНОВЛЕНО
-                  anchorEl={labelsAnchorEl} // 👈 "Якорь" - наша кнопка
-                  onClose={handleLabelsClose} // 👈 Обработчик закрытия
+                  open={isLabelsOpen}
+                  anchorEl={labelsAnchorEl}
+                  onClose={handleLabelsClose}
                   anchorOrigin={{
-                     // 👈 Откуда "растет" Popover
                      vertical: 'bottom',
                      horizontal: 'left',
                   }}
                   transformOrigin={{
-                     // 👈 Точка "привязки" на самом Popover
                      vertical: 'top',
                      horizontal: 'left',
                   }}
@@ -206,7 +197,6 @@ export const IssuesFilterBar = ({
                      <CheksNoLabeles>
                         <input type="checkbox" />
                         <span>No labels</span>{' '}
-                        {/* 👈 Исправлена опечатка "ladels" */}
                      </CheksNoLabeles>
                      <CheksColorsLabeles>
                         <input type="checkbox" /> <StyleBoxGreen />
@@ -222,7 +212,6 @@ export const IssuesFilterBar = ({
                      </CheksColorsLabeles>
                   </Box>
                </Popover>
-               {/* Assignee ----------Btn------------- Assignee */}
                <AssigneeSelect
                   aria-describedby={assigneePopoverId}
                   onClick={handleAssigneeClick}
@@ -233,12 +222,11 @@ export const IssuesFilterBar = ({
                   </span>
                </AssigneeSelect>
 
-               {/* Assignee ----------Popover (ВМЕСТО MODAL)------------- Assignee ----------- */}
-               <Popover // 👈 ЗАМЕНА
+               <Popover
                   id={assigneePopoverId}
-                  open={isAssigneeOpen} // 👈 ОБНОВЛЕНО
-                  anchorEl={assigneeAnchorEl} // 👈 "Якорь"
-                  onClose={handleAssigneeClose} // 👈 Обработчик закрытия
+                  open={isAssigneeOpen}
+                  anchorEl={assigneeAnchorEl}
+                  onClose={handleAssigneeClose}
                   anchorOrigin={{
                      vertical: 'bottom',
                      horizontal: 'left',
@@ -247,17 +235,16 @@ export const IssuesFilterBar = ({
                      vertical: 'top',
                      horizontal: 'left',
                   }}
-                  // 🔽 Используем PaperProps для стилизации, как на скриншоте
                   PaperProps={{
                      style: {
-                        width: '310px', // Ширина из вашего CustomModalAssignee
-                        maxHeight: '512px', // Высота из вашего CustomModalAssignee
+                        width: '310px',
+                        maxHeight: '512px',
                         borderRadius: '8px',
                         boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.1)',
-                        padding: '16px', // 👈 Добавляем отступы
+                        padding: '16px',
                         boxSizing: 'border-box',
-                        display: 'flex', // 👈 Важно для компоновки
-                        flexDirection: 'column', // 👈 Важно для компоновки
+                        display: 'flex',
+                        flexDirection: 'column',
                      },
                   }}
                >
@@ -270,15 +257,12 @@ export const IssuesFilterBar = ({
                   <StylesConteinerBoxProfilesUser
                      style={{ height: '100%', overflowY: 'auto' }}
                   >
-                     {/* --- Unassigned --- */}
                      <StylesBoxUsers>
                         <input type="checkbox" />
                         <StylesAvatar />
-                        {/* <--- Аватар по умолчанию */}
                         <Box>Unassigned</Box>
                      </StylesBoxUsers>
 
-                     {/* --- User Example --- */}
                      <StylesBoxUsers>
                         <input type="checkbox" />
                         <StylesAvatar />
@@ -287,12 +271,9 @@ export const IssuesFilterBar = ({
                            <span className="user-email">nazira@gmail.com</span>
                         </Box>
                      </StylesBoxUsers>
-
-                     {/* ... (тут будет map по вашим юзерам) ... */}
                   </StylesConteinerBoxProfilesUser>
                </Popover>
 
-               {/* Checklist ----------Btn------------- Checklist */}
                <ChecklistWrapper>
                   <input type="checkbox" />
                   <span>Checklist</span>

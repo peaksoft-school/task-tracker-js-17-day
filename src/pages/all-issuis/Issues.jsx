@@ -11,44 +11,35 @@ import { IssuesTable } from './IssuesTable'
 import { StyledBackground, MainLayout, IssuesContainer } from './issues.styles'
 import { ISSUES_THUNK } from '../../store/slices/issuses/IssusesThunk'
 
-// Хелпер для конвертации цвета из API в HEX (для <Label>)
 const mapApiColorToHex = (colorType) => {
    const colors = {
       RED: '#EB5A46',
       GREEN: '#61BD4F',
       BLUE: '#0079BF',
       ORANGE: '#EB8900',
-      // Добавь остальные цвета по необходимости
    }
-   return colors[colorType] || '#82ca9d' // Цвет по умолчанию
+   return colors[colorType] || '#82ca9d' 
 }
 
 export default function Issues() {
    const dispatch = useDispatch()
-   const { boardId } = useParams() // 👈 Получаем ID доски из URL
+   const { boardId } = useParams()
 
-   // 5. Получаем "сырые" данные и статус загрузки из Redux
    const { issues: rawIssues, isLoading } = useSelector((state) => state.issues)
 
-   // 6. Состояния для фильтров (остаются здесь)
    const [startDate, setStartDate] = useState(null)
    const [endDate, setEndDate] = useState(null)
-   const [selectedLabels, setSelectedLabels] = useState([]) // Ожидаем массив ID
-   const [selectedAssignees, setSelectedAssignees] = useState([]) // Ожидаем массив ID
+   const [selectedLabels, setSelectedLabels] = useState([]) 
+   const [selectedAssignees, setSelectedAssignees] = useState([])
    const [showWithChecklist, setShowWithChecklist] = useState(false)
 
-   // 7. useEffect для загрузки данных при изменении фильтров
    useEffect(() => {
-      // API ожидает один ID, а не массив.
-      // Если API поддерживает массив, измени `labelId` на `labelIds`
-      // и передавай `selectedLabels` (аналогично для assignee).
-      // Пока что берем только первый элемент из массива.
       const filterParams = {
          boardId,
          startDate,
          endDate,
-         labelId: selectedLabels[0], // 👈 Внимание: API принимает 1 ID
-         assigneeId: selectedAssignees[0], // 👈 Внимание: API принимает 1 ID
+         labelId: selectedLabels[0], 
+         assigneeId: selectedAssignees[0], 
          hasChecklist: showWithChecklist,
       }
 
@@ -63,19 +54,17 @@ export default function Issues() {
       showWithChecklist,
    ])
 
-   // 8. useMemo для ТРАНСФОРМАЦИИ данных из API в формат для IssuesTable
    const transformedRows = useMemo(() => {
       if (!rawIssues) return []
 
       return rawIssues.map((row) => ({
-         // Поля, которые ожидает IssuesTable:   <-- Поля из API
-         created: dayjs(row.createdDate).format('DD.MM.YYYY'), // Форматируем дату
+         created: dayjs(row.createdDate).format('DD.MM.YYYY'), 
          period: row.period,
          creator: row.creatorEmail,
          column: row.columnTitle,
-         assignee: row.assignees.map((a) => a.avatarUrl), // Превращаем массив объектов в массив URL
-         labels: row.labels.map((l) => mapApiColorToHex(l.colorType)), // Превращаем в массив цветов
-         checklist: row.checklistProgress, // (API отдает "3/5", что совпадает)
+         assignee: row.assignees.map((a) => a.avatarUrl),
+         labels: row.labels.map((l) => mapApiColorToHex(l.colorType)), 
+         checklist: row.checklistProgress,
          description: row.description,
       }))
    }, [rawIssues])
@@ -91,7 +80,6 @@ export default function Issues() {
                   setStartDate={setStartDate}
                   endDate={endDate}
                   setEndDate={setEndDate}
-                  // Передаем новые пропсы
                   selectedLabels={selectedLabels}
                   setSelectedLabels={setSelectedLabels}
                   selectedAssignees={selectedAssignees}
@@ -112,7 +100,7 @@ export default function Issues() {
                      <CircularProgress />
                   </Box>
                ) : (
-                  <IssuesTable rows={transformedRows} /> // 👈 Передаем трансф. данные
+                  <IssuesTable rows={transformedRows} /> 
                )}
             </IssuesContainer>
          </MainLayout>
