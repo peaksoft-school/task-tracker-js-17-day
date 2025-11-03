@@ -51,7 +51,6 @@ const StylesBoxHeder = styled(Box)(({}) => ({
    justifyContent: 'space-between',
    padding: '16px 40px',
    backgroundColor: '#ffffff',
-   // box
 }))
 
 const StylesBoxOneHeader = styled(Box)(({}) => ({

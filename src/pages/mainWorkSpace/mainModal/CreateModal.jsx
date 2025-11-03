@@ -12,10 +12,9 @@ function CreateModal({ onClose }) {
    const {
       register,
       handleSubmit,
-      formState: { errors }, // Получаем объект ошибок
+      formState: { errors },
    } = useForm({
       defaultValues: {
-         // Можно задать значения по умолчанию
          name: '',
          email: '',
       },
@@ -31,16 +30,12 @@ function CreateModal({ onClose }) {
       console.log('Дааные формы :', finalData)
 
       try {
-         // Диспатч сюда: вызываем thunk и передаем ему объект { data: finalData }
-         // .unwrap() позволяет нам дождаться результата промиса
          await dispatch(
             MAIN_THUNK.modalCreateWorkSpase({ data: finalData })
          ).unwrap()
 
-         // onClose() вызывается ТОЛЬКО после успешной отправки!
          onClose()
       } catch (error) {
-         // Здесь можно обработать ошибку (например, показать тост)
          console.error('Ошибка при создании рабочего пространства:', error)
       }
    }
@@ -56,11 +51,9 @@ function CreateModal({ onClose }) {
                   id="workspace-name"
                   type="text"
                   placeholder="Name"
-                  // 💡 name: 'name' — это то, как RHF будет называть это поле в объекте данных
-                  {...register('name', { required: 'Имя обязательно' })} // потключает register иправило валидации
+                  {...register('name', { required: 'Имя обязательно' })} 
                />
 
-               {/* выводим ошибки если оно есть  */}
                {errors.name && (
                   <ErrorMessage>{errors.name.message}</ErrorMessage>
                )}
@@ -72,7 +65,6 @@ function CreateModal({ onClose }) {
                   id="member-email"
                   type="email"
                   placeholder="example@gmail.com"
-                  // 💡 name: 'email'
                   {...register('email', {
                      pattern: {
                         value: /^\S+@\S+$/i,

@@ -5,7 +5,6 @@ import Main from './pages/mainWorkSpace/Main'
 const App = () => (
    <>
       <RouterProvider router={routes} />
-      {/* <Main/> */}
    </>
 )
 

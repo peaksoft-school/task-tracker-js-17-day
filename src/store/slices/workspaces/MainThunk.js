@@ -1,8 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
 
-// пишем get запрос с асинхронным функциями
-// тут у нас getAllMain деген запрос бар
 const getAllMain = createAsyncThunk('post/getAllMain', async ({ token }) => {
    try {
       const { data } = await axiosInstance.get(
@@ -30,7 +28,6 @@ const getAllBoards = createAsyncThunk(
 
 const favoritesWorkSpase = createAsyncThunk(
    'post/favoritesWorkSpase',
-   // примнимает workspaceId вместо data
    async ({ id, token }, { dispatch }) => {
       try {
          const response = await axiosInstance.post(
