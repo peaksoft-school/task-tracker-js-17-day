@@ -6,6 +6,8 @@ import { ChangePassword } from '../pages/change-password/ChangePassword'
 import Main from '../pages/Main'
 import PrivateRoute from './PrivateRoute'
 import Issues from '../pages/all-issuis/Issues'
+import Main from '../pages/mainWorkSpace/Main'
+import BoardsPage from '../pages/BoardsPage'
 
 export const routes = createBrowserRouter([
    {
@@ -29,6 +31,16 @@ export const routes = createBrowserRouter([
                   <Main />
                </>
             }
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+   {
+      path: '/workspace/:id/boards',
+      element: (
+         <PrivateRoute
+            Component={<BoardsPage />}
             isAllowed={true}
             fallBacPath="/"
          />
