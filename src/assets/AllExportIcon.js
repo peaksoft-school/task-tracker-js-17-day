@@ -44,7 +44,7 @@ import CommunicationIcon from './images/icon/system/Communication Icon.svg?react
 import HourglassIcon from './images/icon/system/Hourglass.svg?react'
 import NotifyIcon from './images/icon/system/Notify.svg?react'
 import PenselIcon from './images/icon/system/Pensel.svg?react'
-
+import XIcon from './images/icon/system/X.svg?react'
 
 export {
    //? arrows
@@ -94,4 +94,5 @@ export {
    WhitePliusIcon,
    Black,
    GoogleIcon,
+   XIcon,
 }

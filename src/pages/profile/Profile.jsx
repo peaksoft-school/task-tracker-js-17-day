@@ -13,6 +13,27 @@ export const Profile = () => {
    const data = useSelector((state) => state.profile)
    const dispatch = useDispatch()
 
+   const [form, setForm] = useState({
+      name: '',
+      lastName: '',
+      avatarUrl: '',
+   })
+
+   const [passwords, setPasswords] = useState({
+      oldPassword: '',
+      newPassword: '',
+   })
+
+   useEffect(() => {
+      if (data.profileFul) {
+         setForm({
+            firstName: data.profileFul.name || '',
+            lastName: data.profileFul.lastName || '',
+            avatarUrl: data.profileFul.avatarUrl || '',
+         })
+      }
+   }, [data.profileFul])
+
    useEffect(() => {
       dispatch(PROFILE_THUNK.profileSlice())
    }, [])
@@ -20,6 +41,8 @@ export const Profile = () => {
 
    const [showPassword, setShowPassword] = useState(false)
    const [showRepitPassword, setShowRepitPassword] = useState(false)
+   const [showNewPassword, setShowNewPassword] = useState(false)
+
 
    const inputPassword = () => {
       setShowPassword(!showPassword)
@@ -28,6 +51,31 @@ export const Profile = () => {
       setShowRepitPassword(!showRepitPassword)
    }
 
+   const handleChange = (e) => {
+      const { name, value } = e.target
+      setForm((prev) => ({ ...prev, [name]: value }))
+   }
+
+   const handlePasswordChange = (e) => {
+      const { name, value } = e.target
+      setPasswords((prev) => ({ ...prev, [name]: value }))
+   }
+   const handleSave = () => {
+      dispatch(PROFILE_THUNK.updateProfile(form))
+   }
+   const handleSaveProfile = async () => {
+      try {
+         // 1️⃣ Обновляем данные профиля
+         await dispatch(PROFILE_THUNK.updateProfile(form)).unwrap()
+
+         // 2️⃣ Если пользователь ввёл оба пароля — обновляем пароль
+         if (passwords.oldPassword && passwords.newPassword) {
+            await dispatch(PROFILE_THUNK.updatePassword(passwords)).unwrap()
+         }
+      } catch (error) {
+         console.error('Ошибка при обновлении профиля:', error)
+      }
+   }
    return (
       <Box>
          <Header />
@@ -38,7 +86,7 @@ export const Profile = () => {
                   <Box key={data.profileFul.id}>
                      <StyledBoxPortfolioHeader>
                         <StyledBoxImgProfil>
-                           <StyledAvatar src={UserImage} />
+                           <StyledAvatar src={form.avatarUrl || UserImage} />
                         </StyledBoxImgProfil>
                         <Typography>
                            {data.profileFul.name} {data.profileFul.lastName}
@@ -47,12 +95,18 @@ export const Profile = () => {
                      <StyledBoxInputs>
                         <Box>
                            <StyledInput
-                              label="Name"
-                              value={data.profileFul.name}
+                              label="name"
+                              name="firstName"
+                              placeholder={data.profileFul.name}
+                              value={form.name}
+                              onChange={handleChange}
                            />
                            <StyledInput
-                              label="LastName"
-                              value={data.profileFul.lastName}
+                              label="Last Name"
+                              name="lastName"
+                              value={form.lastName}
+                              placeholder={data.profileFul.lastName}
+                              onChange={handleChange}
                            />
                            <StyledInput
                               label="Email"
@@ -61,33 +115,53 @@ export const Profile = () => {
                         </Box>
                         <StyledBoxIputs>
                            <StyledInput
-                              label="Possword"
-                              placeholder="Password"
+                              label="Old Password"
+                              name="oldPassword"
                               type={showPassword ? 'text' : 'password'}
+                              value={passwords.oldPassword}
+                              onChange={handlePasswordChange}
+                              placeholder="••••••••"
                               iconPosition="end"
                               icon={
                                  showPassword ? (
-                                    <ShowIcon onClick={inputRepitPassword} />
+                                    <ShowIcon
+                                       onClick={() => setShowPassword(false)}
+                                    />
                                  ) : (
-                                    <HideIcon onClick={inputRepitPassword} />
+                                    <HideIcon
+                                       onClick={() => setShowPassword(true)}
+                                    />
                                  )
                               }
                            />
+
                            <StyledInput
-                              label="RepitPassword"
-                              placeholder="Repit Password"
-                              type={showRepitPassword ? 'text' : 'password'}
+                              label="New Password"
+                              name="newPassword"
+                              type={showNewPassword ? 'text' : 'password'}
+                              value={passwords.newPassword}
+                              onChange={handlePasswordChange}
+                              placeholder="••••••••"
                               iconPosition="end"
                               icon={
-                                 showRepitPassword ? (
-                                    <ShowIcon onClick={inputRepitPassword} />
+                                 showNewPassword ? (
+                                    <ShowIcon
+                                       onClick={() => setShowNewPassword(false)}
+                                    />
                                  ) : (
-                                    <HideIcon onClick={inputRepitPassword} />
+                                    <HideIcon
+                                       onClick={() => setShowNewPassword(true)}
+                                    />
                                  )
                               }
                            />
                            <StyledButton>
-                              <AppButton>Save</AppButton>
+                              <AppButton
+                                 onClick={handleSaveProfile}
+                                 disabled={data.isLoading}
+                              >
+                                 {data.isLoading ? 'Saving...' : 'Save Profile'}
+                              </AppButton>
                            </StyledButton>
                         </StyledBoxIputs>
                      </StyledBoxInputs>

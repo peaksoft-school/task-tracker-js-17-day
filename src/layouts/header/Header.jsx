@@ -37,7 +37,6 @@ export const Header = ({ favouritesCount, notificationCount }) => {
    }, [favouritesCount, boardCounts, workspaceCounts])
    const hendlerNavigateUser = () => {
       navigate('/profile')
-
    }
    const hendlerNavigateLogOut = () => {
       navigate(-1)
@@ -140,22 +139,35 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                   src={UserImage}
                />
                {modalUser && (
-                  <CustomModal isVisible={modalUser} handleVisible={hedlerUser}>
+                  <StyledModalProfile
+                     isVisible={modalUser}
+                     handleVisible={hedlerUser}
+                  >
                      <StyledUserProfile>
                         <StyledTypographyProfile onClick={hendlerNavigateUser}>
                            Profile
                         </StyledTypographyProfile>
-                        <StyledTypographyProfile onClick={hendlerNavigateLogOut}>
+                        <StyledTypographyProfile
+                           onClick={hendlerNavigateLogOut}
+                        >
                            Logout
                         </StyledTypographyProfile>
                      </StyledUserProfile>
-                  </CustomModal>
+                  </StyledModalProfile>
                )}
             </StylesBoxTwoHeader>
          </StylesBoxHeder>
       </header>
    )
 }
+const StyledModalProfile = styled(CustomModal)(({}) => ({
+   display: 'flex',
+   justifyContent: 'end',
+   alignItems: 'start',
+   marginTop: '60px',
+   marginRight: '40px',
+}))
+
 const StyledTypographyProfile = styled(Typography)(({}) => ({
    display: 'flex',
    alignItems: 'center',
@@ -179,8 +191,9 @@ const StyledBoxModal = styled(Box)(({}) => ({
 }))
 
 const StyledModal = styled(CustomModal)(({}) => ({
-   width: '400px',
-   height: '300px',
+   display:'flex',
+   justifyContent:'center',
+   alignItems:'center',
 }))
 
 const StyledBoxNonotificationKrug = styled(Box)(({}) => ({

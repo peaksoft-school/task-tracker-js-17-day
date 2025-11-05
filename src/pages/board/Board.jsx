@@ -96,6 +96,8 @@ export default function Board() {
    const handlerModelImg = () => setBackgroundModalImages((prev) => !prev)
    const handlerModelColor = () => setBackgroundModalColors((prev) => !prev)
 
+   console.log(selectedItem, 'gi')
+
    return (
       <>
          <Header favouritesCount="workspaceCount" />
@@ -163,7 +165,7 @@ export default function Board() {
                                  <CircularProgress size={24} color="inherit" />
                               </StyledOverlay>
                            )}
-                           {selectedItem === bgItem && !loadingItem && (
+                           {selectedItem === bgItem && (
                               <StyledOverlay>
                                  <CheckIcon />
                               </StyledOverlay>
@@ -219,7 +221,6 @@ export default function Board() {
                <Box>
                   <StyledModalTypography>Photo</StyledModalTypography>
                   <StyledBoxModalsBack>
-                     {' '}
                      {backgroundImages.map((bgItem) => (
                         <StyledBoxBg
                            key={bgItem}
@@ -393,7 +394,9 @@ const StyledBoxColors = styled(Box)(({ colors }) => ({
 
 const ModalBox = styled(CustomModal)({
    padding: '20px 16px',
-   width: 'fit-content',
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
 })
 
 const StyledImg = styled('img')({

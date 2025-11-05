@@ -69,7 +69,7 @@ export const routes = createBrowserRouter([
    },
    {
       path: '/InnerPage-board',
-      element: <InnerPageBoard />,
+      element: <InnerPageBoard/>,
    },
 
    {

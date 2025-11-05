@@ -1,12 +1,13 @@
 import { Modal as MuiModal, Box, styled } from '@mui/material'
 
-export const CustomModal = ({ children, isVisible, handleVisible }) => (
+export const CustomModal = ({ children, isVisible, handleVisible,...rest }) => (
    <StyledModal
       open={isVisible}
       onClose={handleVisible}
       aria-labelledby="basic-modal-title"
       aria-describedby="basic-modal-desc"
       keepMounted
+      {...rest}  
    >
       <ContentBox>{children}</ContentBox>
    </StyledModal>
