@@ -33,13 +33,6 @@ export const IssuesFilterBar = ({
    setStartDate,
    endDate,
    setEndDate,
-
-   selectedLabels,
-   setSelectedLabels,
-   selectedAssignees,
-   setSelectedAssignees,
-   showWithChecklist,
-   setShowWithChecklist,
 }) => {
    const [assigneeAnchorEl, setAssigneeAnchorEl] = useState(null)
 
@@ -92,7 +85,7 @@ export const IssuesFilterBar = ({
             </FilterTitle>
             <FilterControls>
                <StartDateButton onClick={handleStartClick}>
-                  {startDate ? startDate.format('DD.MM.YY') : '00.00.00'}
+                  {startDate ? startDate.format('YY.MM.DD') : '00.00.00'}
                   <span>
                      <CalendarIcon />
                   </span>
@@ -128,7 +121,7 @@ export const IssuesFilterBar = ({
                </Popover>
 
                <EndDateButton onClick={handleEndClick}>
-                  {endDate ? endDate.format('DD.MM.YY') : 'До'}
+                  {endDate ? endDate.format('YY.MM.DD') : 'До'}
                   <span>
                      <CalendarIcon />
                   </span>
@@ -193,11 +186,7 @@ export const IssuesFilterBar = ({
                      },
                   }}
                >
-                  <Box sx={{ padding: '16px' }}>
-                     <CheksNoLabeles>
-                        <input type="checkbox" />
-                        <span>No labels</span>{' '}
-                     </CheksNoLabeles>
+                  <Box sx={{ padding: '16px'  }}>
                      <CheksColorsLabeles>
                         <input type="checkbox" /> <StyleBoxGreen />
                      </CheksColorsLabeles>

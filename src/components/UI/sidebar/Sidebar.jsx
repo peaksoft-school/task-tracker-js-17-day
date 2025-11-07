@@ -14,6 +14,7 @@ import {
 } from '../../../assets/AllExportIcon'
 import SidebarItem from './SidebarItem'
 import Section from './Section'
+import { useNavigate, useParams } from 'react-router-dom'
 
 export default function Sidebar() {
    const [open, setOpen] = useState(false)
@@ -21,6 +22,8 @@ export default function Sidebar() {
    const [activeAL, setActiveAL] = useState(null)
    const [downAL, setDownAL] = useState({})
    const [showBoards, setShowBoards] = useState(false)
+   const navigate = useNavigate()
+    const { id } = useParams()
 
    const toggleSidebar = () => setOpen((prev) => !prev)
    const toggleAL = (id) => setDownAL((prev) => ({ ...prev, [id]: !prev[id] }))
@@ -84,7 +87,10 @@ export default function Sidebar() {
                label="All issues"
                count="(267)"
                isActive={activeIndex === 122}
-               onClick={() => setActiveIndex(122)}
+               onClick={() => {
+                  setActiveIndex(122)
+                  navigate(`/workspace/${id}/boards/all-issuis`)
+               }}
                open={open}
             />
             <SidebarItem

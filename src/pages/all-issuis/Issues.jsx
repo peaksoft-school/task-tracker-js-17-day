@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import { Paper, Box, CircularProgress } from '@mui/material' 
+import { Paper, Box, CircularProgress } from '@mui/material'
 import { Header } from '../../layouts/header/Header'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import dayjs from 'dayjs'
@@ -18,35 +18,36 @@ const mapApiColorToHex = (colorType) => {
       BLUE: '#0079BF',
       ORANGE: '#EB8900',
    }
-   return colors[colorType] || '#82ca9d' 
+   return colors[colorType] || '#82ca9d'
 }
 
 export default function Issues() {
    const dispatch = useDispatch()
-   const { boardId } = useParams()
+   const { id } = useParams()
 
    const { issues: rawIssues, isLoading } = useSelector((state) => state.issues)
 
    const [startDate, setStartDate] = useState(null)
    const [endDate, setEndDate] = useState(null)
-   const [selectedLabels, setSelectedLabels] = useState([]) 
+   const [selectedLabels, setSelectedLabels] = useState([])
    const [selectedAssignees, setSelectedAssignees] = useState([])
    const [showWithChecklist, setShowWithChecklist] = useState(false)
 
    useEffect(() => {
       const filterParams = {
-         boardId,
-         startDate,
-         endDate,
-         labelId: selectedLabels[0], 
-         assigneeId: selectedAssignees[0], 
+         id,
+         startDate: startDate?.format('YYYY.MM.DD').replaceAll('.', '-'),
+         endDate: endDate?.format('YYYY.MM.DD').replaceAll('.', '-'),
+         labelId: selectedLabels[0],
+         assigneeId: selectedAssignees[0],
          hasChecklist: showWithChecklist,
       }
+      console.log('ID для thunk :', id)
 
-      dispatch(ISSUES_THUNK.getFilteredIssues(filterParams))
+      dispatch(ISSUES_THUNK.getAllIssues(filterParams))
    }, [
       dispatch,
-      boardId,
+      id,
       startDate,
       endDate,
       selectedLabels,
@@ -54,16 +55,16 @@ export default function Issues() {
       showWithChecklist,
    ])
 
-   const transformedRows = useMemo(() => {
-      if (!rawIssues) return []
+   console.log(startDate?.format('YYYY.MM.DD').replaceAll('.', '-'))
 
+   const transformedRows = useMemo(() => {
       return rawIssues.map((row) => ({
-         created: dayjs(row.createdDate).format('DD.MM.YYYY'), 
+         created: dayjs(row.createdDate).format('YYYY.MM.DD'),
          period: row.period,
          creator: row.creatorEmail,
          column: row.columnTitle,
          assignee: row.assignees.map((a) => a.avatarUrl),
-         labels: row.labels.map((l) => mapApiColorToHex(l.colorType)), 
+         labels: row.labels.map((l) => mapApiColorToHex(l.colorType)),
          checklist: row.checklistProgress,
          description: row.description,
       }))
@@ -100,7 +101,7 @@ export default function Issues() {
                      <CircularProgress />
                   </Box>
                ) : (
-                  <IssuesTable rows={transformedRows} /> 
+                  <IssuesTable rows={transformedRows} />
                )}
             </IssuesContainer>
          </MainLayout>

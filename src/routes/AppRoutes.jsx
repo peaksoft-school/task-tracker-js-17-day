@@ -46,7 +46,7 @@ export const routes = createBrowserRouter([
       ),
    },
    {
-      path: '/all-issuis',
+      path: '/workspace/:id/boards/all-issuis',
       element: (
          <PrivateRoute
             Component={<Issues />}

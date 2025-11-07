@@ -1,58 +1,51 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
 
-/**
- * Thunk для получения отфильтрованных задач (issues)
- * @param {object} filterParams - Объект с параметрами фильтрации.
- * @param {number} filterParams.boardId - ID доски (из URL).
- * @param {number} [filterParams.assigneeId] - ID исполнителя.
- * @param {number} [filterParams.labelId] - ID метки.
- * @param {object} [filterParams.startDate] - Объект Dayjs.
- * @param {object} [filterParams.endDate] - Объект Dayjs.
- * @param {boolean} [filterParams.hasChecklist] - Наличие чек-листа.
- */
-const getFilteredIssues = createAsyncThunk(
-   'issues/getFiltered',
-   async (filterParams, { rejectWithValue }) => {
-      const {
-         boardId,
-         assigneeId,
-         labelId,
-         startDate,
-         endDate,
-         hasChecklist,
-      } = filterParams
-
-      const queryParams = {
-         assigneeId,
-         labelId,
-         startDate: startDate ? startDate.format('YYYY-MM-DD') : undefined,
-         endDate: endDate ? endDate.format('YYYY-MM-DD') : undefined,
-         hasChecklist,
-      }
-
-      Object.keys(queryParams).forEach(
-         (key) =>
-            (queryParams[key] === undefined || queryParams[key] === null) &&
-            delete queryParams[key]
-      )
-
+const getAllIssues = createAsyncThunk(
+   //Вызов Thunk (в IssusesThunk.js): Хук отправляет (dispatch) thunk getAllIssues с новыми параметрами, которые включают дату.
+   'get/getAllIssues',
+   async (
+      { id, startDate, endDate, labelId, assigneeId, hasChecklist },
+      { rejectWithValue }
+   ) => {
       try {
-         // 3. Выполняем запрос
-         const { data } = await axiosInstance.get(
-            `/api/boards/${boardId}/issues/filter`,
-            {
-               params: queryParams, // axios сам подставит их как ?key=value
+         // собираем все возможные параметры
+         const params = {
+            startDate,
+            endDate,
+            labelId,
+            assigneeId,
+            hasChecklist,
+         }
+
+         // создаём объект для query-параметров, исключая пустые значения
+         const searchParams = new URLSearchParams()
+
+         Object.entries(params).forEach(([key, value]) => {
+            if (
+               value !== undefined &&
+               value !== null &&
+               value !== '' &&
+               value !== false
+            ) {
+               searchParams.append(key, value)
             }
-         )
+         })
+
+         const query = searchParams.toString()
+         const url = query
+            ? `api/boards/${id}/issues/filter?${query}`
+            : `api/boards/${id}/issues/filter`
+
+         const { data } = await axiosInstance.get(url)
          return data
       } catch (error) {
-         console.error(error)
+         console.error('Ошибка при переходе на страницу issues с id:', error)
          return rejectWithValue(error.response?.data || error.message)
       }
    }
 )
 
 export const ISSUES_THUNK = {
-   getFilteredIssues,
+   getAllIssues,
 }
