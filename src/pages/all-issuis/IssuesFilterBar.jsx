@@ -38,6 +38,8 @@ export const IssuesFilterBar = ({
    selectedAssignees,
    setSelectedAssignees,
    allAssignees,
+   showWithChecklist,
+   setShowWithChecklist,
 }) => {
    const [assigneeAnchorEl, setAssigneeAnchorEl] = useState(null)
 
@@ -100,6 +102,10 @@ export const IssuesFilterBar = ({
       } else {
          setSelectedAssignees([assigneeId])
       }
+   }
+
+   const handleChecklistChange = () => {
+      setShowWithChecklist((prevValue) => !prevValue)
    }
 
    return (
@@ -322,7 +328,11 @@ export const IssuesFilterBar = ({
                </Popover>
 
                <ChecklistWrapper>
-                  <input type="checkbox" />
+                  <input
+                     type="checkbox"
+                     onChange={handleChecklistChange}
+                     checked={showWithChecklist}
+                  />
                   <span>Checklist</span>
                </ChecklistWrapper>
             </FilterControls>
@@ -332,6 +342,9 @@ export const IssuesFilterBar = ({
                Total: <span>{rowsLength}</span>
             </span>
          </TotalBox>
+
+       
       </FilterSection>
    )
 }
+

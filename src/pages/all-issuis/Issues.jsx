@@ -58,7 +58,18 @@ export default function Issues() {
    console.log(startDate?.format('YYYY.MM.DD').replaceAll('.', '-'))
 
    const transformedRows = useMemo(() => {
-      return rawIssues.map((row) => ({
+      let filteredIssues = rawIssues
+
+      if (showWithChecklist) {
+         filteredIssues = rawIssues.filter((issue) => {
+            return (
+               issue.checklistProgress !== '1/1' &&
+               issue.checklistProgress !== '0/0'
+            )
+         })
+      }
+
+      return filteredIssues.map((row) => ({
          created: dayjs(row.createdDate).format('YYYY.MM.DD'),
          period: row.period,
          creator: row.creatorEmail,
@@ -67,8 +78,8 @@ export default function Issues() {
          labels: row.labels.map((l) => mapApiColorToHex(l.colorType)),
          checklist: row.checklistProgress,
          description: row.description,
-      }))
-   }, [rawIssues])
+      })) // 4. Добавляем showWithChecklist в массив зависимостей!
+   }, [rawIssues, showWithChecklist])
 
    const allAssignees = useMemo(() => {
       const assigneeMap = new Map()
