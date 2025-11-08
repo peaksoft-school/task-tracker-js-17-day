@@ -11,7 +11,6 @@ import {
 } from '@mui/material'
 import { Input } from '../../components/UI/Input'
 
-
 export const StyledChekbox = {
    '& input': {
       appearance: 'none',
@@ -212,7 +211,6 @@ export const Label = styled('span')(({ color }) => ({
    backgroundColor: color,
    marginRight: '4px',
 }))
-
 
 export const StartDateButton = styled(Box)({
    ...commonButtonStyle,

@@ -38,7 +38,7 @@ export default function Issues() {
          id,
          startDate: startDate?.format('YYYY.MM.DD').replaceAll('.', '-'),
          endDate: endDate?.format('YYYY.MM.DD').replaceAll('.', '-'),
-         labelId: selectedLabels[0],
+         labelId: selectedLabels,
          assigneeId: selectedAssignees[0],
          hasChecklist: showWithChecklist,
       }

@@ -33,6 +33,8 @@ export const IssuesFilterBar = ({
    setStartDate,
    endDate,
    setEndDate,
+   selectedLabels,
+   setSelectedLabels,
 }) => {
    const [assigneeAnchorEl, setAssigneeAnchorEl] = useState(null)
 
@@ -77,6 +79,20 @@ export const IssuesFilterBar = ({
       setEndAnchorEl(null)
    }
    const isEndOpen = Boolean(endAnchorEl)
+
+   // ↓↓↓ ДОБАВЬ ЭТУ ФУНКЦИЮ ↓↓↓
+   const handleLabelChange = (labelId) => {
+      // Проверяем, выбран ли уже этот ID
+      const isAlreadySelected = selectedLabels[0] === labelId
+
+      if (isAlreadySelected) {
+         // Если да, убираем его (очищаем массив)
+         setSelectedLabels([])
+      } else {
+         // Если нет, выбираем его (массив с одним этим ID)
+         setSelectedLabels([labelId])
+      }
+   }
    return (
       <FilterSection>
          <FilterHeader>
@@ -186,18 +202,38 @@ export const IssuesFilterBar = ({
                      },
                   }}
                >
-                  <Box sx={{ padding: '16px'  }}>
+                  <Box sx={{ padding: '16px' }}>
                      <CheksColorsLabeles>
-                        <input type="checkbox" /> <StyleBoxGreen />
+                        <input
+                           type="checkbox"
+                           onChange={() => handleLabelChange(3)}
+                           checked={selectedLabels[0] === 3}
+                        />
+                        <StyleBoxGreen />
                      </CheksColorsLabeles>
                      <CheksColorsLabeles>
-                        <input type="checkbox" /> <StyleBoxOreng />
+                        <input
+                           type="checkbox"
+                           onChange={() => handleLabelChange(4)}
+                           checked={selectedLabels[0] === 4}
+                        />
+                        <StyleBoxOreng />
                      </CheksColorsLabeles>
                      <CheksColorsLabeles>
-                        <input type="checkbox" /> <StyleBoxBlue />
+                        <input
+                           type="checkbox"
+                           onChange={() => handleLabelChange(1)}
+                           checked={selectedLabels[0] === 1}
+                        />
+                        <StyleBoxBlue />
                      </CheksColorsLabeles>
                      <CheksColorsLabeles>
-                        <input type="checkbox" /> <StyleBoxRed />
+                        <input
+                           type="checkbox"
+                           onChange={() => handleLabelChange(2)}
+                           checked={selectedLabels[0] === 2}
+                        />
+                        <StyleBoxRed />
                      </CheksColorsLabeles>
                   </Box>
                </Popover>
