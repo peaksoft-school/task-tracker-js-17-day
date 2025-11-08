@@ -1,5 +1,5 @@
 import { IconButton, styled } from '@mui/material'
-import { Title, AccountingLMS } from './index'
+import { Title, AccountingLMS } from '../index'
 import { useState } from 'react'
 import {
    DownIcon,
