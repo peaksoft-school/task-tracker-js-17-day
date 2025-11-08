@@ -35,6 +35,9 @@ export const IssuesFilterBar = ({
    setEndDate,
    selectedLabels,
    setSelectedLabels,
+   selectedAssignees,
+   setSelectedAssignees,
+   allAssignees,
 }) => {
    const [assigneeAnchorEl, setAssigneeAnchorEl] = useState(null)
 
@@ -80,19 +83,25 @@ export const IssuesFilterBar = ({
    }
    const isEndOpen = Boolean(endAnchorEl)
 
-   // ↓↓↓ ДОБАВЬ ЭТУ ФУНКЦИЮ ↓↓↓
    const handleLabelChange = (labelId) => {
-      // Проверяем, выбран ли уже этот ID
       const isAlreadySelected = selectedLabels[0] === labelId
 
       if (isAlreadySelected) {
-         // Если да, убираем его (очищаем массив)
          setSelectedLabels([])
       } else {
-         // Если нет, выбираем его (массив с одним этим ID)
          setSelectedLabels([labelId])
       }
    }
+
+   const handleAssigneeChange = (assigneeId) => {
+      const isAlreadySelected = selectedAssignees[0] === assigneeId
+      if (isAlreadySelected) {
+         setSelectedAssignees([])
+      } else {
+         setSelectedAssignees([assigneeId])
+      }
+   }
+
    return (
       <FilterSection>
          <FilterHeader>
@@ -283,19 +292,32 @@ export const IssuesFilterBar = ({
                      style={{ height: '100%', overflowY: 'auto' }}
                   >
                      <StylesBoxUsers>
-                        <input type="checkbox" />
+                        <input
+                           type="checkbox"
+                           onChange={() => handleAssigneeChange(0)}
+                           checked={selectedAssignees[0] === 0}
+                        />
                         <StylesAvatar />
                         <Box>Unassigned</Box>
                      </StylesBoxUsers>
-
-                     <StylesBoxUsers>
-                        <input type="checkbox" />
-                        <StylesAvatar />
-                        <Box className="user-info">
-                           <span className="user-name">Nazira</span>
-                           <span className="user-email">nazira@gmail.com</span>
-                        </Box>
-                     </StylesBoxUsers>
+                     {allAssignees.map((assignee) => (
+                        <StylesBoxUsers>
+                           <input
+                              type="checkbox"
+                              onChange={() => handleAssigneeChange(assignee.id)}
+                              checked={selectedAssignees[0] === assignee.id}
+                           />
+                           <StylesAvatar src={assignee.avatarUrl} />
+                           <Box className="user-info">
+                              <span className="user-name">
+                                 {assignee.firstName} {assignee.lastName}
+                              </span>
+                              <span className="user-email">
+                                 {assignee.email}
+                              </span>
+                           </Box>
+                        </StylesBoxUsers>
+                     ))}
                   </StylesConteinerBoxProfilesUser>
                </Popover>
 

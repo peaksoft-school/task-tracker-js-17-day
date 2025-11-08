@@ -69,6 +69,21 @@ export default function Issues() {
          description: row.description,
       }))
    }, [rawIssues])
+
+   const allAssignees = useMemo(() => {
+      const assigneeMap = new Map()
+
+      rawIssues.forEach((issue) => {
+         issue.assignees.forEach((assignee) => {
+            if (!assigneeMap.has(assignee.id)) {
+               assigneeMap.set(assignee.id, assignee)
+            }
+         })
+      })
+
+      return Array.from(assigneeMap.values())
+   }, [rawIssues])
+
    return (
       <StyledBackground>
          <Header />
@@ -85,6 +100,7 @@ export default function Issues() {
                   setSelectedLabels={setSelectedLabels}
                   selectedAssignees={selectedAssignees}
                   setSelectedAssignees={setSelectedAssignees}
+                  allAssignees={allAssignees}
                   showWithChecklist={showWithChecklist}
                   setShowWithChecklist={setShowWithChecklist}
                />
