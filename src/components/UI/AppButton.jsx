@@ -1,12 +1,11 @@
 import { Button } from '@mui/material'
-import React from 'react'
 import { themeColors } from '../../styles/appColors'
 
 export const AppButton = ({
    children,
    onClick,
    disabled,
-   type = 'button',
+   type = 'sabmit',
    ...rest
 }) => {
    const bluee = themeColors.palette.primary.blue

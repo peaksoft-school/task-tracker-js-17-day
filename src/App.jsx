@@ -1,10 +1,11 @@
-import Sidebar from './components/sidebar/Sidebar'
+import { RouterProvider } from 'react-router-dom'
+import { routes } from './routes/AppRoutes'
 
 const App = () => {
    return (
-      <div>
-         <Sidebar />
-      </div>
+      <>
+         <RouterProvider router={routes} />
+      </>
    )
 }
 

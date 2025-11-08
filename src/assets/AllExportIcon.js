@@ -3,6 +3,9 @@ import LeftIcon from './images/icon/arrows/left.svg?react'
 import RightIcon from './images/icon/arrows/right.svg?react'
 import UpIcon from './images/icon/arrows/up.svg?react'
 import DownIcon from './images/icon/arrows/down.svg?react'
+// ? favoriteIcon
+import FavoriteIconstarBlue from './images/icon/favoriteIcon/favoriteIconstarBlue.svg?react'
+import FavoriteIconstarSilver from './images/icon/favoriteIcon/favoriteIconstarSilver.svg?react'
 //? side panel
 import FilesAndFoldersIcon from './images/icon/side panel/Files and Folders Icon.svg?react'
 import GraphicIcon from './images/icon/side panel/Graphic Icon.svg?react'
@@ -33,6 +36,13 @@ import SearchIcon from './images/icon/system/Search.svg?react'
 import ShowIcon from './images/icon/system/Show.svg?react'
 import StarIcon from './images/icon/system/Star.svg?react'
 import TemplateIcon from './images/icon/system/Template.svg?react'
+import DoneNotificationIcon from './images/icon/notificationIcons/Done.svg?react'
+import ErrorNotificationIcon from './images/icon/notificationIcons/Error.svg?react'
+import WarningNotificationIcon from './images/icon/notificationIcons/Warning.svg?react'
+import WhitePliusIcon from './images/icon/system/Alerts, Warning, Signs Icon.svg?react'
+import Black from './images/icon/system/Black and White Collection 2.svg?react'
+import GoogleIcon from './images/icon/system/googleIkon.svg?react'
+
 
 export {
    //? arrows
@@ -40,6 +50,9 @@ export {
    RightIcon,
    UpIcon,
    DownIcon,
+   // ? favoriteIcon
+   FavoriteIconstarBlue,
+   FavoriteIconstarSilver,
    //? side panel
    FilesAndFoldersIcon,
    GraphicIcon,
@@ -70,4 +83,11 @@ export {
    ShowIcon,
    StarIcon,
    TemplateIcon,
+   //? notificationIcons
+   DoneNotificationIcon,
+   ErrorNotificationIcon,
+   WarningNotificationIcon,
+   WhitePliusIcon,
+   Black,
+   GoogleIcon,
 }
