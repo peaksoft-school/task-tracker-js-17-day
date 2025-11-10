@@ -1,5 +1,4 @@
 import { IconButton, styled } from '@mui/material'
-import SidebarTechnical from './SidebarTechnical'
 import {
    DownIcon,
    LayoutIcon,

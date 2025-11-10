@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { IconButton, styled } from '@mui/material'
-import { Title, AccountingLMS } from '../../../utils/constants/index'
 import {
    DownIcon,
    FilesAndFoldersIcon,
@@ -12,22 +11,43 @@ import {
    PlusIcon,
    ToolsIcon,
 } from '../../../assets/AllExportIcon'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import SidebarItem from './SidebarItem'
 import Section from './Section'
-import { useNavigate, useParams } from 'react-router-dom'
+import { CustomModal } from '../modal/Modal'
+import SidebarSettingModal from './SidebarModal'
 
 export default function Sidebar() {
+   const Title = ['Title', 'Title', 'Title', 'Title', 'Title']
+   const AccountingLMS = [
+      'Accounting',
+      'LMS',
+      'Accounting',
+      'LMS',
+      'Accounting',
+      'LMS',
+   ]
+   const [OpenSidebarModal, setOpenSidebarModal] = useState(true)
+   const OpenSidebarModalCrate = () => setOpenSidebarModal((prev) => !prev)
+
    const [open, setOpen] = useState(false)
    const [activeIndex, setActiveIndex] = useState(null)
    const [activeAL, setActiveAL] = useState(null)
    const [downAL, setDownAL] = useState({})
    const [showBoards, setShowBoards] = useState(false)
    const navigate = useNavigate()
-    const { id } = useParams()
+   const { id } = useParams()
+
+   const location = useLocation()
+   const currentPath = location.pathname
 
    const toggleSidebar = () => setOpen((prev) => !prev)
    const toggleAL = (id) => setDownAL((prev) => ({ ...prev, [id]: !prev[id] }))
    const toggleBoards = () => setShowBoards((prev) => !prev)
+
+   const pathBoards = `/workspace/${id}/boards`
+   const pathAllIssues = `/workspace/${id}/boards/all-issuis`
+   const pathParticipants = `/workspace/${id}/participants`
 
    return (
       <SidebarContainer open={open}>
@@ -50,7 +70,11 @@ export default function Sidebar() {
 
          <Divider open={open} />
 
-         <SelectedMenuItem open={open}>
+         <SelectedMenuItem
+            open={open}
+            isActive={currentPath === pathBoards}
+            onClick={() => navigate(pathBoards)}
+         >
             <LayoutIcon />
             {open && (
                <>
@@ -86,9 +110,8 @@ export default function Sidebar() {
                icon={<FilesAndFoldersIcon />}
                label="All issues"
                count="(267)"
-               isActive={activeIndex === 122}
+               isActive={currentPath === pathAllIssues}
                onClick={() => {
-                  setActiveIndex(122)
                   navigate(`/workspace/${id}/boards/all-issuis`)
                }}
                open={open}
@@ -97,18 +120,28 @@ export default function Sidebar() {
                icon={<PeopleIcon />}
                label="Participants"
                count="(17)"
-               isActive={activeIndex === 288}
-               onClick={() => setActiveIndex(288)}
+               isActive={currentPath === pathParticipants}
+               onClick={() => {
+                  navigate(pathParticipants)
+               }}
                open={open}
             />
+
             <SidebarItem
                icon={<ToolsIcon />}
                label="Setting"
-               isActive={activeIndex === 377}
-               onClick={() => setActiveIndex(377)}
+               isActive={activeIndex}
+               onClick={OpenSidebarModalCrate}
                open={open}
             />
          </MainIcons>
+
+         <CustomModal
+            isVisible={OpenSidebarModal}
+            handleVisible={OpenSidebarModalCrate}
+         >
+            <SidebarSettingModal />
+         </CustomModal>
 
          <Divider open={open} />
 
@@ -212,7 +245,7 @@ const Divider = styled('div')(({ open }) => ({
    border: '1px solid rgba(224,224,224,1)',
 }))
 
-const SelectedMenuItem = styled('div')(({ open }) => ({
+const SelectedMenuItem = styled('div')(({ open, isActive }) => ({
    width: open ? '100%' : 100,
    height: 37,
    borderRadius: '0 24px 24px 0',
@@ -220,7 +253,7 @@ const SelectedMenuItem = styled('div')(({ open }) => ({
    alignItems: 'center',
    justifyContent: 'center',
    padding: open ? '8px 32px 8px 32px' : '8px 32px 9px 32px',
-   background: open ? 'rgba(58,104,131,0.6)' : undefined,
+   background: open && isActive ? 'rgba(58,104,131,0.6)' : undefined,
    margin: '10px 0',
 }))
 

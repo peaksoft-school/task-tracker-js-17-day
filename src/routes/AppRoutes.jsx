@@ -7,6 +7,8 @@ import PrivateRoute from './PrivateRoute'
 import Issues from '../pages/all-issuis/Issues'
 import Main from '../pages/mainWorkSpace/Main'
 import BoardsPage from '../pages/BoardsPage'
+import ParticipantsPage from '../pages/ParticipantsPage'
+import SettingPage from '../pages/SettingPage'
 
 export const routes = createBrowserRouter([
    {
@@ -55,6 +57,17 @@ export const routes = createBrowserRouter([
          />
       ),
    },
+   {
+      path: '/workspace/:id/participants',
+      element: (
+         <PrivateRoute
+            Component={<ParticipantsPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+
    {
       path: '*',
       element: <h1>Этой страницы не существует!!!</h1>,

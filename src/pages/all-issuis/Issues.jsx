@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react'
 import { Paper, Box, CircularProgress } from '@mui/material'
 import { Header } from '../../layouts/header/Header'
-import Sidebar from '../../components/UI/sidebar/Sidebar'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { useDispatch, useSelector } from 'react-redux'
@@ -10,6 +9,7 @@ import { IssuesFilterBar } from './IssuesFilterBar'
 import { IssuesTable } from './IssuesTable'
 import { StyledBackground, MainLayout, IssuesContainer } from './issues.styles'
 import { ISSUES_THUNK } from '../../store/slices/issuses/IssusesThunk'
+import Sidebar from '../../components/UI/sidebar/Sidebar'
 
 const mapApiColorToHex = (colorType) => {
    const colors = {

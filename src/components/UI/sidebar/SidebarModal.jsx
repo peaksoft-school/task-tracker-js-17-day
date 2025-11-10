@@ -1,0 +1,152 @@
+import { Box, styled } from '@mui/material'
+import React, { useState } from 'react'
+import { AppButton } from '../AppButton'
+import { CustomModal } from '../modal/Modal'
+
+function SidebarSettingModal() {
+   const [openDeleteWorkspace, setOpenDeleteWorkspace] = useState(false)
+   const DeleteWorkspace = () => {
+      setOpenDeleteWorkspace((prev) => !prev)
+   }
+   return (
+      <BoxSidebarSetting>
+         <Title>Setting</Title>
+         <StyledInput defaultValue="LMS" />
+         <DeleteText onClick={DeleteWorkspace}>
+            Delete this workspace?
+         </DeleteText>
+
+         <CustomModal
+            isVisible={openDeleteWorkspace}
+            handleVisible={DeleteWorkspace}
+         >
+            <BoxDeleteWorkspace>
+               <Title>Delete workspace</Title>
+               <DeleteWorkspaceText>
+                  Are you sure to delete this workspace?
+               </DeleteWorkspaceText>
+
+               <ButtonContainer>
+                  {/* 1. Кнопка "Cancel" со стилями из модалки "Setting" */}
+                  <AppButton
+                     onClick={DeleteWorkspace} // Добавили, чтобы закрывать модалку
+                     sx={{
+                        backgroundColor: 'rgba(245, 245, 245, 1)',
+                        color: 'rgba(141, 147, 153, 1)',
+                        fontSize: '14px',
+                        fontWeight: '400',
+                        borderRadius: '24px',
+                        padding: '8px 16px',
+                        '&:hover': {
+                           backgroundColor: 'rgba(230, 230, 230, 1)',
+                        },
+                     }}
+                  >
+                     Cancel
+                  </AppButton>
+
+                  {/* 2. Твоя красная кнопка "Delete" (она в порядке) */}
+                  <AppButton
+                     sx={{
+                        backgroundColor: '#D91212',
+                        color: '#ffffff',
+                        fontSize: '14px',
+                        fontWeight: '400',
+                        borderRadius: '24px',
+                        padding: '8px 16px',
+                        '&:hover': {
+                           backgroundColor: '#cd2b2b',
+                        },
+                     }}
+                  >
+                     Delete
+                  </AppButton>
+               </ButtonContainer>
+            </BoxDeleteWorkspace>
+         </CustomModal>
+         <ButtonContainer>
+            <AppButton
+               sx={{
+                  backgroundColor: 'rgba(245, 245, 245, 1)',
+                  color: 'rgba(141, 147, 153, 1)',
+                  fontSize: '14px',
+                  fontWeight: '400',
+                  borderRadius: '24px',
+                  padding: '8px 16px',
+                  '&:hover': {
+                     backgroundColor: 'rgba(230, 230, 230, 1)',
+                  },
+               }}
+            >
+               Cancel
+            </AppButton>
+            <AppButton>Save</AppButton>
+         </ButtonContainer>
+      </BoxSidebarSetting>
+   )
+}
+
+export default SidebarSettingModal
+
+const BoxDeleteWorkspace = styled(Box)({
+   width: '328px',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '16px',
+})
+const BoxSidebarSetting = styled(Box)({
+   width: '477px',
+   display: 'flex',
+   flexDirection: 'column',
+   gap: '16px',
+})
+
+const Title = styled('p')({
+   fontFamily: 'Inter, sans-serif',
+   fontSize: '18px',
+   fontWeight: 500,
+   textAlign: 'center',
+   margin: 0,
+   color: '#333',
+})
+
+const DeleteWorkspaceText = styled('p')({
+   fontFamily: 'Inter, sans-serif',
+   fontSize: '16px',
+   textAlign: 'center',
+   color: '#555',
+   margin: 0,
+})
+
+const StyledInput = styled('input')({
+   width: '100%',
+   padding: '12px 16px',
+   borderRadius: '8px',
+   border: '1px solid rgba(224, 224, 224, 1)',
+   boxSizing: 'border-box',
+   fontSize: '16px',
+   fontFamily: 'inherit',
+   outline: 'none',
+   '&:focus': {
+      borderColor: 'rgba(0, 121, 191, 1)',
+   },
+})
+
+const DeleteText = styled('div')({
+   fontFamily: 'Inter, sans-serif',
+   fontSize: '14px',
+   color: 'red',
+   margin: 0,
+   cursor: 'pointer',
+   alignSelf: 'flex-start',
+   '&:hover': {
+      textDecoration: 'underline',
+   },
+})
+
+const ButtonContainer = styled(Box)({
+   display: 'flex',
+   justifyContent: 'flex-end',
+   gap: '12px',
+   marginTop: '24px',
+})
