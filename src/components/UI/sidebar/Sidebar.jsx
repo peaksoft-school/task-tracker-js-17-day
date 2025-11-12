@@ -27,7 +27,7 @@ export default function Sidebar() {
       'Accounting',
       'LMS',
    ]
-   const [OpenSidebarModal, setOpenSidebarModal] = useState(true)
+   const [OpenSidebarModal, setOpenSidebarModal] = useState(false)
    const OpenSidebarModalCrate = () => setOpenSidebarModal((prev) => !prev)
 
    const [open, setOpen] = useState(false)

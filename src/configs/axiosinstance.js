@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://3.75.184.75'
+const BASE_URL = 'http://3.72.63.246'
 
 export const axiosInstance = axios.create({
    baseURL: BASE_URL,
@@ -10,15 +10,15 @@ export const axiosInstance = axios.create({
    },
 })
 
-// redax store 
+// redax store
 let customStore
 // store это с main.jsx приходит данные что было доступ со всего проекта
 export const injectStore = (store) => {
    customStore = store
 }
 
-// отправлять request в бекенд 
-axiosInstance.interceptors.request.use( 
+// отправлять request в бекенд
+axiosInstance.interceptors.request.use(
    (config) => {
       const updateConfig = { ...config }
 
@@ -35,7 +35,7 @@ axiosInstance.interceptors.request.use(
       return Promise.reject(error)
    }
 )
-// получать response данные с бекенда 
+// получать response данные с бекенда
 axiosInstance.interceptors.response.use(
    (response) => {
       return Promise.resolve(response)
