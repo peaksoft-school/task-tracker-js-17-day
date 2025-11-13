@@ -45,6 +45,7 @@ function CreateModal({ onClose }) {
                   type="text"
                   placeholder="Name"
                   {...register('name', { required: 'Имя обязательно' })}
+                  maxLength={11}
                />
 
                {errors.name && (

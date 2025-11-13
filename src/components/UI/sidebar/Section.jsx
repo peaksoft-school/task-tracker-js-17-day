@@ -17,19 +17,23 @@ function Section({ label, open, downAL, toggleDownAL, onClick }) {
             </SectionWrapperL>
 
             {open && (
-               <>
+               <BoxLabel>
                   <SpanLMS>{label}</SpanLMS>
 
                   <DownButton onClick={toggleDownAL}>
                      <DownIcon />
                   </DownButton>
-               </>
+               </BoxLabel>
             )}
          </SectionContainer>
 
          {open && downAL && (
             <SectionDetails>
-               <SidebarItemDetalis icon={<LayoutIcon />} label="Boards" open={open} />
+               <SidebarItemDetalis
+                  icon={<LayoutIcon />}
+                  label="Boards"
+                  open={open}
+               />
 
                <SidebarItemDetalis
                   icon={<PeopleIcon />}
@@ -38,7 +42,11 @@ function Section({ label, open, downAL, toggleDownAL, onClick }) {
                   open={open}
                />
 
-               <SidebarItemDetalis icon={<ToolsIcon />} label="Setting" open={open} />
+               <SidebarItemDetalis
+                  icon={<ToolsIcon />}
+                  label="Setting"
+                  open={open}
+               />
             </SectionDetails>
          )}
       </>
@@ -64,6 +72,12 @@ const SectionWrapperL = styled('div')({
    alignItems: 'center',
    cursor: 'pointer',
    '& span': { color: '#fff' },
+})
+
+const BoxLabel = styled('div')({
+   width: '118px',
+   display: 'flex',
+   justifyContent: 'space-between',
 })
 
 const SpanLMS = styled('div')({

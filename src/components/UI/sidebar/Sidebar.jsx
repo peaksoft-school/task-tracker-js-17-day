@@ -22,8 +22,8 @@ import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 export default function Sidebar() {
    const Title = ['Title', 'Title', 'Title', 'Title', 'Title']
    const AccountingLMS = [
-      'Accounting',
-      // 'LMS',
+      'Accountingr',
+      'LMS',
       // 'Accounting',
       // 'LMS',
       // 'Accounting',
