@@ -22,7 +22,8 @@ export const SignUp = () => {
 
    const dispatch = useDispatch()
 
-   const onSubmit = (values) => dispatch(AUTH_THUNK.signUP({ values,navigate }))
+   const onSubmit = (values) =>
+      dispatch(AUTH_THUNK.signUP({ values, navigate }))
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
@@ -55,7 +56,6 @@ export const SignUp = () => {
                   tokenId: response?.user?.accessToken,
                })
             )
-            console.log('dl')
          })
          .catch((error) => {
             return error
@@ -191,7 +191,7 @@ export const SignUp = () => {
                      sx={{ '& .MuiSvgIcon-root': { fontSize: 28 } }}
                   />
                   <StylesP>
-                     Creating an account means you’re okay with our Terms of
+                     Creating an account means you're okay with our Terms of
                      Service, Privacy Policy.
                   </StylesP>
                </StylesBoxCheckbox>

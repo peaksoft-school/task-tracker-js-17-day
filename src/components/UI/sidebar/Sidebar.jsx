@@ -146,13 +146,21 @@ export default function Sidebar() {
 const SidebarContainer = styled('div')(({ open }) => ({
    width: open ? 250 : 116,
    transition: 'width 0.5s',
-   height: '100vh',
+   height: '93.5vh',
    display: 'flex',
    flexDirection: 'column',
    paddingTop: 93,
-   overflow: 'auto',
+   overflowY: 'auto',
+   overflowX: 'hidden',
    background: 'rgba(248,248,248,0.6)',
    alignItems: 'center',
+
+   scrollbarWidth: 'none',
+   msOverflowStyle: 'none',
+
+   '&::-webkit-scrollbar': {
+      display: 'none',
+   },
 }))
 
 const TopSection = styled('div')({

@@ -37,12 +37,10 @@ export const Profile = () => {
    useEffect(() => {
       dispatch(PROFILE_THUNK.profileSlice())
    }, [])
-   console.log(data, 'data profile')
 
    const [showPassword, setShowPassword] = useState(false)
    const [showRepitPassword, setShowRepitPassword] = useState(false)
    const [showNewPassword, setShowNewPassword] = useState(false)
-
 
    const inputPassword = () => {
       setShowPassword(!showPassword)
@@ -197,6 +195,11 @@ export const Profile = () => {
       </Box>
    )
 }
+const StyledTypography = styled(Typography)({
+   color: '#ffffff',
+   marginInline: '10px',
+})
+
 const StyledBoxWorkspace = styled(Box)({
    display: 'grid',
    gridTemplateColumns: 'repeat(2, 1fr)',
@@ -252,7 +255,7 @@ const StyledBoxIputs = styled(Box)({
 })
 
 const StyledBoxPortfolioHeader = styled(Box)({
-   maxWidth: '296px',
+   maxWidth: '350px',
    display: 'flex',
    justifyContent: 'space-between',
 })

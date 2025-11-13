@@ -5,7 +5,7 @@ import { axiosInstanceFile } from '../../../configs/axiosInstanceFile'
 const workSpaceById = createAsyncThunk(
    'board/workSpaceById',
 
-   async ({ workspaceId = 1 }, { rejectWithValue }) => {
+   async ({ workspaceId }, { rejectWithValue }) => {
       try {
          const { data } = await axiosInstance.get(
             `/api/boards/workspace/${workspaceId}`
@@ -22,7 +22,7 @@ const boardPost = createAsyncThunk(
 
    async (
       { name, description, backgroundUrl, workspaceId },
-      { rejectWithValue }
+      { rejectWithValue,  dispatch  }
    ) => {
       try {
          const body = { name, description, backgroundUrl }
@@ -30,6 +30,8 @@ const boardPost = createAsyncThunk(
             `/api/boards?workspaceId=${workspaceId}`,
             body
          )
+         dispatch(workSpaceById({ workspaceId }))
+
          return data
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)
@@ -47,6 +49,7 @@ const uploadImage = createAsyncThunk('board/uploadImage', async (file) => {
          '/api/s3file/upload',
          formData
       )
+      
 
       return data
    } catch (error) {

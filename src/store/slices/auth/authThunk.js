@@ -1,12 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
-import { useNavigate } from 'react-router-dom'
 import { showNotification } from '../../../utils/helpers/notification'
 
-const signUP = createAsyncThunk('auth/signUp', async ({ values,navigate }) => {
+const signUP = createAsyncThunk('auth/signUp', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-up', values)
-      navigate('/board')
+      navigate('/main-page')
       showNotification({
          title: 'Success',
          message: 'Успешная регистрация!',
@@ -26,7 +25,7 @@ const signUP = createAsyncThunk('auth/signUp', async ({ values,navigate }) => {
 const signIn = createAsyncThunk('auth/signIn', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-in', values)
-      navigate('/board')
+      navigate('/main-page')
       showNotification({
          title: 'Success',
          message: 'Успешная регистрация!',
@@ -56,12 +55,12 @@ const password = createAsyncThunk('auth/password', async ({ values }) => {
 const authWithGoogle = createAsyncThunk(
    'auth/authWithGoogle',
 
-   async ({ idToken, navigate }) => {
+   async ({ token, navigate }) => {
       try {
-         await axiosInstance.post('/api/auth/google', JSON.stringify(idToken), {
+         await axiosInstance.post('/api/auth/google', JSON.stringify(token), {
             headers: { 'Content-Type': 'application/json' },
          })
-         navigate('/board')
+         navigate('/main-page')
       } catch (error) {
          console.log(error.massage)
       }

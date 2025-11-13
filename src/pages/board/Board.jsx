@@ -1,5 +1,5 @@
 import { Box, CircularProgress, styled, Typography } from '@mui/material'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from '../../layouts/header/Header'
 import { AppButton } from '../../components/UI/AppButton'
@@ -11,9 +11,13 @@ import { CustomModal } from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
 import CheckIcon from '@mui/icons-material/Check'
+import { useParams } from 'react-router-dom'
 
 export default function Board() {
+   const { id } = useParams()
    const { boards, loading } = useSelector((state) => state.board)
+   console.log('boards', boards)
+
    const dispatch = useDispatch()
 
    const [boardsImg, setBoardsImg] = useState(false)
@@ -32,17 +36,23 @@ export default function Board() {
    const handlerName = (e) => setName(e.target.value)
 
    // === Клик по фото ===
-   const handlerClickIdBackImg = async (selectedImage) => {
+   const handlerClickIdBackImg = async (imageUrl) => {
       try {
-         setLoadingItem(selectedImage)
-         const response = await fetch(selectedImage)
+         setLoadingItem(imageUrl)
+
+         // Загружаем файл
+         const response = await fetch(imageUrl)
          const blob = await response.blob()
          const file = new File([blob], 'background.jpg', { type: blob.type })
+
          const result = await dispatch(BOARD_THUNK.uploadImage(file))
 
          if (result.payload && result.payload[0]) {
-            setSelectedBg({ type: 'image', value: result.payload[0] })
-            setSelectedItem(selectedImage)
+            // Предполагаем, что сервер возвращает объект { url: '...' } или строку
+            const uploadedUrl = result.payload[0].url || result.payload[0]
+
+            setSelectedBg({ type: 'image', value: uploadedUrl })
+            setSelectedItem(imageUrl)
          }
       } catch (error) {
          console.error('Ошибка при загрузке изображения:', error)
@@ -51,11 +61,15 @@ export default function Board() {
       }
    }
 
+   useEffect(() => {
+      if (id) {
+         dispatch(BOARD_THUNK.workSpaceById({ workspaceId: Number(id) }))
+      }
+   }, [id, dispatch])
    // === Клик по цвету ===
-   const handlerClickIdColor = (selectedColor) => {
-      // просто сохраняем цвет
-      setSelectedBg({ type: 'color', value: selectedColor })
-      setSelectedItem(selectedColor)
+   const handlerClickIdColor = (color) => {
+      setSelectedBg({ type: 'color', value: color }) // сохраняем строку цвета
+      setSelectedItem(color) // для UI (чекмарка)
    }
 
    // === Создание доски ===
@@ -65,21 +79,27 @@ export default function Board() {
          return
       }
 
+      if (!selectedBg) {
+         alert('Выберите фон (цвет или изображение)')
+         return
+      }
+
       const body = {
          name,
          description: 'Created from modal',
-         workspaceId: 1,
+         workspaceId: Number(id),
       }
 
-      // передаём нужное поле в зависимости от типа фона
-      if (selectedBg?.type === 'color') {
-         body.backgroundColor = selectedBg.value
-      } else if (selectedBg?.type === 'image') {
+      if (selectedBg.type === 'color') {
+         body.backgroundUrl = selectedBg.value
+      } else if (selectedBg.type === 'image') {
          body.backgroundUrl = selectedBg.value
       }
 
       try {
          await dispatch(BOARD_THUNK.boardPost(body))
+
+         // Сброс стейтов
          setBoardsImg(false)
          setSelectedBg(null)
          setSelectedItem(null)
@@ -96,11 +116,9 @@ export default function Board() {
    const handlerModelImg = () => setBackgroundModalImages((prev) => !prev)
    const handlerModelColor = () => setBackgroundModalColors((prev) => !prev)
 
-   console.log(selectedItem, 'gi')
-
    return (
       <>
-         <Header favouritesCount="workspaceCount" />
+         <Header favouritesCount="boardCount" />
          <StyledBoxBoards>
             <Box>
                <Sidebar />
@@ -120,6 +138,7 @@ export default function Board() {
                      {boards.map((item) => (
                         <CardBoard
                            key={item.id}
+                           id={item.id}
                            name={item.name}
                            background={item.backgroundUrl}
                            fevered={item.fevered}
@@ -425,6 +444,7 @@ const StyledCardBoard = styled(Box)({
    gridTemplateColumns: '1fr 1fr 1fr 1fr',
    gap: '16px',
    marginTop: '16px',
+   borderRadius: '8px',
 })
 
 const StyledBoxBoards = styled(Box)({

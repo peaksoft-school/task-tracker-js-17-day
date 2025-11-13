@@ -1,22 +1,26 @@
-import storageSession from 'redux-persist/lib/storage/session'
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { persistStore, persistReducer } from 'redux-persist'
 import { authSlice } from './slices/auth/authSlice'
+import { mainSlice } from './slices/workspaces/MainSlice'
 import { boardSlice } from './slices/board/boardSlice'
 import { profileSlice } from './profile/profileSlice'
 import { favoriteCountSlice } from './favoriteCount/favoriteCountSlice'
+import storage from 'redux-persist/lib/storage'
+import { innerpageSlice } from './slices/bordInnerpage/innerpageSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [boardSlice.name]: boardSlice.reducer,
    [profileSlice.name]: profileSlice.reducer,
    [favoriteCountSlice.name]: favoriteCountSlice.reducer,
+   [mainSlice.name]: mainSlice.reducer,
+   [innerpageSlice.name]: innerpageSlice.reducer,
+
 })
 
 const persistConfig = {
    key: 'TASK_TRACKER',
-   storage: storageSession,
-   whitelist: [authSlice.name],
+   storage,
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

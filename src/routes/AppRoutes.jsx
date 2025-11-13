@@ -1,5 +1,4 @@
 import { createBrowserRouter } from 'react-router-dom'
-import { PrivateRoute } from './PrivateRoute'
 import { ROLES } from './routes'
 import { SignIn } from '../pages/sign-in/SignIn'
 
@@ -8,72 +7,72 @@ import { ChangePassword } from '../pages/change-password/ChangePassword'
 import { InnerPageBoard } from '../pages/board/InnerPageBoard'
 import Board from '../pages/board/Board'
 import { Profile } from '../pages/profile/Profile'
+import IssuesPage from '../pages/all-issuis/Issues'
+import PrivateRoute from './PrivateRoute'
+import Main from '../pages/mainWorkSpace/Main'
+
 
 export const routes = createBrowserRouter([
    {
       path: '/',
-      element: (
-         <PrivateRoute
-            component={<SignIn />}
-            roles={[ROLES.GUEST]}
-            fallBacPath="/main-page"
-         />
-      ),
+      element: <SignIn />,
    },
-
    {
       path: '/sign-up',
-      element: (
-         <PrivateRoute
-            component={<SignUp />}
-            roles={[ROLES.GUEST]}
-            fallBacPath="/main-page"
-         />
-      ),
+      element: <SignUp />,
    },
 
    {
-      path: `/forgot-password/:id`,
-      element: (
-         <PrivateRoute
-            component={<ChangePassword />}
-            roles={[ROLES.GUEST]}
-            fallBacPath="/"
-         />
-      ),
+      path: '/forgot-password/:id',
+      element: <ChangePassword />,
    },
-
    {
       path: '/main-page',
       element: (
          <PrivateRoute
-            component={
+            Component={
                <>
-                  <h1>Headers</h1>
-                  <h1>Workspaces</h1>
+                  <Main />
                </>
             }
-            roles={[ROLES.ADMIN, ROLES.USER]}
+            isAllowed={true}
             fallBacPath="/"
          />
       ),
    },
 
    {
-      path: '/board',
-      element: <Board />,
+      path: '/workspace/:id/boards',
+      element: (
+         <PrivateRoute
+            Component={<Board />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
    },
+   {
+      path: '/all-issuis',
+      element: (
+         <PrivateRoute
+            Component={<IssuesPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+
    {
       path: '/profile',
       element: <Profile />,
    },
    {
-      path: '/InnerPage-board',
+      path: '/boards/:id/columns-with-cards',
       element: <InnerPageBoard/>,
    },
 
    {
       path: '*',
-      element: <h1>Этой страницы не существует!!! </h1>,
+      element: <h1>Этой страницы не существует!!!</h1>,
    },
 ])

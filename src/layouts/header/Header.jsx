@@ -51,9 +51,7 @@ export const Header = ({ favouritesCount, notificationCount }) => {
    const hedlerUser = () => {
       setModalUser((prev) => !prev)
    }
-   console.log(favorites, 'lf')
-
-   console.log(boardCount.boardCount, 'hhhh')
+  
 
    return (
       <header>

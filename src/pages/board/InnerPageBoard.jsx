@@ -9,20 +9,13 @@ import {
    RadioGroup,
    Typography,
 } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Header } from '../../layouts/header/Header'
 import {
-   CheckMarkIcon,
-   CommunicationIcon,
    DoneIcon,
    DownIcon,
-   HourglassIcon,
    LeftIcon,
-   NotifyIcon,
    PenselIcon,
-   PeopleIcon,
-   RightIcon,
-   TemplateIcon,
    XIcon,
    // ThreeDotsIcon,
    // TypographyIcon,
@@ -37,6 +30,10 @@ import { Input } from '../../components/UI/Input'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import { backgroundImages } from '../../assets/backgroundImg/background'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
+import BordCard from './BordCard'
+import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { INNER_PAGE_THUNK } from '../../store/slices/bordInnerpage/innerpageThunk'
 
 export const InnerPageBoard = ({ columns = 1 }) => {
    const [modalInvite, setModalInvite] = useState(false)
@@ -49,10 +46,20 @@ export const InnerPageBoard = ({ columns = 1 }) => {
    const [fellterModal, setFellterModal] = useState(false)
    const [ikonDown, setIkonDown] = useState(null)
 
+   const { id } = useParams()
+   const dispatch = useDispatch()
+   const { board } = useSelector((state) => state.innerpage)
 
+   console.log(board, 'board')
 
+   useEffect(() => {
+      if (id) {
+         dispatch(INNER_PAGE_THUNK.innerpageThunk({ id }))
+         dispatch(INNER_PAGE_THUNK.boardThunk({ id }))
+      }
+   }, [id, dispatch])
 
-   const handlerFellterModal=()=>{
+   const handlerFellterModal = () => {
       setFellterModal((prev) => !prev)
    }
    const handlerModelImg = () => setBackgroundModalImages((prev) => !prev)
@@ -75,21 +82,21 @@ export const InnerPageBoard = ({ columns = 1 }) => {
    }
    const handlerParticipant = () => {
       setParticipant((prev) => !prev)
-      console.log(participant, 'clicki')
    }
 
    return (
       <>
          <Header notificationCount={12} favouritesCount={0} />
-         <StyledBox>
+         <StyledBox key={board.id} background={board.backgroundUrl}>
             <Sidebar />
-
             <StyledBoxRights>
                <StyledBoxRightHeader>
                   <Box>
                      <StyledBoxRightHeaderMini>
                         <Box>{<PenselIcon />}</Box>
-                        <StyledTypographyTitle>Title</StyledTypographyTitle>
+                        <StyledTypographyTitle>
+                           {board.name}
+                        </StyledTypographyTitle>
                      </StyledBoxRightHeaderMini>
 
                      <StyledBoxRightHeaderMini>
@@ -318,29 +325,27 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                            </StyledModalBoxInvite>
                         </CustomModal>
                      )}
-
                      <StyledAvatar>
                         <StyledPlusIcon />
                      </StyledAvatar>
-
-                     <StyledButton onClick={handlerFellterModal} startIcon={<FilterListIcon />}>
+                     <StyledButton
+                        onClick={handlerFellterModal}
+                        startIcon={<FilterListIcon />}
+                     >
                         Filter (2)
                      </StyledButton>
-                     {fellterModal&&(
-                        <CustomModal isVisible={fellterModal} handleVisible={handlerFellterModal}>
+                     {fellterModal && (
+                        <CustomModal
+                           isVisible={fellterModal}
+                           handleVisible={handlerFellterModal}
+                        >
                            <Box>
                               <Box>
                                  <Typography>Filter</Typography>
                               </Box>
-
-                              
-
-
-
                            </Box>
                         </CustomModal>
                      )}
-
                      <StyledButton
                         onClick={hendlerOpenMenuModal}
                         startIcon={<AppsIcon />}
@@ -506,6 +511,7 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                      )}
                   </StyledBoxAvatarButton>
                </StyledBoxRightHeader>
+               <BordCard />
             </StyledBoxRights>
          </StyledBox>
       </>
@@ -741,156 +747,11 @@ const StyledTypographyInvite = styled(Typography)(() => ({
 }))
 
 const StyledTypographyTitle = styled(Typography)(() => ({
-   color: '#000000',
    fontSize: '20px',
    fontWeight: '500',
 }))
 
-const StyledBoxCardContainer = styled(Box)(() => ({
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   gap: '16px',
-}))
-
-const StyledBoxButtons = styled(Box)(() => ({
-   display: 'flex',
-   justifyContent: 'space-between',
-   alignItems: 'center',
-}))
-
-const StyledButtonPlus = styled(Button)({
-   color: '#000000',
-})
-
-const StyledBoxRightsContainerBottom = styled(Box)(() => ({
-   backgroundColor: '#f4f4f4',
-   padding: '8px',
-   borderRadius: '8px',
-}))
-
-const StyledBoxRightsContainerTop = styled(Box)(() => ({
-   backgroundColor: '#f4f4f4',
-   padding: '8px',
-   borderRadius: '8px',
-   marginBottom: '16px',
-}))
-
 const StyledBoxRights = styled(Box)(() => ({
-   padding: '16px',
-}))
-
-const StyledBoxFuters = styled(Box)(() => ({
-   marginTop: '16px',
-   display: 'flex',
-   justifyContent: 'end',
-   alignItems: 'end',
-   flexDirection: 'column',
-}))
-
-const StyledBoxIconsFuter = styled(Box)(() => ({
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   gap: '8px',
-}))
-
-const StyledButtonBlek = styled(AppButton)({
-   backgroundColor: '#121212',
-   '&:hover': {
-      backgroundColor: '#121212',
-   },
-
-   '&:active': {
-      backgroundColor: '#121212',
-   },
-})
-
-const StyledBoxColorsContainer = styled(Box)((props) => ({
-   backgroundColor: props.green
-      ? '#61bd4f'
-      : 'white' && props.red
-        ? '#eb5a46'
-        : 'white' && props.yellow
-          ? '#f2d600'
-          : 'white' && props.blue
-            ? '#0079bf'
-            : 'white',
-   borderRadius: '8px',
-   width: 'fit-content',
-   color: 'white',
-   marginBottom: '8px',
-   fontSize: '12px',
-   fontWeight: 500,
-}))
-
-const StyledBoxColorContainer = styled(Box)(() => ({
-   display: 'flex',
-   gap: '8px',
-}))
-
-const StyledBoxTask = styled(Box)(() => ({
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   gap: '12px',
-}))
-
-const StyledTypographyIcon = styled(Typography)(() => ({
-   color: '#919191',
-   fontWeight: 500,
-   fontSize: '14px',
-}))
-
-const StyledBoxHourglass = styled(Box)(() => ({
-   display: 'flex',
-   justifyContent: 'center',
-   alignItems: 'center',
-   backgroundColor: '#faddb4',
-   width: '91px',
-   height: '22px',
-   borderRadius: '8px',
-}))
-
-const StyledTypography = styled(Typography)(() => ({
-   color: '#c7842c',
-   fontWeight: 500,
-   fontSize: '14px',
-}))
-
-const StyledBoxColor = styled(Box)(() => ({
-   display: 'flex',
-   gap: '8px',
-}))
-
-const StyledBoxColors = styled(Box)((props) => {
-   return {
-      backgroundColor: props.green
-         ? '#61bd4f'
-         : 'white' && props.red
-           ? '#eb5a46'
-           : 'white' && props.yellow
-             ? '#f2d600'
-             : 'white' && props.blue
-               ? '#0079bf'
-               : 'white',
-      width: '45px',
-      height: '5px',
-      borderRadius: '8px',
-   }
-})
-
-const StyledBoxCardHeader = styled(Box)(() => ({
-   display: 'flex',
-   justifyContent: 'space-between',
-   alignItems: 'center',
-}))
-
-const StyledCard = styled(Box)(() => ({
-   maxWidth: '290px',
-   maxHeight: '430px',
-   backgroundColor: '#e6e6e6',
-   borderRadius: '8px',
    padding: '16px',
 }))
 
@@ -950,10 +811,21 @@ const StyledBoxRightHeader = styled(Box)(({}) => ({
    gap: '5px',
 }))
 
-const StyledBox = styled(Box)(() => ({
-   backgroundColor: '#414141',
-   display: 'grid',
-   gridTemplateColumns: '240px 1fr',
-   width: '100%',
-   height: '100%',
-}))
+const StyledBox = styled(Box)(({ background }) => {
+   const isColor = typeof background === 'string' && background.startsWith('#')
+
+   const isWhite = isColor && background.toLowerCase() === '#c5c5c5 '
+
+   return {
+      backgroundColor: isColor ? background : 'transparent',
+      backgroundImage: !isColor && background ? `url(${background})` : 'none',
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      color: isWhite ? 'black' : 'white',
+      display: 'grid',
+      gridTemplateColumns: '240px 1fr',
+      width: '100%',
+      height: '100%',
+   }
+})

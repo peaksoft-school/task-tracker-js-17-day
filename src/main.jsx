@@ -5,9 +5,8 @@ import Notification from './components/Notification.jsx'
 import { ThemeProvider } from '@mui/material'
 import { themeColors } from './styles/appColors.js'
 import { Provider } from 'react-redux'
-import { persistor, store } from './store/store.js'
+import { store } from './store/store.js'
 import { injectStore } from './configs/axiosinstance.js'
-import { PersistGate } from 'redux-persist/integration/react'
 import { injectStoreFile } from './configs/axiosInstanceFile.js'
 
 injectStore(store)
@@ -15,12 +14,9 @@ injectStoreFile(store)
 
 createRoot(document.getElementById('root')).render(
    <Provider store={store}>
-      <PersistGate loading={<h1>Loading...</h1>} persistor={persistor}>
+      <ThemeProvider theme={themeColors}>
+         <App />
          <Notification />
-
-         <ThemeProvider theme={themeColors}>
-            <App />
-         </ThemeProvider>
-      </PersistGate>
+      </ThemeProvider>
    </Provider>
 )
