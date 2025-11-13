@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { IconButton, styled } from '@mui/material'
 import {
    DownIcon,
@@ -16,17 +16,20 @@ import SidebarItem from './SidebarItem'
 import Section from './Section'
 import { CustomModal } from '../modal/Modal'
 import SidebarSettingModal from './SidebarModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 
 export default function Sidebar() {
    const Title = ['Title', 'Title', 'Title', 'Title', 'Title']
    const AccountingLMS = [
       'Accounting',
-      'LMS',
-      'Accounting',
-      'LMS',
-      'Accounting',
-      'LMS',
+      // 'LMS',
+      // 'Accounting',
+      // 'LMS',
+      // 'Accounting',
+      // 'LMS',
    ]
+
    const [OpenSidebarModal, setOpenSidebarModal] = useState(false)
    const OpenSidebarModalCrate = () => setOpenSidebarModal((prev) => !prev)
 
@@ -38,6 +41,16 @@ export default function Sidebar() {
    const navigate = useNavigate()
    const { id } = useParams()
 
+   const dispatch = useDispatch()
+   const { token } = useSelector((state) => state.auth)
+   const { main } = useSelector((state) => state.main)
+
+   useEffect(() => {
+      if (token) {
+         dispatch(MAIN_THUNK.getAllMain({ token }))
+      }
+   }, [dispatch, token])
+
    const location = useLocation()
    const currentPath = location.pathname
 
@@ -48,6 +61,9 @@ export default function Sidebar() {
    const pathBoards = `/workspace/${id}/boards`
    const pathAllIssues = `/workspace/${id}/boards/all-issuis`
    const pathParticipants = `/workspace/${id}/participants`
+
+   console.log(main)
+   console.log(token)
 
    return (
       <SidebarContainer open={open}>
@@ -159,6 +175,21 @@ export default function Sidebar() {
                   </>
                )}
             </WorkspaceHeader>
+
+            {/* {main &&
+               main.length > 0 &&
+               main.map((workspace) => (
+                  <Section
+                     key={workspace.id}
+                     id={workspace.id}
+                     label={"fff"}
+                     open={open}
+                     downAL={!!downAL[workspace.id]}
+                     toggleDownAL={() => toggleAL(workspace.id)}
+                     isActive={activeAL === workspace.id}
+                     onClick={() => setActiveAL(workspace.id)}
+                  />
+               ))} */}
 
             {AccountingLMS.map((label, id) => (
                <Section
@@ -288,16 +319,20 @@ const PlusIconWrapper = styled('div')({
    marginLeft: 6,
    '& svg': { width: 20, height: 20 },
 })
-const LabelText = styled('span')({ marginLeft: 12 })
+const LabelText = styled('div')({ marginLeft: 12 })
 
 const Workspaces = styled('div')({
+   width: '100%',
+   paddingLeft: '40px',
    marginTop: 21.5,
    display: 'flex',
    flexDirection: 'column',
-   alignItems: 'center',
    gap: 16,
 })
-const WorkspaceHeader = styled('div')({ display: 'flex', alignItems: 'center' })
+const WorkspaceHeader = styled('div')({
+   display: 'flex',
+   alignItems: 'center',
+})
 
 const GraphicIconWrapper = styled('div')({
    width: 20,
@@ -309,5 +344,6 @@ const DownButton = styled(IconButton)({ padding: 0, marginLeft: 7 })
 const ShowMore = styled('div')({
    display: 'flex',
    alignItems: 'center',
+   gap: '12px',
    cursor: 'pointer',
 })

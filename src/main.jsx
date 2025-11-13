@@ -8,18 +8,21 @@ import { Provider } from 'react-redux'
 import { injectStore } from './configs/axiosinstance.js'
 import { PersistGate } from 'redux-persist/integration/react'
 import { persistor, store } from './store/store.js'
+import { BrowserRouter } from 'react-router-dom'
 // import { injectStoreFile } from './configs/axiosInstanceFile.js'
 
 injectStore(store)
 // injectStoreFile(store)
 
 createRoot(document.getElementById('root')).render(
-   <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-         <ThemeProvider theme={themeColors}>
-            <App />
-            <Notification />
-         </ThemeProvider>
-      </PersistGate>
-   </Provider>
+   <BrowserRouter>
+      <Provider store={store}>
+         <PersistGate loading={null} persistor={persistor}>
+            <ThemeProvider theme={themeColors}>
+               <App />
+               <Notification />
+            </ThemeProvider>
+         </PersistGate>
+      </Provider>
+   </BrowserRouter>
 )

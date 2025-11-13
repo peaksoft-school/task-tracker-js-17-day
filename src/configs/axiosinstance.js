@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://3.72.63.246'
+const BASE_URL = 'http://3.72.63.246/'
 
 export const axiosInstance = axios.create({
    baseURL: BASE_URL,
@@ -10,9 +10,7 @@ export const axiosInstance = axios.create({
    },
 })
 
-// redax store
 let customStore
-// store это с main.jsx приходит данные что было доступ со всего проекта
 export const injectStore = (store) => {
    customStore = store
 }
