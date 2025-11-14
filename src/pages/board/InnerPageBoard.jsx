@@ -360,8 +360,13 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                            <StyledBoxModalContainerMenu>
                               <StyledBoxMenu>
                                  <StyledBoxMenu2>
+                                    <Box></Box>
                                     <Typography>Menu</Typography>
-                                    <XIcon />
+                                    <StyledXIcon
+                                       onClick={hendlerOpenMenuModal}
+                                    >
+                                       <XIcon />
+                                    </StyledXIcon>
                                  </StyledBoxMenu2>
                               </StyledBoxMenu>
                               <StyledBoxModalContainerImges>
@@ -382,11 +387,20 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                                 }
                                              >
                                                 <StyledBoxChange>
-                                                   <LeftIcon />
+                                                   <>
+                                                      <LeftIcon />
+                                                   </>
+
                                                    <Typography>
                                                       Change the background
                                                    </Typography>
-                                                   <XIcon />
+                                                   <StyledXIcon
+                                                      onClick={
+                                                         hedlerOpenChatBackground
+                                                      }
+                                                   >
+                                                      <XIcon />
+                                                   </StyledXIcon>
                                                 </StyledBoxChange>
                                                 <StyledBoxModalImgColor>
                                                    <Box>
@@ -502,21 +516,31 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                     ))}
                                  </Box>
                               </StyledBoxModalContainerImges>
-                              <Typography>
+                              <StyledTypographyTitel>
                                  In archive <span>(2)</span>
-                              </Typography>
-                              <Typography>Delete this board</Typography>
+                              </StyledTypographyTitel>
+                              <StyledTypographyTitel>
+                                 Delete this board
+                              </StyledTypographyTitel>
                            </StyledBoxModalContainerMenu>
                         </CustomModal>
                      )}
                   </StyledBoxAvatarButton>
                </StyledBoxRightHeader>
-               <BordCard />
+               <BordCard IdBoard={id} />
             </StyledBoxRights>
          </StyledBox>
       </>
    )
 }
+const StyledXIcon = styled(Box)({
+   cursor: 'pointer',
+})
+
+const StyledTypographyTitel = styled(Typography)({
+   marginBottom: '10px',
+})
+
 const StyledBoxBg = styled(Box)(({ bg }) => ({
    backgroundImage: `url(${bg})`,
    backgroundSize: 'cover',
@@ -621,6 +645,7 @@ const StyledBoxMenu2 = styled(Box)({
    display: 'flex',
    justifyContent: 'space-between',
    width: '350px',
+   marginBottom: '5px',
 })
 
 const StyledBoxMenu = styled(Box)({

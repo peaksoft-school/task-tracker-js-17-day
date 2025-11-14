@@ -2,14 +2,14 @@
 import { createSlice } from '@reduxjs/toolkit'
 import { INNER_PAGE_THUNK } from './innerpageThunk'
 
-const initialState = {
+export const initialState = {
    loading: false,
    error: null,
    board: null,
    columns: [],
 }
 
-const innerpageSlice = createSlice({
+export const innerpageSlice = createSlice({
    name: 'innerpage',
    initialState,
    reducers: {},
@@ -41,4 +41,4 @@ const innerpageSlice = createSlice({
    },
 })
 
-export { innerpageSlice }
+export default innerpageSlice .reducer

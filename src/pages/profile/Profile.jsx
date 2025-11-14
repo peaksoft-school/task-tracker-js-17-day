@@ -63,10 +63,10 @@ export const Profile = () => {
    }
    const handleSaveProfile = async () => {
       try {
-         // 1️⃣ Обновляем данные профиля
+
          await dispatch(PROFILE_THUNK.updateProfile(form)).unwrap()
 
-         // 2️⃣ Если пользователь ввёл оба пароля — обновляем пароль
+
          if (passwords.oldPassword && passwords.newPassword) {
             await dispatch(PROFILE_THUNK.updatePassword(passwords)).unwrap()
          }

@@ -1,23 +1,33 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Typography, TextField, IconButton, Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import CloseIcon from '@mui/icons-material/Close'
+import { useDispatch, useSelector } from 'react-redux'
+import { COLUMN_THUNK } from '../../store/slices/column/columnThunk'
 
-export default function BordCard() {
+export default function BordCard({ IdBoard }) {
    const [open, setOpen] = useState(false)
    const [name, setName] = useState('')
+   const dispatch = useDispatch()
+   const columns = useSelector((state) => state.column.columns)
+
+   console.log(columns.map((item) => item.name), 'data0')
 
    const handleOpen = () => setOpen(true)
    const handleClose = () => setOpen(false)
 
-   const handleCreate = () => {
-      console.log('Создана колонка:', name)
+   useEffect(() => {
+      dispatch(COLUMN_THUNK.getColumnsThunk(IdBoard, dispatch))
+   }, [dispatch, IdBoard])
+   const handleCreate = async () => {
+      if (!name.trim()) return
+      await dispatch(COLUMN_THUNK.columnThunk({ id: IdBoard, name }))
       setName('')
       setOpen(false)
    }
 
    return (
-      <Box>
+      <StyledBoxColumnContainer>
          {!open ? (
             <StyledBoxCardContainer onClick={handleOpen}>
                <StyledTypographyButton>+ Add a column</StyledTypographyButton>
@@ -25,28 +35,17 @@ export default function BordCard() {
          ) : (
             <StyledFormContainer>
                <FormHeader>
-                  <Typography sx={{ fontSize: '14px', color: '#8c8c8c' }}>
-                     Name of the column
-                  </Typography>
+                  <StyledTypography>Name of the column</StyledTypography>
                   <IconButton onClick={handleClose} size="small">
                      <CloseIcon fontSize="small" />
                   </IconButton>
                </FormHeader>
 
-               <TextField
+               <StyledTextField
                   placeholder="Name"
                   size="small"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  sx={{
-                     width: '100%',
-                     backgroundColor: '#f9f9f9',
-                     borderRadius: '8px',
-                     mb: 2,
-                     '& .MuiOutlinedInput-root': {
-                        borderRadius: '8px',
-                     },
-                  }}
                />
 
                <StyledButton variant="contained" onClick={handleCreate}>
@@ -54,10 +53,32 @@ export default function BordCard() {
                </StyledButton>
             </StyledFormContainer>
          )}
-      </Box>
+         <StyledFormContainer>
+            <Typography>{}</Typography>
+         </StyledFormContainer>
+      </StyledBoxColumnContainer>
    )
 }
+const StyledBoxColumnContainer = styled(Box)(() => ({
+   display: 'grid',
+   gridTemplateColumns:'1fr 1fr 1fr',
+   gap: '8px',
+}))
 
+const StyledTypography = styled(Typography)(() => ({
+   fontSize: '14px',
+   color: '#8c8c8c',
+}))
+
+const StyledTextField = styled(TextField)(() => ({
+   width: '100%',
+   backgroundColor: '#f9f9f9',
+   borderRadius: '8px',
+   mb: 2,
+   '& .MuiOutlinedInput-root': {
+      borderRadius: '8px',
+   },
+}))
 
 const StyledButton = styled(Button)(() => ({
    backgroundColor: '#2f80ed',

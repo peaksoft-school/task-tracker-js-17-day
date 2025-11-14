@@ -33,17 +33,20 @@ export const SignIn = () => {
    const inputPassword = () => {
       setShowPassword(!showPassword)
    }
-   const handleGoogleLogin = async () => {
-      try {
-         const response = await signInWithPopup(auth, provider)
-         const token = response?.user?.accessToken
-
-         console.log('✅ Google Access Token:', token)
-
-         dispatch(AUTH_THUNK.authWithGoogle({ token, navigate }))
-      } catch (error) {
-         console.error('Google SignIn error:', error)
-      }
+   const hndlerGoogel = async () => {
+      await signInWithPopup(auth, provider)
+         .then((response) => {
+            const token = response?.user?.accessToken
+            dispatch(
+               AUTH_THUNK.authWithGoogle({
+                  token,
+               })
+            )
+            console.log('Google Access Token:', token)
+         })
+         .catch((error) => {
+            return error
+         })
    }
    return (
       <StylesBox onSubmit={handleSubmit}>
@@ -54,7 +57,7 @@ export const SignIn = () => {
             </StylesBoxLogo>
             <StylesBoxInput>
                <Typography fontSize={18}>Sign In</Typography>
-               <StyledBoxGoogle onClick={handleGoogleLogin}>
+               <StyledBoxGoogle onClick={hndlerGoogel}>
                   <StyledBox>
                      <StyledAvatar>R</StyledAvatar>
                      <Box>

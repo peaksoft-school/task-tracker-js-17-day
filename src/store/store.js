@@ -7,6 +7,7 @@ import { profileSlice } from './profile/profileSlice'
 import { favoriteCountSlice } from './favoriteCount/favoriteCountSlice'
 import storage from 'redux-persist/lib/storage'
 import { innerpageSlice } from './slices/bordInnerpage/innerpageSlice'
+import { columnSlice } from './slices/column/columnSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
    [favoriteCountSlice.name]: favoriteCountSlice.reducer,
    [mainSlice.name]: mainSlice.reducer,
    [innerpageSlice.name]: innerpageSlice.reducer,
+   [columnSlice.name]: columnSlice.reducer,
 
 })
 
