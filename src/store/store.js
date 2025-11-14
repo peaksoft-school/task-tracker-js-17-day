@@ -7,6 +7,7 @@ import { boardSlice } from './slices/board/boardSlice'
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [boardSlice.name]: boardSlice.reducer,
+   
 })
 
 const persistConfig = {
