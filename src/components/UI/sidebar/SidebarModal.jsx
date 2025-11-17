@@ -28,7 +28,7 @@ function SidebarSettingModal() {
 
                <ButtonContainer>
                   <AppButton
-                     onClick={DeleteWorkspace} 
+                     onClick={DeleteWorkspace}
                      sx={{
                         backgroundColor: 'rgba(245, 245, 245, 1)',
                         color: 'rgba(141, 147, 153, 1)',

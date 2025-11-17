@@ -78,8 +78,10 @@ export default function Issues() {
          labels: row.labels.map((l) => mapApiColorToHex(l.colorType)),
          checklist: row.checklistProgress,
          description: row.description,
-      })) 
+      }))
    }, [rawIssues, showWithChecklist])
+
+   const count = transformedRows.length
 
    const allAssignees = useMemo(() => {
       const assigneeMap = new Map()
@@ -99,10 +101,10 @@ export default function Issues() {
       <StyledBackground>
          <Header />
          <MainLayout>
-            <Sidebar />
+            <Sidebar rowsLength={count} />
             <IssuesContainer component={Paper}>
                <IssuesFilterBar
-                  rowsLength={transformedRows.length}
+                  rowsLength={count}
                   startDate={startDate}
                   setStartDate={setStartDate}
                   endDate={endDate}

@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 import CreateModal from '../../../pages/mainWorkSpace/mainModal/CreateModal'
 
-export default function Sidebar() {
+export default function Sidebar({ rowsLength = 0 }) {
    const Title = ['Title', 'Title', 'Title', 'Title', 'Title']
 
    const [CrateSidebarModal, setCrateSidebarModal] = useState(false)
@@ -118,7 +118,7 @@ export default function Sidebar() {
             <SidebarItem
                icon={<FilesAndFoldersIcon />}
                label="All issues"
-               count="(267)"
+               count={`(${rowsLength})`}
                isActive={currentPath === pathAllIssues}
                onClick={() => {
                   navigate(`/workspace/${id}/boards/all-issuis`)
@@ -191,19 +191,6 @@ export default function Sidebar() {
                      onClick={() => setActiveAL(workspace.id)}
                   />
                ))}
-
-            {/* {AccountingLMS.map((label, id) => (
-               <Section
-                  key={id}
-                  id={id}
-                  label={label}
-                  open={open}
-                  downAL={!!downAL[id]}
-                  toggleDownAL={() => toggleAL(id)}
-                  isActive={activeAL === id}
-                  onClick={() => setActiveAL(id)}
-               />
-            ))} */}
 
             <ShowMore>
                <DownIcon />

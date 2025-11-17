@@ -342,9 +342,6 @@ export const IssuesFilterBar = ({
                Total: <span>{rowsLength}</span>
             </span>
          </TotalBox>
-
-       
       </FilterSection>
    )
 }
-

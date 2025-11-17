@@ -4,7 +4,7 @@ import { Header } from '../layouts/header/Header'
 
 function ParticipantsPage() {
    return (
-      <div >
+      <div>
          <Header />
          <div style={{ display: 'flex' }}>
             <Sidebar />

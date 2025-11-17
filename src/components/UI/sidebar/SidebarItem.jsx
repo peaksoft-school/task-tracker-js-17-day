@@ -23,7 +23,7 @@ const ItemContainer = styled('div')(({ open, isActive }) => ({
    width: open && isActive ? '100%' : undefined,
    background: open && isActive ? 'rgba(58,104,131,0.6)' : undefined,
    borderRadius: open && isActive ? '0 24px 24px 0' : undefined,
-   padding: open ? '8px 32px 9px 35px' : '8px 0px 9px 0px', 
+   padding: open ? '8px 32px 9px 35px' : '8px 0px 9px 0px',
 }))
 
 const CountText = styled('span')({ marginLeft: 6 })
