@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { ISSUES_THUNK } from './IssusesThunk'
 
 const initialState = {
-   issues: [], // Здесь будут храниться задачи с бэкенда
+   issues: [], 
    isLoading: false,
    error: null,
 }
@@ -20,11 +20,11 @@ const issuesSlice = createSlice({
          })
          .addCase(ISSUES_THUNK.getAllIssues.fulfilled, (state, action) => {
             state.isLoading = false
-            state.issues = action.payload // Сохраняем полученные данные
+            state.issues = action.payload 
          })
          .addCase(ISSUES_THUNK.getAllIssues.rejected, (state, action) => {
             state.isLoading = false
-            state.error = action.payload // Сохраняем ошибку
+            state.error = action.payload
          })
    },
 })

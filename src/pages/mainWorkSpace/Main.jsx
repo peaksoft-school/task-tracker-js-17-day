@@ -50,7 +50,6 @@ function Main() {
          })
    }
 
-   console.log(main)
    return (
       <ConteinerBoxMain>
          <Header status={true} />

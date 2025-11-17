@@ -8,7 +8,23 @@ import {
    ToolsIcon,
 } from '../../../assets/AllExportIcon'
 import SidebarItemDetalis from './SidebarItemDetalis'
-function Section({ label, open, downAL, toggleDownAL, onClick }) {
+import { useNavigate, useParams } from 'react-router-dom'
+import SidebarSettingModal from './SidebarModal'
+import { CustomModal } from '../modal/Modal'
+
+function Section({
+   label,
+   open,
+   downAL,
+   toggleDownAL,
+   onClick,
+   OpenSidebarModalSetting,
+   OpenSidebarModal,
+}) {
+   const navigate = useNavigate()
+   const { id } = useParams()
+
+   const pathBoards = `/workspace/${id}/boards`
    return (
       <>
          <SectionContainer>
@@ -16,15 +32,13 @@ function Section({ label, open, downAL, toggleDownAL, onClick }) {
                <LabelSpan>{label[0]}</LabelSpan>
             </SectionWrapperL>
 
-            {open && (
-               <BoxLabel>
-                  <SpanLMS>{label}</SpanLMS>
+            <BoxLabel open={open}>
+               <SpanLMS>{label}</SpanLMS>
 
-                  <DownButton onClick={toggleDownAL}>
-                     <DownIcon />
-                  </DownButton>
-               </BoxLabel>
-            )}
+               <DownButton onClick={toggleDownAL}>
+                  <DownIcon />
+               </DownButton>
+            </BoxLabel>
          </SectionContainer>
 
          {open && downAL && (
@@ -32,6 +46,7 @@ function Section({ label, open, downAL, toggleDownAL, onClick }) {
                <SidebarItemDetalis
                   icon={<LayoutIcon />}
                   label="Boards"
+                  onClick={() => navigate(pathBoards)}
                   open={open}
                />
 
@@ -45,8 +60,15 @@ function Section({ label, open, downAL, toggleDownAL, onClick }) {
                <SidebarItemDetalis
                   icon={<ToolsIcon />}
                   label="Setting"
+                  onClick={OpenSidebarModalSetting}
                   open={open}
                />
+               <CustomModal
+                  isVisible={OpenSidebarModal}
+                  handleVisible={OpenSidebarModalSetting}
+               >
+                  <SidebarSettingModal />
+               </CustomModal>
             </SectionDetails>
          )}
       </>
@@ -74,17 +96,29 @@ const SectionWrapperL = styled('div')({
    '& span': { color: '#fff' },
 })
 
-const BoxLabel = styled('div')({
+const BoxLabel = styled('div')(({ open }) => ({
    width: '118px',
    display: 'flex',
    justifyContent: 'space-between',
-})
-
-const SpanLMS = styled('div')({
+   alignItems: 'center',
    marginLeft: '8px',
-})
 
-const LabelSpan = styled('span')({})
+   opacity: open ? 1 : 0,
+   visibility: open ? 'visible' : 'hidden',
+   transform: open ? 'translateX(0)' : 'translateX(-10px)',
+   transition: 'opacity 0.3s, transform 0.3s, visibility 0.3s',
+   transitionDelay: '0.1s',
+}))
+
+const SpanLMS = styled('div')({})
+
+const LabelSpan = styled('span')({
+   width: '27px',
+   height: '27px',
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+})
 
 const DownButton = styled(IconButton)({ padding: 0, marginLeft: 7 })
 

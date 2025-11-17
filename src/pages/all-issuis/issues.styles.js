@@ -68,15 +68,16 @@ export const commonButtonStyle = {
 }
 
 export const StyledBackground = styled('div')({
-   backgroundColor: '#537081',
    minHeight: '100vh',
+   backgroundImage: 'url(/src/assets/backgroundImg/backImg/bgBluu.jpg)',
+   backgroundSize: 'cover',
 })
 export const MainLayout = styled(Box)({ display: 'flex' })
 export const IssuesContainer = styled(TableContainer)({
-   width: '91.9%',
+   width: '90%',
    margin: '12px 24px 12px 20px',
    borderRadius: '8px',
-   background: 'rgba(248, 248, 248, 0.9)',
+   background: 'rgba(255, 255, 255, 0.6)',
 })
 
 export const FilterSection = styled(Box)({ margin: '22px 0 0 16px' })

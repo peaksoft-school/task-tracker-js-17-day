@@ -27,9 +27,8 @@ function SidebarSettingModal() {
                </DeleteWorkspaceText>
 
                <ButtonContainer>
-                  {/* 1. Кнопка "Cancel" со стилями из модалки "Setting" */}
                   <AppButton
-                     onClick={DeleteWorkspace} // Добавили, чтобы закрывать модалку
+                     onClick={DeleteWorkspace} 
                      sx={{
                         backgroundColor: 'rgba(245, 245, 245, 1)',
                         color: 'rgba(141, 147, 153, 1)',
@@ -45,7 +44,6 @@ function SidebarSettingModal() {
                      Cancel
                   </AppButton>
 
-                  {/* 2. Твоя красная кнопка "Delete" (она в порядке) */}
                   <AppButton
                      sx={{
                         backgroundColor: '#D91212',

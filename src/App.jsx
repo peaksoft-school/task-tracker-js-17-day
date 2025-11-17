@@ -5,8 +5,8 @@ import Issues from './pages/all-issuis/Issues'
 const App = () => {
    return (
       <>
-         {/* <RouterProvider router={routes} /> */}
-         <Issues />
+         <RouterProvider router={routes} />
+         {/* <Issues /> */}
       </>
    )
 }

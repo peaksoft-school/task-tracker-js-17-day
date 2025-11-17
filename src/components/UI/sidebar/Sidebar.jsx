@@ -18,20 +18,16 @@ import { CustomModal } from '../modal/Modal'
 import SidebarSettingModal from './SidebarModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
+import CreateModal from '../../../pages/mainWorkSpace/mainModal/CreateModal'
 
 export default function Sidebar() {
    const Title = ['Title', 'Title', 'Title', 'Title', 'Title']
-   const AccountingLMS = [
-      'Accountingr',
-      'LMS',
-      // 'Accounting',
-      // 'LMS',
-      // 'Accounting',
-      // 'LMS',
-   ]
+
+   const [CrateSidebarModal, setCrateSidebarModal] = useState(false)
+   const OpenSidebarModalCrate = () => setCrateSidebarModal((prev) => !prev)
 
    const [OpenSidebarModal, setOpenSidebarModal] = useState(false)
-   const OpenSidebarModalCrate = () => setOpenSidebarModal((prev) => !prev)
+   const OpenSidebarModalSetting = () => setOpenSidebarModal((prev) => !prev)
 
    const [open, setOpen] = useState(false)
    const [activeIndex, setActiveIndex] = useState(null)
@@ -61,9 +57,6 @@ export default function Sidebar() {
    const pathBoards = `/workspace/${id}/boards`
    const pathAllIssues = `/workspace/${id}/boards/all-issuis`
    const pathParticipants = `/workspace/${id}/participants`
-
-   console.log(main)
-   console.log(token)
 
    return (
       <SidebarContainer open={open}>
@@ -121,7 +114,7 @@ export default function Sidebar() {
 
          <Divider open={open} />
 
-         <MainIcons>
+         <MainIcons open={open}>
             <SidebarItem
                icon={<FilesAndFoldersIcon />}
                label="All issues"
@@ -147,51 +140,59 @@ export default function Sidebar() {
                icon={<ToolsIcon />}
                label="Setting"
                isActive={activeIndex}
-               onClick={OpenSidebarModalCrate}
+               onClick={OpenSidebarModalSetting}
                open={open}
             />
          </MainIcons>
 
          <CustomModal
             isVisible={OpenSidebarModal}
-            handleVisible={OpenSidebarModalCrate}
+            handleVisible={OpenSidebarModalSetting}
          >
             <SidebarSettingModal />
          </CustomModal>
 
          <Divider open={open} />
 
-         <Workspaces>
+         <Workspaces open={open}>
             <WorkspaceHeader>
-               <GraphicIconWrapper>
+               <GraphicIconWrapper open={open}>
                   <GraphicIcon />
                </GraphicIconWrapper>
-               {open && (
-                  <>
-                     <LabelText>Workspaces</LabelText>
-                     <PlusIconWrapper>
-                        <PlusIcon />
-                     </PlusIconWrapper>
-                  </>
-               )}
+
+               <HeaderLabelContainer open={open}>
+                  <LabelText>Workspaces</LabelText>
+                  <PlusIconWrapper onClick={OpenSidebarModalCrate}>
+                     <PlusIcon />
+                  </PlusIconWrapper>
+               </HeaderLabelContainer>
+
+               <CustomModalCrate
+                  isVisible={CrateSidebarModal}
+                  handleVisible={OpenSidebarModalCrate}
+               >
+                  <CreateModal onClose={OpenSidebarModalCrate} />
+               </CustomModalCrate>
             </WorkspaceHeader>
 
-            {/* {main &&
+            {main &&
                main.length > 0 &&
                main.map((workspace) => (
                   <Section
+                     OpenSidebarModalSetting={OpenSidebarModalSetting}
+                     OpenSidebarModal={OpenSidebarModal}
                      key={workspace.id}
                      id={workspace.id}
-                     label={"fff"}
+                     label={workspace.name}
                      open={open}
                      downAL={!!downAL[workspace.id]}
                      toggleDownAL={() => toggleAL(workspace.id)}
                      isActive={activeAL === workspace.id}
                      onClick={() => setActiveAL(workspace.id)}
                   />
-               ))} */}
+               ))}
 
-            {AccountingLMS.map((label, id) => (
+            {/* {AccountingLMS.map((label, id) => (
                <Section
                   key={id}
                   id={id}
@@ -202,7 +203,7 @@ export default function Sidebar() {
                   isActive={activeAL === id}
                   onClick={() => setActiveAL(id)}
                />
-            ))}
+            ))} */}
 
             <ShowMore>
                <DownIcon />
@@ -214,7 +215,7 @@ export default function Sidebar() {
 }
 
 const SidebarContainer = styled('div')(({ open }) => ({
-   width: open ? 250 : 116,
+   width: open ? '250px' : 116,
    transition: 'width 0.5s',
    height: '93.5vh',
    display: 'flex',
@@ -222,7 +223,7 @@ const SidebarContainer = styled('div')(({ open }) => ({
    paddingTop: 93,
    overflowY: 'auto',
    overflowX: 'hidden',
-   background: 'rgba(248,248,248,0.6)',
+   background: 'rgba(255, 255, 255, 0.6)',
    alignItems: 'center',
 
    scrollbarWidth: 'none',
@@ -277,12 +278,12 @@ const Divider = styled('div')(({ open }) => ({
 }))
 
 const SelectedMenuItem = styled('div')(({ open, isActive }) => ({
-   width: open ? '100%' : 100,
+   width: open ? '90%' : 100,
    height: 37,
    borderRadius: '0 24px 24px 0',
    display: 'flex',
    alignItems: 'center',
-   justifyContent: 'center',
+   justifyContent: open ? 'space-between' : 'center',
    padding: open ? '8px 32px 8px 32px' : '8px 32px 9px 32px',
    background: open && isActive ? 'rgba(58,104,131,0.6)' : undefined,
    margin: '10px 0',
@@ -308,36 +309,54 @@ const TitleItem = styled('div')(({ isActive }) => ({
    cursor: 'pointer',
 }))
 
-const MainIcons = styled('div')({
+const MainIcons = styled('div')(({ open }) => ({
    display: 'flex',
    flexDirection: 'column',
    margin: '20px 0',
    gap: 16,
-})
+}))
 
 const PlusIconWrapper = styled('div')({
    marginLeft: 6,
    '& svg': { width: 20, height: 20 },
 })
+
+const CustomModalCrate = styled(CustomModal)({})
+
+const HeaderLabelContainer = styled('div')(({ open }) => ({
+   display: 'flex',
+   alignItems: 'center',
+   marginLeft: 12,
+
+   opacity: open ? 1 : 0,
+   visibility: open ? 'visible' : 'hidden',
+   transform: open ? 'translateX(0)' : 'translateX(-10px)',
+   transition: 'opacity 0.3s, transform 0.3s, visibility 0.3s',
+   transitionDelay: '0.1s',
+}))
+
 const LabelText = styled('div')({ marginLeft: 12 })
 
-const Workspaces = styled('div')({
+const Workspaces = styled('div')(({ open }) => ({
    width: '100%',
-   paddingLeft: '40px',
+   paddingLeft: open ? '40px' : '45px',
    marginTop: 21.5,
    display: 'flex',
    flexDirection: 'column',
    gap: 16,
-})
+   transition: 'padding-left 0.5s',
+}))
 const WorkspaceHeader = styled('div')({
    display: 'flex',
    alignItems: 'center',
 })
 
-const GraphicIconWrapper = styled('div')({
+const GraphicIconWrapper = styled('div')(({ open }) => ({
+   paddingLeft: open ? '3px' : '4px',
    width: 20,
    height: 20,
-})
+   transition: 'padding-left 0.5s',
+}))
 
 const DownButton = styled(IconButton)({ padding: 0, marginLeft: 7 })
 

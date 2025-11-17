@@ -1,4 +1,3 @@
-// import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { Box, Typography } from '@mui/material'
 import { AppButton } from '../../../components/UI/AppButton'
@@ -47,7 +46,6 @@ function CreateModal({ onClose }) {
                   {...register('name', { required: 'Имя обязательно' })}
                   maxLength={11}
                />
-
                {errors.name && (
                   <ErrorMessage>{errors.name.message}</ErrorMessage>
                )}

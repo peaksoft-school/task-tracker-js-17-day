@@ -18,6 +18,7 @@ function SidebarItemDetalis({ icon, label, count, open, isActive, onClick }) {
 export default SidebarItemDetalis
 
 const ItemContainer = styled('div')(({ open, isActive }) => ({
+   transition: 'width 0.5s',
    display: 'flex',
    alignItems: 'center',
    width: open && isActive ? 227 : undefined,

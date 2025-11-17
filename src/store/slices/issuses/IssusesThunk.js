@@ -2,14 +2,12 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
 
 const getAllIssues = createAsyncThunk(
-   //Вызов Thunk (в IssusesThunk.js): Хук отправляет (dispatch) thunk getAllIssues с новыми параметрами, которые включают дату.
    'get/getAllIssues',
    async (
       { id, startDate, endDate, labelId, assigneeId, hasChecklist },
       { rejectWithValue }
    ) => {
       try {
-         // собираем все возможные параметры
          const params = {
             startDate,
             endDate,
@@ -18,7 +16,6 @@ const getAllIssues = createAsyncThunk(
             hasChecklist,
          }
 
-         // создаём объект для query-параметров, исключая пустые значения
          const searchParams = new URLSearchParams()
 
          Object.entries(params).forEach(([key, value]) => {

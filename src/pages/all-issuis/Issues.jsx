@@ -78,7 +78,7 @@ export default function Issues() {
          labels: row.labels.map((l) => mapApiColorToHex(l.colorType)),
          checklist: row.checklistProgress,
          description: row.description,
-      })) // 4. Добавляем showWithChecklist в массив зависимостей!
+      })) 
    }, [rawIssues, showWithChecklist])
 
    const allAssignees = useMemo(() => {
