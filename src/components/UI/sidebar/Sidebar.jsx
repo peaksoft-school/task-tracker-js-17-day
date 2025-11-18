@@ -34,7 +34,7 @@ export default function Sidebar({ rowsLength = 0 }) {
    const [activeAL, setActiveAL] = useState(null)
    const [downAL, setDownAL] = useState({})
    const [showBoards, setShowBoards] = useState(false)
-   const navigate = useNavigate()
+   // const navigate = useNavigate()
    const { id } = useParams()
 
    const dispatch = useDispatch()
@@ -47,7 +47,7 @@ export default function Sidebar({ rowsLength = 0 }) {
       }
    }, [dispatch, token])
 
-   const location = useLocation()
+   // const location = useLocation()
    const currentPath = location.pathname
 
    const toggleSidebar = () => setOpen((prev) => !prev)

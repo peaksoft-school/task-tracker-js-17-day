@@ -25,28 +25,30 @@ function TableParticipantsPage() {
             <StyledTableBody>
                {/* {rows.map((row, index) => ( */}
                <StyledTableRow>
-                  <StyledTableCellBodyCreated>
+                  <StyledTableCellBodyName>
                      <BoxMail>
                         <span>Salamat Salamat</span>
                      </BoxMail>
-                  </StyledTableCellBodyCreated>
-                  <StyledTableCellBodyPeriod>
+                  </StyledTableCellBodyName>
+                  <StyledTableCellBodyEmail>
                      <BoxMail>
                         <span>salamat@gmail.com</span>
                      </BoxMail>
-                  </StyledTableCellBodyPeriod>
-                  <StyledTableCellBodyCreator>
-                     <BoxTable>
-                        <LabelsSelect>
-                           <TitleRole>Member</TitleRole>
-                           <span>
-                              <DownIcon />
-                           </span>
-                        </LabelsSelect>
+                  </StyledTableCellBodyEmail>
+                  <StyledTableCellBodyRole>
+                     <BoxMailMember>
+                        <BoxTable>
+                           <LabelsSelect>
+                              <TitleRole>Member</TitleRole>
+                              <span>
+                                 <DownIcon />
+                              </span>
+                           </LabelsSelect>
 
-                        <DeleteIcon />
-                     </BoxTable>
-                  </StyledTableCellBodyCreator>
+                           <DeleteIcon />
+                        </BoxTable>
+                     </BoxMailMember>
+                  </StyledTableCellBodyRole>
                </StyledTableRow>
                {/* ))} */}
             </StyledTableBody>
@@ -129,8 +131,8 @@ const StyledTableRow = styled(TableRow)({
    },
 })
 
-const StyledTableCellBodyCreated = styled(TableCell)({})
-const StyledTableCellBodyPeriod = styled(TableCell)({
+const StyledTableCellBodyName = styled(TableCell)({})
+const StyledTableCellBodyEmail = styled(TableCell)({
    textAlign: 'end',
 })
 
@@ -143,15 +145,20 @@ const BoxMail = styled(Box)({
    '& span': { minWidth: '74px' },
 })
 
-const StyledTableCellBodyCreator = styled(TableCell)({
-   display: 'flex',
-   justifyContent: 'end',
-})
+const StyledTableCellBodyRole = styled(TableCell)({})
 const BoxTable = styled(Box)({
    width: '200px',
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'space-between',
+})
+
+const BoxMailMember = styled(Box)({
+   height: '36px',
+   display: 'flex',
+   flexDirection: 'column',
+   justifyContent: 'center',
+   alignItems: 'end',
 })
 
 const LabelsSelect = styled(Box)({
