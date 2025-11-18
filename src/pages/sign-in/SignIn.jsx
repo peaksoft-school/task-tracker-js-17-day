@@ -40,6 +40,7 @@ export const SignIn = () => {
             dispatch(
                AUTH_THUNK.authWithGoogle({
                   token,
+                  navigate,
                })
             )
             console.log('Google Access Token:', token)

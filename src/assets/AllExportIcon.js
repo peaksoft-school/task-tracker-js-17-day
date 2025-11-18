@@ -48,6 +48,8 @@ import HourglassIcon from './images/icon/system/Hourglass.svg?react'
 import NotifyIcon from './images/icon/system/Notify.svg?react'
 import PenselIcon from './images/icon/system/Pensel.svg?react'
 import XIcon from './images/icon/system/X.svg?react'
+import ThreeDotsIcon from './images/icon/arrows/ThreeDots.svg?react'
+import VectorIcon from './images/icon/system/Vector.svg?react'
 
 export {
    //? arrows
@@ -58,6 +60,7 @@ export {
    // ? favoriteIcon
    FavoriteIconstarBlue,
    FavoriteIconstarSilver,
+   ThreeDotsIcon,
    //? side panel
    FilesAndFoldersIcon,
    GraphicIcon,
@@ -93,6 +96,7 @@ export {
    ShowIcon,
    StarIcon,
    TemplateIcon,
+   VectorIcon ,
    //? notificationIcons
    DoneNotificationIcon,
    ErrorNotificationIcon,

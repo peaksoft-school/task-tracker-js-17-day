@@ -61,6 +61,8 @@ const authWithGoogle = createAsyncThunk(
             headers: { 'Content-Type': 'application/json' },
          })
          navigate('/main-page')
+         console.log(navigate, 'navigate');
+         
       } catch (error) {
          console.log(error.massage)
       }

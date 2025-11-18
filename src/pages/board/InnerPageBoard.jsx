@@ -87,7 +87,7 @@ export const InnerPageBoard = ({ columns = 1 }) => {
    return (
       <>
          <Header notificationCount={12} favouritesCount={0} />
-         <StyledBox key={board.id} background={board.backgroundUrl}>
+         <StyledBox key={board?.id} background={board?.backgroundUrl}>
             <Sidebar />
             <StyledBoxRights>
                <StyledBoxRightHeader>
@@ -95,7 +95,7 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                      <StyledBoxRightHeaderMini>
                         <Box>{<PenselIcon />}</Box>
                         <StyledTypographyTitle>
-                           {board.name}
+                           {board?.name}
                         </StyledTypographyTitle>
                      </StyledBoxRightHeaderMini>
 
@@ -362,9 +362,7 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                  <StyledBoxMenu2>
                                     <Box></Box>
                                     <Typography>Menu</Typography>
-                                    <StyledXIcon
-                                       onClick={hendlerOpenMenuModal}
-                                    >
+                                    <StyledXIcon onClick={hendlerOpenMenuModal}>
                                        <XIcon />
                                     </StyledXIcon>
                                  </StyledBoxMenu2>

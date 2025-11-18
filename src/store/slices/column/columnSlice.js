@@ -28,7 +28,13 @@ export const columnSlice = createSlice({
 
          // Создание новой колонки
          .addCase(COLUMN_THUNK.columnThunk.fulfilled, (state, action) => {
-            state.columns.push(action.payload.column) // 👈 добавляем в массив
+            state.columns.push(action.payload)
+         })
+         .addCase(COLUMN_THUNK.columnThunk.rejected, (state, action) => {
+            state.error = action.payload
+         })
+         .addCase(COLUMN_THUNK.columnThunk.pending, (state) => {
+            state.loading = true
          })
    },
 })
