@@ -33,6 +33,7 @@ function ParticipantsPage() {
             <ParticipantsPageContainer>
                <FilterBarParticipantsPage
                   totalCount={participans?.length || 0}
+                  workspaceId={currentWorkspaceId}
                />
 
                {isLoading ? (

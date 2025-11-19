@@ -4,8 +4,12 @@ import { AppButton } from '../../../components/UI/AppButton' // Твой ком�
 import styled from '@emotion/styled'
 import { useForm } from 'react-hook-form'
 import CloseIcon from '@mui/icons-material/Close'
+import { useDispatch } from 'react-redux'
+import { PARTISPANTS_THUNK } from '../../../store/slices/participants/ParticipantsThunk'
 
-function ModalCreateParticipants({ onClose }) {
+function ModalCreateParticipants({ onClose, workspaceId }) {
+   const dispatch = useDispatch()
+
    const {
       register,
       handleSubmit,
@@ -17,7 +21,13 @@ function ModalCreateParticipants({ onClose }) {
    })
 
    const onSubmit = (data) => {
-      console.log('Form Data:', data)
+      dispatch(
+         PARTISPANTS_THUNK.postParticipant({
+            workspaceId: workspaceId,
+            email: data.email,
+            role: data.role,
+         })
+      )
 
       if (onClose) {
          onClose()

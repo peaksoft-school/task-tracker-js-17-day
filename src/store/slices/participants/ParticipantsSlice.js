@@ -35,6 +35,23 @@ const participants = createSlice({
                state.error = action.payload
             }
          )
+
+         // --- POST NEW PARTICIPANT (Добавил этот блок) ---
+         .addCase(PARTISPANTS_THUNK.postParticipant.pending, (state) => {
+            state.isloading = true
+            state.error = null
+         })
+         .addCase(PARTISPANTS_THUNK.postParticipant.fulfilled, (state) => {
+            state.isloading = false
+            // Данные обновятся через getAllParticipant, который вызывается внутри Thunk
+         })
+         .addCase(
+            PARTISPANTS_THUNK.postParticipant.rejected,
+            (state, action) => {
+               state.isloading = false
+               state.error = action.payload
+            }
+         )
    },
 })
 

@@ -6,7 +6,7 @@ import { CustomModal } from '../../components/UI/modal/Modal'
 import { useState } from 'react'
 import ModalCrateParticipans from './ModalParticipans/ModalCrateParticipans'
 
-function FilterBarParticipantsPage() {
+function FilterBarParticipantsPage({ totalCount, workspaceId }) {
    const [createModalParticipans, setCreateModalParticipans] = useState(false)
 
    const OpenCreateParticipans = () =>
@@ -34,13 +34,16 @@ function FilterBarParticipantsPage() {
                   isVisible={createModalParticipans}
                   handleVisible={OpenCreateParticipans}
                >
-                  <ModalCrateParticipans onClose={OpenCreateParticipans} />
+                  <ModalCrateParticipans
+                     onClose={OpenCreateParticipans}
+                     workspaceId={workspaceId}
+                  />
                </CustomModalCrate>
             </FilterControls>
          </FilterHeader>
          <TotalBox>
             <span>
-               Total: <span>{null}</span>
+               Total: <span>{totalCount}</span>
             </span>
          </TotalBox>
       </FilterParticipantsPage>
