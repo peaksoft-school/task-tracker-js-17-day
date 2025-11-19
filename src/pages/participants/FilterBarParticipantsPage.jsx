@@ -2,8 +2,16 @@ import { Box, styled } from '@mui/material'
 import { FilterTitle, TotalBox } from '../all-issuis/issues.styles'
 import { DownIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
+import { CustomModal } from '../../components/UI/modal/Modal'
+import { useState } from 'react'
+import ModalCrateParticipans from './ModalParticipans/ModalCrateParticipans'
 
 function FilterBarParticipantsPage() {
+   const [createModalParticipans, setCreateModalParticipans] = useState(false)
+
+   const OpenCreateParticipans = () =>
+      setCreateModalParticipans((prev) => !prev)
+
    return (
       <FilterParticipantsPage>
          <FilterHeader>
@@ -11,17 +19,23 @@ function FilterBarParticipantsPage() {
                <p>View all issues</p>
             </FilterTitle>
             <FilterControls>
-               <LabelsSelect
-               // aria-describedby={labelsPopoverId}
-               // onClick={handleLabelsClick}
-               >
+               <LabelsSelect>
                   Role
                   <span>
                      <DownIcon />
                   </span>
                </LabelsSelect>
 
-               <CrateAppButton>Create</CrateAppButton>
+               <CrateAppButton onClick={OpenCreateParticipans}>
+                  Create
+               </CrateAppButton>
+
+               <CustomModalCrate
+                  isVisible={createModalParticipans}
+                  handleVisible={OpenCreateParticipans}
+               >
+                  <ModalCrateParticipans onClose={OpenCreateParticipans} />
+               </CustomModalCrate>
             </FilterControls>
          </FilterHeader>
          <TotalBox>
@@ -70,6 +84,6 @@ const LabelsSelect = styled(Box)({
    padding: '9px 14px 9px 16px',
 })
 
-const CrateAppButton = styled(AppButton)({
-   // margin: '16px 16px 0px 0px ',
-})
+const CrateAppButton = styled(AppButton)({})
+
+const CustomModalCrate = styled(CustomModal)({})
