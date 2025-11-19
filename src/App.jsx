@@ -6,8 +6,8 @@ import ParticipantsPage from './pages/participants/ParticipantsPage'
 const App = () => {
    return (
       <>
-         {/* <RouterProvider router={routes} /> */}
-         <ParticipantsPage />
+         <RouterProvider router={routes} />
+         {/* <ParticipantsPage /> */}
       </>
    )
 }

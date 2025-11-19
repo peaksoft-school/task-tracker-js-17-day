@@ -4,11 +4,13 @@ import { authSlice } from './slices/auth/authSlice'
 import { issuesSlice } from './slices/issuses/IssusesSlise'
 import storage from 'redux-persist/lib/storage'
 import { mainSlice } from './slices/workspaces/MainSlice'
+import { participants } from './slices/participants/ParticipantsSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [issuesSlice.name]: issuesSlice.reducer,
    [mainSlice.name]: mainSlice.reducer,
+   [participants.name]: participants.reducer,
 })
 
 const persistConfig = {

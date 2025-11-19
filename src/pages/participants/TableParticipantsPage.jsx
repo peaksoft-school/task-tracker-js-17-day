@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { DeleteIcon, DownIcon } from '../../assets/AllExportIcon'
 
-function TableParticipantsPage() {
+function TableParticipantsPage({ rows }) {
    return (
       <ContainerTableParticipantsPage>
          <TableParticipants>
@@ -23,34 +23,36 @@ function TableParticipantsPage() {
             </TableHeader>
 
             <StyledTableBody>
-               {/* {rows.map((row, index) => ( */}
-               <StyledTableRow>
-                  <StyledTableCellBodyName>
-                     <BoxMail>
-                        <span>Salamat Salamat</span>
-                     </BoxMail>
-                  </StyledTableCellBodyName>
-                  <StyledTableCellBodyEmail>
-                     <BoxMail>
-                        <span>salamat@gmail.com</span>
-                     </BoxMail>
-                  </StyledTableCellBodyEmail>
-                  <StyledTableCellBodyRole>
-                     <BoxMailMember>
-                        <BoxTable>
-                           <LabelsSelect>
-                              <TitleRole>Member</TitleRole>
-                              <span>
-                                 <DownIcon />
-                              </span>
-                           </LabelsSelect>
+               {rows?.map((row) => (
+                  <StyledTableRow key={row.userId || row.memberShipId}>
+                     <StyledTableCellBodyName>
+                        <BoxMail>
+                           <span>{row.name}Salamat Salamat</span>
+                        </BoxMail>
+                     </StyledTableCellBodyName>
 
-                           <DeleteIcon />
-                        </BoxTable>
-                     </BoxMailMember>
-                  </StyledTableCellBodyRole>
-               </StyledTableRow>
-               {/* ))} */}
+                     <StyledTableCellBodyEmail>
+                        <BoxMail>
+                           <span>{row.email}salamat@gmail.com</span>
+                        </BoxMail>
+                     </StyledTableCellBodyEmail>
+
+                     <StyledTableCellBodyRole>
+                        <BoxMailMember>
+                           <BoxTable>
+                              <LabelsSelect>
+                                 <TitleRole>{row.role}Member</TitleRole>
+
+                                 <span>
+                                    <DownIcon />
+                                 </span>
+                              </LabelsSelect>
+                              <DeleteIcon />
+                           </BoxTable>
+                        </BoxMailMember>
+                     </StyledTableCellBodyRole>
+                  </StyledTableRow>
+               ))}
             </StyledTableBody>
          </TableParticipants>
       </ContainerTableParticipantsPage>
@@ -132,6 +134,7 @@ const StyledTableRow = styled(TableRow)({
 })
 
 const StyledTableCellBodyName = styled(TableCell)({})
+
 const StyledTableCellBodyEmail = styled(TableCell)({
    textAlign: 'end',
 })
@@ -146,6 +149,7 @@ const BoxMail = styled(Box)({
 })
 
 const StyledTableCellBodyRole = styled(TableCell)({})
+
 const BoxTable = styled(Box)({
    width: '200px',
    display: 'flex',

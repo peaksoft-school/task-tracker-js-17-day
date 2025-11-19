@@ -58,10 +58,10 @@ export default function Issues() {
    console.log(startDate?.format('YYYY.MM.DD').replaceAll('.', '-'))
 
    const transformedRows = useMemo(() => {
-      let filteredIssues = rawIssues
+      let filteredIssues = rawIssues || []
 
       if (showWithChecklist) {
-         filteredIssues = rawIssues.filter((issue) => {
+         filteredIssues = filteredIssues.filter((issue) => {
             return (
                issue.checklistProgress !== '1/1' &&
                issue.checklistProgress !== '0/0'
@@ -74,8 +74,8 @@ export default function Issues() {
          period: row.period,
          creator: row.creatorEmail,
          column: row.columnTitle,
-         assignee: row.assignees.map((a) => a.avatarUrl),
-         labels: row.labels.map((l) => mapApiColorToHex(l.colorType)),
+         assignee: row.assignees?.map((a) => a.avatarUrl) || [],
+         labels: row.labels?.map((l) => mapApiColorToHex(l.colorType)) || [],
          checklist: row.checklistProgress,
          description: row.description,
       }))
@@ -86,8 +86,10 @@ export default function Issues() {
    const allAssignees = useMemo(() => {
       const assigneeMap = new Map()
 
-      rawIssues.forEach((issue) => {
-         issue.assignees.forEach((assignee) => {
+      const safeIssues = rawIssues || []
+
+      safeIssues.forEach((issue) => {
+         issue.assignees?.forEach((assignee) => {
             if (!assigneeMap.has(assignee.id)) {
                assigneeMap.set(assignee.id, assignee)
             }

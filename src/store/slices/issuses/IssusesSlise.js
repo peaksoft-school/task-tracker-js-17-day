@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { ISSUES_THUNK } from './IssusesThunk'
 
 const initialState = {
-   issues: [], 
+   issues: [],
    isLoading: false,
    error: null,
 }
@@ -20,7 +20,7 @@ const issuesSlice = createSlice({
          })
          .addCase(ISSUES_THUNK.getAllIssues.fulfilled, (state, action) => {
             state.isLoading = false
-            state.issues = action.payload 
+            state.issues = action.payload
          })
          .addCase(ISSUES_THUNK.getAllIssues.rejected, (state, action) => {
             state.isLoading = false

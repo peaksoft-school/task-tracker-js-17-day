@@ -21,7 +21,7 @@ function Section({
    OpenSidebarModalSetting,
    OpenSidebarModal,
 }) {
-   // const navigate = useNavigate()
+   const navigate = useNavigate()
    const { id } = useParams()
 
    const pathBoards = `/workspace/${id}/boards`
