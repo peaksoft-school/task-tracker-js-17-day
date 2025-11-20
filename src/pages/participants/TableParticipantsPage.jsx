@@ -11,22 +11,16 @@ import {
    MenuItem,
 } from '@mui/material'
 import { DeleteIcon, DownIcon, CheckIcon } from '../../assets/AllExportIcon'
+import { useDispatch } from 'react-redux'
+import { PARTISPANTS_THUNK } from '../../store/slices/participants/ParticipantsThunk'
 
 const RoleSelect = ({ currentRole, onChange }) => {
    const [anchorEl, setAnchorEl] = useState(null)
    const open = Boolean(anchorEl)
-
-   const handleClick = (event) => {
-      setAnchorEl(event.currentTarget)
-   }
-
-   const handleClose = () => {
-      setAnchorEl(null)
-   }
-
+   const handleClick = (event) => setAnchorEl(event.currentTarget)
+   const handleClose = () => setAnchorEl(null)
    const handleSelect = (role) => {
-      // Здесь логика смены роли
-      // onChange(role)
+      if (onChange) onChange(role)
       handleClose()
    }
 
@@ -38,29 +32,24 @@ const RoleSelect = ({ currentRole, onChange }) => {
                <DownIcon />
             </span>
          </LabelsSelect>
-
          <StyledMenu
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
-            anchorOrigin={{
-               vertical: 'top',
-               horizontal: 'right',
-            }}
-            transformOrigin={{
-               vertical: 'top',
-               horizontal: 'right',
-            }}
+            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
          >
             {['Admin', 'Member'].map((role) => (
                <StyledMenuItem
                   key={role}
                   onClick={() => handleSelect(role)}
-                  selected={role === currentRole}
+                  selected={role.toUpperCase() === currentRole?.toUpperCase()}
                   disableRipple
                >
                   {role}
-                  {role === currentRole && <CheckIcon />}
+                  {role.toUpperCase() === currentRole?.toUpperCase() && (
+                     <CheckIcon />
+                  )}
                </StyledMenuItem>
             ))}
          </StyledMenu>
@@ -68,7 +57,28 @@ const RoleSelect = ({ currentRole, onChange }) => {
    )
 }
 
-function TableParticipantsPage({ rows }) {
+function TableParticipantsPage({ rows, workspaceId = 1 }) {
+   const dispatch = useDispatch()
+
+   const handleChangeRole = (row, newRole) => {
+      console.log('🛠 ДАННЫЕ СТРОКИ:', row)
+      if (row.userId === 1) {
+         console.warn(
+            '⚠️ Внимание: Вы пытаетесь изменить роль Владельца (ID 1). Сервер может это запрещать.'
+         )
+      }
+
+      dispatch(
+         PARTISPANTS_THUNK.changeParticipantRole({
+            workspaceId: workspaceId,
+            userId: row.userId,
+            membershipId: row.membershipId,
+            role: newRole.toUpperCase(),
+            currentFilterRole: 'ALL',
+         })
+      )
+   }
+
    return (
       <ContainerTableParticipantsPage>
          <TableParticipants>
@@ -82,7 +92,7 @@ function TableParticipantsPage({ rows }) {
 
             <StyledTableBody>
                {rows?.map((row) => (
-                  <StyledTableRow key={row.userId || row.memberShipId}>
+                  <StyledTableRow key={row.userId || row.membershipId}>
                      <StyledTableCellBodyName>
                         <BoxMail>
                            <span>{row.name}</span>
@@ -98,8 +108,12 @@ function TableParticipantsPage({ rows }) {
                      <StyledTableCellBodyRole>
                         <BoxMailMember>
                            <BoxTable>
-                              <RoleSelect currentRole={row.role} />
-
+                              <RoleSelect
+                                 currentRole={row.role}
+                                 onChange={(newRole) =>
+                                    handleChangeRole(row, newRole)
+                                 }
+                              />
                               <DeleteIcon />
                            </BoxTable>
                         </BoxMailMember>
@@ -113,7 +127,6 @@ function TableParticipantsPage({ rows }) {
 }
 
 export default TableParticipantsPage
-
 const StyledMenu = styled(Menu)({
    '& .MuiPaper-root': {
       width: '165px',

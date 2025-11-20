@@ -5,14 +5,15 @@ const getAllParticipant = createAsyncThunk(
    'get/getAllParticipant',
    async ({ workspaceId, role }, { rejectWithValue }) => {
       try {
+         const params = { workspaceId }
+
+         if (role) {
+            params.role = role
+         }
+
          const { data } = await axiosInstance.get(
             `/api/participants/getParticipants`,
-            {
-               params: {
-                  workspaceId,
-                  role,
-               },
-            }
+            { params }
          )
          return data
       } catch (error) {
@@ -56,7 +57,45 @@ const postParticipant = createAsyncThunk(
       }
    }
 )
+
+const changeParticipantRole = createAsyncThunk(
+   'put/changeParticipantRole',
+   async (
+      { workspaceId, userId, membershipId, role, currentFilterRole },
+      { dispatch, rejectWithValue }
+   ) => {
+      try {
+         const targetId = membershipId || userId
+
+         console.log(
+            `🚀 Отправляем запрос смены роли. Используем ID: ${targetId}`
+         )
+
+         const dataToSend = {
+            userId: Number(targetId),
+            role: role.toUpperCase(),
+         }
+
+         await axiosInstance.post(
+            `/api/workspaces/${workspaceId}/change-role`,
+            dataToSend
+         )
+
+         dispatch(
+            getAllParticipant({
+               workspaceId,
+               role: currentFilterRole === 'ALL' ? null : currentFilterRole,
+            })
+         )
+      } catch (error) {
+         console.error('Ошибка смены роли:', error)
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
 export const PARTISPANTS_THUNK = {
    getAllParticipant,
    postParticipant,
+   changeParticipantRole,
 }

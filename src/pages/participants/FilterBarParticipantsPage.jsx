@@ -6,24 +6,31 @@ import { CustomModal } from '../../components/UI/modal/Modal'
 import { useState } from 'react'
 import ModalCrateParticipans from './ModalParticipans/ModalCrateParticipans'
 
-function FilterBarParticipantsPage({ totalCount, workspaceId }) {
+function FilterBarParticipantsPage({
+   totalCount,
+   workspaceId,
+   onFilterChange,
+   currentFilter,
+}) {
    const [createModalParticipans, setCreateModalParticipans] = useState(false)
-
-   // Состояние для меню фильтрации
    const [anchorEl, setAnchorEl] = useState(null)
    const openFilter = Boolean(anchorEl)
 
    const OpenCreateParticipans = () =>
       setCreateModalParticipans((prev) => !prev)
+   const handleFilterClick = (event) => setAnchorEl(event.currentTarget)
+   const handleFilterClose = () => setAnchorEl(null)
 
-   // Открытие меню
-   const handleFilterClick = (event) => {
-      setAnchorEl(event.currentTarget)
+   const handleSelectFilter = (role) => {
+      onFilterChange(role)
+      handleFilterClose()
    }
 
-   // Закрытие меню
-   const handleFilterClose = () => {
-      setAnchorEl(null)
+   const getLabel = () => {
+      if (currentFilter === 'ALL') return 'Role (ALL)'
+      if (currentFilter === 'ADMIN') return 'Admin'
+      if (currentFilter === 'MEMBER') return 'Member'
+      return 'Role'
    }
 
    return (
@@ -33,35 +40,25 @@ function FilterBarParticipantsPage({ totalCount, workspaceId }) {
                <p>View all issues</p>
             </FilterTitle>
             <FilterControls>
-               {/* Кнопка-триггер для меню */}
                <LabelsSelect onClick={handleFilterClick}>
-                  Role
+                  {getLabel()}
                   <span>
                      <DownIcon />
                   </span>
                </LabelsSelect>
 
-               {/* Само выпадающее меню */}
                <StyledMenu
                   anchorEl={anchorEl}
                   open={openFilter}
                   onClose={handleFilterClose}
-                  anchorOrigin={{
-                     vertical: 'bottom',
-                     horizontal: 'left',
-                  }}
-                  transformOrigin={{
-                     vertical: 'top',
-                     horizontal: 'left',
-                  }}
                >
-                  <StyledMenuItem onClick={handleFilterClose}>
+                  <StyledMenuItem onClick={() => handleSelectFilter('ALL')}>
                      All
                   </StyledMenuItem>
-                  <StyledMenuItem onClick={handleFilterClose}>
+                  <StyledMenuItem onClick={() => handleSelectFilter('ADMIN')}>
                      Admin
                   </StyledMenuItem>
-                  <StyledMenuItem onClick={handleFilterClose}>
+                  <StyledMenuItem onClick={() => handleSelectFilter('MEMBER')}>
                      Member
                   </StyledMenuItem>
                </StyledMenu>

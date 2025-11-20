@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react' 
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import { Header } from '../../layouts/header/Header'
 import styled from '@emotion/styled'
@@ -11,19 +11,22 @@ import { Box, CircularProgress } from '@mui/material'
 
 function ParticipantsPage() {
    const dispatch = useDispatch()
-
    const { participans, isLoading } = useSelector((state) => state.participans)
+
+   const [filterRole, setFilterRole] = useState('ALL')
 
    const currentWorkspaceId = 1
 
    useEffect(() => {
+      const roleParam = filterRole === 'ALL' ? null : filterRole
+
       dispatch(
          PARTISPANTS_THUNK.getAllParticipant({
             workspaceId: currentWorkspaceId,
-            role: 'MEMBER',
+            role: roleParam, 
          })
       )
-   }, [dispatch])
+   }, [dispatch, filterRole]) 
 
    return (
       <StyledBackground>
@@ -34,6 +37,8 @@ function ParticipantsPage() {
                <FilterBarParticipantsPage
                   totalCount={participans?.length || 0}
                   workspaceId={currentWorkspaceId}
+                  onFilterChange={setFilterRole} 
+                  currentFilter={filterRole}
                />
 
                {isLoading ? (
