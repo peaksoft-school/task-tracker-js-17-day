@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/material'
+import { Box, styled, Menu, MenuItem } from '@mui/material'
 import { FilterTitle, TotalBox } from '../all-issuis/issues.styles'
 import { DownIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
@@ -9,8 +9,22 @@ import ModalCrateParticipans from './ModalParticipans/ModalCrateParticipans'
 function FilterBarParticipantsPage({ totalCount, workspaceId }) {
    const [createModalParticipans, setCreateModalParticipans] = useState(false)
 
+   // Состояние для меню фильтрации
+   const [anchorEl, setAnchorEl] = useState(null)
+   const openFilter = Boolean(anchorEl)
+
    const OpenCreateParticipans = () =>
       setCreateModalParticipans((prev) => !prev)
+
+   // Открытие меню
+   const handleFilterClick = (event) => {
+      setAnchorEl(event.currentTarget)
+   }
+
+   // Закрытие меню
+   const handleFilterClose = () => {
+      setAnchorEl(null)
+   }
 
    return (
       <FilterParticipantsPage>
@@ -19,12 +33,38 @@ function FilterBarParticipantsPage({ totalCount, workspaceId }) {
                <p>View all issues</p>
             </FilterTitle>
             <FilterControls>
-               <LabelsSelect>
+               {/* Кнопка-триггер для меню */}
+               <LabelsSelect onClick={handleFilterClick}>
                   Role
                   <span>
                      <DownIcon />
                   </span>
                </LabelsSelect>
+
+               {/* Само выпадающее меню */}
+               <StyledMenu
+                  anchorEl={anchorEl}
+                  open={openFilter}
+                  onClose={handleFilterClose}
+                  anchorOrigin={{
+                     vertical: 'bottom',
+                     horizontal: 'left',
+                  }}
+                  transformOrigin={{
+                     vertical: 'top',
+                     horizontal: 'left',
+                  }}
+               >
+                  <StyledMenuItem onClick={handleFilterClose}>
+                     All
+                  </StyledMenuItem>
+                  <StyledMenuItem onClick={handleFilterClose}>
+                     Admin
+                  </StyledMenuItem>
+                  <StyledMenuItem onClick={handleFilterClose}>
+                     Member
+                  </StyledMenuItem>
+               </StyledMenu>
 
                <CrateAppButton onClick={OpenCreateParticipans}>
                   Create
@@ -60,12 +100,14 @@ const commonButtonStyle = {
    borderRadius: '8px',
    border: '1px solid rgba(208,208,208,1)',
    padding: '7px 14px 7px 16px',
+   cursor: 'pointer',
 }
 
 const FilterParticipantsPage = styled(Box)({
    width: 'null',
    marginLeft: '16px',
 })
+
 const FilterHeader = styled(Box)({
    margin: '16px 16px 0px 0px ',
    height: '36px',
@@ -82,9 +124,40 @@ const FilterControls = styled(Box)({
 
 const LabelsSelect = styled(Box)({
    ...commonButtonStyle,
-
    width: '154px',
    padding: '9px 14px 9px 16px',
+   transition: 'background 0.2s',
+   '&:hover': {
+      backgroundColor: '#f9f9f9',
+   },
+})
+
+const StyledMenu = styled(Menu)({
+   marginTop: '2px',
+   '& .MuiPaper-root': {
+      width: '165px',
+      height: '130px',
+      borderRadius: '10px',
+      boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.1)',
+      padding: 0,
+      overflow: 'hidden',
+   },
+   '& .MuiList-root': {
+      padding: 0,
+      height: '100%',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+   },
+})
+
+const StyledMenuItem = styled(MenuItem)({
+   fontSize: '16px',
+   padding: '10px 15px',
+   color: '#1C1C1C',
+   '&:hover': {
+      backgroundColor: '#F3F4F6',
+   },
 })
 
 const CrateAppButton = styled(AppButton)({})
