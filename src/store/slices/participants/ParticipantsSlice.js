@@ -2,7 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 import { PARTISPANTS_THUNK } from './ParticipantsThunk'
 
 const initialState = {
-   isloading: false,
+   // Исправим на isLoading (CamelCase), это стандарт
+   isLoading: false, 
    participans: [],
    error: null,
 }
@@ -14,44 +15,33 @@ const participants = createSlice({
 
    extraReducers: (builder) => {
       builder
-         //pending — запрос начался
+         // --- GET ---
          .addCase(PARTISPANTS_THUNK.getAllParticipant.pending, (state) => {
-            state.isloading = true
+            state.isLoading = true
             state.error = null
          })
-         //fulfilled — запрос успешный, данные получены
-         .addCase(
-            PARTISPANTS_THUNK.getAllParticipant.fulfilled,
-            (state, action) => {
-               state.isloading = false
-               state.participans = action.payload
-            }
-         )
-         // rejected - запрос провальный , с ошибкой
-         .addCase(
-            PARTISPANTS_THUNK.getAllParticipant.rejected,
-            (state, action) => {
-               state.isloading = false
-               state.error = action.payload
-            }
-         )
+         .addCase(PARTISPANTS_THUNK.getAllParticipant.fulfilled, (state, action) => {
+            state.isLoading = false
+            state.participans = action.payload
+         })
+         .addCase(PARTISPANTS_THUNK.getAllParticipant.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.payload
+         })
 
-         // --- POST NEW PARTICIPANT (Добавил этот блок) ---
+         // --- POST ---
          .addCase(PARTISPANTS_THUNK.postParticipant.pending, (state) => {
-            state.isloading = true
+            state.isLoading = true
             state.error = null
          })
          .addCase(PARTISPANTS_THUNK.postParticipant.fulfilled, (state) => {
-            state.isloading = false
-            // Данные обновятся через getAllParticipant, который вызывается внутри Thunk
+            state.isLoading = false
+            // Данные не меняем тут, они придут через getAllParticipant
          })
-         .addCase(
-            PARTISPANTS_THUNK.postParticipant.rejected,
-            (state, action) => {
-               state.isloading = false
-               state.error = action.payload
-            }
-         )
+         .addCase(PARTISPANTS_THUNK.postParticipant.rejected, (state, action) => {
+            state.isLoading = false
+            state.error = action.payload
+         })
    },
 })
 

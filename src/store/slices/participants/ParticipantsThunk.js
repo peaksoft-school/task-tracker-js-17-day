@@ -25,25 +25,37 @@ const postParticipant = createAsyncThunk(
    'post/postParticipant',
    async ({ workspaceId, email, role }, { dispatch, rejectWithValue }) => {
       try {
-         // ОТПРАВЛЯЕМ ЗАПРОС
-         await axiosInstance.post(`/api/participants`, {
-            workspaceId: Number(workspaceId), // 1. Гарантируем, что это число
-            email: email,
-            role: role.toUpperCase(), // 2. Превращаем "admin" в "ADMIN"
-            // userId: 0,  <--- 3. УДАЛИЛИ ЭТУ СТРОКУ. Она ломала сервер.
-         })
+         const dataToSend = {
+            workspaceId: Number(workspaceId),
+            emails: [email],
+            role: role.toUpperCase(),
+            link: window.location.origin,
+         }
 
-         // Сразу обновляем список
-         dispatch(getAllParticipant({ workspaceId, role: 'ADMIN' }))
-         
+         console.log(
+            '📤 Пробуем отправить на /api/workspaces/invite:',
+            dataToSend
+         )
+
+         await axiosInstance.post(`/api/workspaces/invite`, dataToSend)
+
+         console.log('✅ Приглашение отправлено!')
+
+         dispatch(
+            getAllParticipant({
+               workspaceId,
+               role: role.toUpperCase(),
+            })
+         )
       } catch (error) {
-         // Логируем ошибку, чтобы видеть детали в консоли
-         console.error("Ошибка при добавлении:", error)
+         console.error(
+            '❌ Ошибка сервера:',
+            error.response?.data || error.message
+         )
          return rejectWithValue(error.response?.data || error.message)
       }
    }
 )
-
 export const PARTISPANTS_THUNK = {
    getAllParticipant,
    postParticipant,

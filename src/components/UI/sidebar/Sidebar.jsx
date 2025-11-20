@@ -131,7 +131,7 @@ export default function Sidebar({ rowsLength = 0 }) {
                count="(17)"
                isActive={currentPath === pathParticipants}
                onClick={() => {
-                  navigate(pathParticipants)
+                  navigate(`/workspace/${id}/participants`)
                }}
                open={open}
             />

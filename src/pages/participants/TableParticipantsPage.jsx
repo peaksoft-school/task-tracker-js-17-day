@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import React from 'react'
+import React, { useState } from 'react'
 import {
    Box,
    Table,
@@ -7,8 +7,66 @@ import {
    TableCell,
    TableHead,
    TableRow,
+   Menu,
+   MenuItem,
 } from '@mui/material'
-import { DeleteIcon, DownIcon } from '../../assets/AllExportIcon'
+import { DeleteIcon, DownIcon, CheckIcon } from '../../assets/AllExportIcon'
+
+const RoleSelect = ({ currentRole, onChange }) => {
+   const [anchorEl, setAnchorEl] = useState(null)
+   const open = Boolean(anchorEl)
+
+   const handleClick = (event) => {
+      setAnchorEl(event.currentTarget)
+   }
+
+   const handleClose = () => {
+      setAnchorEl(null)
+   }
+
+   const handleSelect = (role) => {
+      // Здесь логика смены роли
+      // onChange(role)
+      handleClose()
+   }
+
+   return (
+      <>
+         <LabelsSelect onClick={handleClick}>
+            <TitleRole>{currentRole}</TitleRole>
+            <span>
+               <DownIcon />
+            </span>
+         </LabelsSelect>
+
+         <StyledMenu
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            anchorOrigin={{
+               vertical: 'top',
+               horizontal: 'right',
+            }}
+            transformOrigin={{
+               vertical: 'top',
+               horizontal: 'right',
+            }}
+         >
+            {['Admin', 'Member'].map((role) => (
+               <StyledMenuItem
+                  key={role}
+                  onClick={() => handleSelect(role)}
+                  selected={role === currentRole}
+                  disableRipple
+               >
+                  {role}
+                  {role === currentRole && <CheckIcon />}
+               </StyledMenuItem>
+            ))}
+         </StyledMenu>
+      </>
+   )
+}
 
 function TableParticipantsPage({ rows }) {
    return (
@@ -27,26 +85,21 @@ function TableParticipantsPage({ rows }) {
                   <StyledTableRow key={row.userId || row.memberShipId}>
                      <StyledTableCellBodyName>
                         <BoxMail>
-                           <span>{row.name}Salamat Salamat</span>
+                           <span>{row.name}</span>
                         </BoxMail>
                      </StyledTableCellBodyName>
 
                      <StyledTableCellBodyEmail>
                         <BoxMail>
-                           <span>{row.email}salamat@gmail.com</span>
+                           <span>{row.email}</span>
                         </BoxMail>
                      </StyledTableCellBodyEmail>
 
                      <StyledTableCellBodyRole>
                         <BoxMailMember>
                            <BoxTable>
-                              <LabelsSelect>
-                                 <TitleRole>{row.role}Member</TitleRole>
+                              <RoleSelect currentRole={row.role} />
 
-                                 <span>
-                                    <DownIcon />
-                                 </span>
-                              </LabelsSelect>
                               <DeleteIcon />
                            </BoxTable>
                         </BoxMailMember>
@@ -60,6 +113,37 @@ function TableParticipantsPage({ rows }) {
 }
 
 export default TableParticipantsPage
+
+const StyledMenu = styled(Menu)({
+   '& .MuiPaper-root': {
+      width: '165px',
+      borderRadius: '8px',
+      marginTop: '8px',
+      boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.1)',
+      padding: 0,
+   },
+   '& .MuiList-root': {
+      padding: '4px 0',
+   },
+})
+
+const StyledMenuItem = styled(MenuItem)({
+   fontSize: '14px',
+   padding: '10px 16px',
+   display: 'flex',
+   justifyContent: 'space-between',
+   alignItems: 'center',
+   '&:hover': {
+      backgroundColor: '#F3F4F6',
+   },
+   '&.Mui-selected': {
+      backgroundColor: 'transparent',
+      fontWeight: 500,
+      '&:hover': {
+         backgroundColor: '#F3F4F6',
+      },
+   },
+})
 
 const baseHeaderCell = {
    border: 'none !important',
@@ -170,10 +254,14 @@ const LabelsSelect = styled(Box)({
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'space-between',
-   padding: '7px 14px 7px 16px',
-
    width: '130px',
    padding: '9px 14px 9px 16px',
+   cursor: 'pointer',
+   borderRadius: '6px',
+   transition: 'background 0.2s',
+   '&:hover': {
+      backgroundColor: '#f5f5f5',
+   },
 
    '& span': {
       marginLeft: '6px',

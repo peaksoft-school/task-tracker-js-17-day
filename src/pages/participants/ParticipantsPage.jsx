@@ -20,7 +20,7 @@ function ParticipantsPage() {
       dispatch(
          PARTISPANTS_THUNK.getAllParticipant({
             workspaceId: currentWorkspaceId,
-            role: 'ADMIN',
+            role: 'MEMBER',
          })
       )
    }, [dispatch])
