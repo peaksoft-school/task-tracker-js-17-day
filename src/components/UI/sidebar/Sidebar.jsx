@@ -41,6 +41,8 @@ export default function Sidebar({ rowsLength = 0 }) {
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
 
+   const { participans } = useSelector((state) => state.participans)
+
    useEffect(() => {
       if (token) {
          dispatch(MAIN_THUNK.getAllMain({ token }))
@@ -128,7 +130,7 @@ export default function Sidebar({ rowsLength = 0 }) {
             <SidebarItem
                icon={<PeopleIcon />}
                label="Participants"
-               count="(17)"
+               count={`(${participans?.length || 0})`}
                isActive={currentPath === pathParticipants}
                onClick={() => {
                   navigate(`/workspace/${id}/participants`)
