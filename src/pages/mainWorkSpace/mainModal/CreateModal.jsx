@@ -10,6 +10,8 @@ function CreateModal({ onClose }) {
 
    const { token } = useSelector((state) => state.auth)
 
+   const link = window.location.origin
+
    const {
       register,
       handleSubmit,
@@ -23,8 +25,9 @@ function CreateModal({ onClose }) {
 
    const onSubmit = async (data) => {
       const finalData = {
-         ...data,
-         role: 'OWNER',
+         ...data, 
+         role: 'MEMBER',
+         link: `${link}/workspace`,
       }
 
       dispatch(

@@ -36,6 +36,7 @@ const RoleSelect = ({ currentRole, onChange }) => {
             anchorEl={anchorEl}
             open={open}
             onClose={handleClose}
+            transitionDuration={0}
             anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
          >

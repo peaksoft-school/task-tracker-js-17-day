@@ -53,7 +53,6 @@ function ParticipantsPage() {
                ) : (
                   <TableParticipantsPage
                      rows={participans || []}
-                     // 👇 ПЕРЕДАЕМ ЭТИ ДВА ПРОПСА В ТАБЛИЦУ
                      workspaceId={currentWorkspaceId}
                      currentFilterRole={filterRole}
                   />

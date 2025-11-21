@@ -95,9 +95,9 @@ function Main() {
                                     onClick={() => handleFavoriteToogle(row.id)}
                                  >
                                     {row.favorite ? (
-                                       <FavoriteIconstarBlue color="primary" />
-                                    ) : (
                                        <FavoriteIconstarSilver color="action" />
+                                    ) : (
+                                       <FavoriteIconstarBlue color="primary" />
                                     )}
                                  </FavoriteIconBox>
                               </TableCell>
