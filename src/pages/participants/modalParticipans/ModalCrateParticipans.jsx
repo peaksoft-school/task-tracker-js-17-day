@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Typography, IconButton } from '@mui/material'
-import { AppButton } from '../../../components/UI/AppButton' // Твой компонент
+import { AppButton } from '../../../components/UI/AppButton'
 import styled from '@emotion/styled'
 import { useForm } from 'react-hook-form'
 import CloseIcon from '@mui/icons-material/Close'

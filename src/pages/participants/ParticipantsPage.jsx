@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react' 
+import React, { useEffect, useState } from 'react'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import { Header } from '../../layouts/header/Header'
 import styled from '@emotion/styled'
@@ -14,19 +14,17 @@ function ParticipantsPage() {
    const { participans, isLoading } = useSelector((state) => state.participans)
 
    const [filterRole, setFilterRole] = useState('ALL')
-
    const currentWorkspaceId = 1
 
    useEffect(() => {
       const roleParam = filterRole === 'ALL' ? null : filterRole
-
       dispatch(
          PARTISPANTS_THUNK.getAllParticipant({
             workspaceId: currentWorkspaceId,
-            role: roleParam, 
+            role: roleParam,
          })
       )
-   }, [dispatch, filterRole]) 
+   }, [dispatch, filterRole])
 
    return (
       <StyledBackground>
@@ -37,7 +35,7 @@ function ParticipantsPage() {
                <FilterBarParticipantsPage
                   totalCount={participans?.length || 0}
                   workspaceId={currentWorkspaceId}
-                  onFilterChange={setFilterRole} 
+                  onFilterChange={setFilterRole}
                   currentFilter={filterRole}
                />
 
@@ -53,7 +51,12 @@ function ParticipantsPage() {
                      <CircularProgress />
                   </Box>
                ) : (
-                  <TableParticipantsPage rows={participans || []} />
+                  <TableParticipantsPage
+                     rows={participans || []}
+                     // 👇 ПЕРЕДАЕМ ЭТИ ДВА ПРОПСА В ТАБЛИЦУ
+                     workspaceId={currentWorkspaceId}
+                     currentFilterRole={filterRole}
+                  />
                )}
             </ParticipantsPageContainer>
          </div>

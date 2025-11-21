@@ -66,19 +66,11 @@ const changeParticipantRole = createAsyncThunk(
    ) => {
       try {
          const targetId = membershipId || userId
-
-         console.log(
-            `🚀 Отправляем запрос смены роли. Используем ID: ${targetId}`
-         )
-
-         const dataToSend = {
-            userId: Number(targetId),
-            role: role.toUpperCase(),
-         }
+         console.log(`🚀 Смена роли ID: ${targetId}`)
 
          await axiosInstance.post(
             `/api/workspaces/${workspaceId}/change-role`,
-            dataToSend
+            { userId: Number(targetId), role: role.toUpperCase() }
          )
 
          dispatch(
@@ -88,7 +80,39 @@ const changeParticipantRole = createAsyncThunk(
             })
          )
       } catch (error) {
-         console.error('Ошибка смены роли:', error)
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
+const deleteParticipant = createAsyncThunk(
+   'delete/deleteParticipant',
+   async (
+      { workspaceId, participantId, currentFilterRole },
+      { dispatch, rejectWithValue }
+   ) => {
+      try {
+         console.log(`🗑 Удаляем участника с ID: ${participantId}`)
+
+         await axiosInstance.delete(`/api/participants/id`, {
+            params: {
+               participantId: participantId,
+            },
+         })
+
+         console.log('✅ Участник удален!')
+
+         dispatch(
+            getAllParticipant({
+               workspaceId,
+               role: currentFilterRole === 'ALL' ? null : currentFilterRole,
+            })
+         )
+      } catch (error) {
+         console.error(
+            '❌ Ошибка удаления (ответ сервера):',
+            error.response?.data
+         )
          return rejectWithValue(error.response?.data || error.message)
       }
    }
@@ -98,4 +122,5 @@ export const PARTISPANTS_THUNK = {
    getAllParticipant,
    postParticipant,
    changeParticipantRole,
+   deleteParticipant,
 }

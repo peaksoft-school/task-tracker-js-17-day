@@ -57,26 +57,42 @@ const RoleSelect = ({ currentRole, onChange }) => {
    )
 }
 
-function TableParticipantsPage({ rows, workspaceId = 1 }) {
+function TableParticipantsPage({ rows, workspaceId, currentFilterRole }) {
    const dispatch = useDispatch()
 
    const handleChangeRole = (row, newRole) => {
-      console.log('🛠 ДАННЫЕ СТРОКИ:', row)
-      if (row.userId === 1) {
-         console.warn(
-            '⚠️ Внимание: Вы пытаетесь изменить роль Владельца (ID 1). Сервер может это запрещать.'
-         )
-      }
-
       dispatch(
          PARTISPANTS_THUNK.changeParticipantRole({
             workspaceId: workspaceId,
             userId: row.userId,
             membershipId: row.membershipId,
             role: newRole.toUpperCase(),
-            currentFilterRole: 'ALL',
+            currentFilterRole: currentFilterRole || 'ALL',
          })
       )
+   }
+
+   const handleDelete = (row) => {
+      const confirmDelete = window.confirm(
+         `Are you sure you want to remove ${row.name}?`
+      )
+
+      if (confirmDelete) {
+         const idToDelete = row.membershipId || row.id
+
+         if (!idToDelete) {
+            console.error('Не найден membershipId для удаления!', row)
+            return
+         }
+
+         dispatch(
+            PARTISPANTS_THUNK.deleteParticipant({
+               workspaceId: workspaceId,
+               participantId: idToDelete,
+               currentFilterRole: currentFilterRole || 'ALL',
+            })
+         )
+      }
    }
 
    return (
@@ -114,7 +130,13 @@ function TableParticipantsPage({ rows, workspaceId = 1 }) {
                                     handleChangeRole(row, newRole)
                                  }
                               />
-                              <DeleteIcon />
+
+                              <div
+                                 onClick={() => handleDelete(row)}
+                                 style={{ cursor: 'pointer', display: 'flex' }}
+                              >
+                                 <DeleteIcon />
+                              </div>
                            </BoxTable>
                         </BoxMailMember>
                      </StyledTableCellBodyRole>
