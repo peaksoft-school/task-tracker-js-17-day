@@ -8,23 +8,28 @@ import { StyledBackground } from '../all-issuis/issues.styles'
 import { useDispatch, useSelector } from 'react-redux'
 import { PARTISPANTS_THUNK } from '../../store/slices/participants/ParticipantsThunk'
 import { Box, CircularProgress } from '@mui/material'
+import { useParams } from 'react-router-dom'
 
 function ParticipantsPage() {
    const dispatch = useDispatch()
+   const { id } = useParams()
    const { participans, isLoading } = useSelector((state) => state.participans)
 
    const [filterRole, setFilterRole] = useState('ALL')
-   const currentWorkspaceId = 1
+
+   const currentWorkspaceId = Number(id)
 
    useEffect(() => {
-      const roleParam = filterRole === 'ALL' ? null : filterRole
-      dispatch(
-         PARTISPANTS_THUNK.getAllParticipant({
-            workspaceId: currentWorkspaceId,
-            role: roleParam,
-         })
-      )
-   }, [dispatch, filterRole])
+      if (currentWorkspaceId) {
+         const roleParam = filterRole === 'ALL' ? null : filterRole
+         dispatch(
+            PARTISPANTS_THUNK.getAllParticipant({
+               workspaceId: currentWorkspaceId,
+               role: roleParam,
+            })
+         )
+      }
+   }, [dispatch, filterRole, currentWorkspaceId])
 
    return (
       <StyledBackground>

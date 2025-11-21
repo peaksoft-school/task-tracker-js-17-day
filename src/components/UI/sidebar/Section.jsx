@@ -20,16 +20,18 @@ function Section({
    onClick,
    OpenSidebarModalSetting,
    OpenSidebarModal,
+   id,
 }) {
    const navigate = useNavigate()
-   const { id } = useParams()
+   // const { id } = useParams()
 
    const pathBoards = `/workspace/${id}/boards`
+   const pathParticipants = `/workspace/${id}/participants`
    return (
       <>
          <SectionContainer>
             <SectionWrapperL onClick={onClick}>
-               <LabelSpan>{label[0]}</LabelSpan>
+               <LabelSpan>{label ? label[0] : 'W'}</LabelSpan>
             </SectionWrapperL>
 
             <BoxLabel open={open}>
@@ -54,10 +56,9 @@ function Section({
                   icon={<PeopleIcon />}
                   label="Participants"
                   iconPlus={<PlusIcon />}
+                  onClick={() => navigate(pathParticipants)}
                   open={open}
                />
-
-               
 
                <SidebarItemDetalis
                   icon={<ToolsIcon />}
