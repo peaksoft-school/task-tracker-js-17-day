@@ -23,7 +23,6 @@ function Section({
    id,
 }) {
    const navigate = useNavigate()
-   // const { id } = useParams()
 
    const pathBoards = `/workspace/${id}/boards`
    const pathParticipants = `/workspace/${id}/participants`
@@ -66,11 +65,16 @@ function Section({
                   onClick={OpenSidebarModalSetting}
                   open={open}
                />
+
                <CustomModal
                   isVisible={OpenSidebarModal}
                   handleVisible={OpenSidebarModalSetting}
                >
-                  <SidebarSettingModal />
+                  <SidebarSettingModal
+                     id={id}
+                     workspaceName={label}
+                     onClose={OpenSidebarModalSetting}
+                  />
                </CustomModal>
             </SectionDetails>
          )}

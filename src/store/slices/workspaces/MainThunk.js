@@ -44,6 +44,23 @@ const favoritesWorkSpase = createAsyncThunk(
    }
 )
 
+const deleteWorkspace = createAsyncThunk(
+   'delete/deleteWorkspace',
+   async ({ id, token }, { dispatch, rejectWithValue }) => {
+      try {
+         await axiosInstance.delete(`/api/workspaces/${id}`)
+
+         // После удаления обновляем список всех воркспейсов
+         dispatch(getAllMain({ token }))
+
+         return id
+      } catch (error) {
+         console.error('Ошибка при удалении workspace:', error)
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
 const modalCreateWorkSpase = createAsyncThunk(
    'post/modalCreateWorkSpase',
    async ({ data, onClose, token }, { rejectWithValue, dispatch }) => {
@@ -65,4 +82,5 @@ export const MAIN_THUNK = {
    favoritesWorkSpase,
    modalCreateWorkSpase,
    getAllBoards,
+   deleteWorkspace,
 }

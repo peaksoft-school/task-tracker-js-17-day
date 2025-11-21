@@ -2,23 +2,41 @@ import { Box, styled } from '@mui/material'
 import React, { useState } from 'react'
 import { AppButton } from '../AppButton'
 import { CustomModal } from '../modal/Modal'
+import { useDispatch, useSelector } from 'react-redux'
+import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 
-function SidebarSettingModal() {
+function SidebarSettingModal({ id, workspaceName, onClose }) {
+   const dispatch = useDispatch()
+   const { token } = useSelector((state) => state.auth) 
+
    const [openDeleteWorkspace, setOpenDeleteWorkspace] = useState(false)
-   const DeleteWorkspace = () => {
+
+   const toggleDeleteModal = () => {
       setOpenDeleteWorkspace((prev) => !prev)
+   }
+
+   const handleDelete = () => {
+      if (id && token) {
+         dispatch(MAIN_THUNK.deleteWorkspace({ id, token }))
+            .unwrap()
+            .then(() => {
+               toggleDeleteModal() 
+               if (onClose) onClose() 
+            })
+            .catch((err) => console.error(err))
+      }
    }
    return (
       <BoxSidebarSetting>
          <Title>Setting</Title>
-         <StyledInput defaultValue="LMS" />
-         <DeleteText onClick={DeleteWorkspace}>
+         <StyledInput defaultValue={workspaceName} />
+         <DeleteText onClick={toggleDeleteModal}>
             Delete this workspace?
          </DeleteText>
 
          <CustomModal
             isVisible={openDeleteWorkspace}
-            handleVisible={DeleteWorkspace}
+            handleVisible={toggleDeleteModal}
          >
             <BoxDeleteWorkspace>
                <Title>Delete workspace</Title>
@@ -28,7 +46,7 @@ function SidebarSettingModal() {
 
                <ButtonContainer>
                   <AppButton
-                     onClick={DeleteWorkspace}
+                     onClick={toggleDeleteModal}
                      sx={{
                         backgroundColor: 'rgba(245, 245, 245, 1)',
                         color: 'rgba(141, 147, 153, 1)',
@@ -45,6 +63,7 @@ function SidebarSettingModal() {
                   </AppButton>
 
                   <AppButton
+                     onClick={handleDelete}
                      sx={{
                         backgroundColor: '#D91212',
                         color: '#ffffff',
@@ -64,6 +83,7 @@ function SidebarSettingModal() {
          </CustomModal>
          <ButtonContainer>
             <AppButton
+               onClick={onClose}
                sx={{
                   backgroundColor: 'rgba(245, 245, 245, 1)',
                   color: 'rgba(141, 147, 153, 1)',
