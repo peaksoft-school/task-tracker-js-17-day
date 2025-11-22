@@ -7,7 +7,7 @@ import {
    LayoutIcon,
    LeftIcon,
    MenuIconRight,
-   MenuIconLeft, // Убедитесь, что импорт есть
+   MenuIconLeft, 
    PeopleIcon,
    PlusIcon,
    ToolsIcon,
@@ -256,7 +256,6 @@ export default function Sidebar({ rowsLength = 0 }) {
    )
 }
 
-// --- STYLES ---
 
 const SidebarContainer = styled('div')(({ open }) => ({
    width: open ? '250px' : 116,
@@ -278,18 +277,15 @@ const SidebarContainer = styled('div')(({ open }) => ({
    },
 }))
 
-// Исправленный TopSection
 const TopSection = styled('div')(({ open }) => ({
    display: 'flex',
    alignItems: 'center',
-   // Если открыто - раздвигаем по краям, если закрыто - центрируем (или flex-end/start по дизайну)
-   justifyContent: open ? 'space-between' : 'center', 
-   width: '100%', // Важно занимать всю ширину
-   padding: open ? '0 20px' : '0', // Добавляем отступы по бокам при открытии
+   justifyContent: open ? 'space-between' : 'center',
+   width: '100%', 
+   padding: open ? '0 20px' : '0', 
    boxSizing: 'border-box',
    marginBottom: 22,
-   gap: open ? 0 : 10, // Отступ между кружком и меню, когда закрыто
-   // Удален фиксированный marginLeft: 40
+   gap: open ? 0 : 10, 
 }))
 
 const CircleIconButton = styled('div')(({ open }) => ({
@@ -318,18 +314,16 @@ const LMSSpan = styled('span')({
    whiteSpace: 'nowrap',
    overflow: 'hidden',
    textOverflow: 'ellipsis',
-   fontWeight: 600, // Обычно название жирнее
+   fontWeight: 600, 
 })
 
 const MenuButton = styled(IconButton)({
    width: 23,
    height: 22,
    padding: 0,
-   // Удален marginLeft: 23, так как теперь отступы регулирует TopSection
    '& svg': { width: 20, height: 20 },
 })
 
-// ... Остальные стили без изменений ...
 const Divider = styled('div')(({ open }) => ({
    width: open ? 170 : 36,
    border: '1px solid rgba(224,224,224,1)',
