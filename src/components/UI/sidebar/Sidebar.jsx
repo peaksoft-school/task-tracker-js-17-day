@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { IconButton, styled } from '@mui/material'
 import {
    DownIcon,
@@ -30,8 +30,8 @@ export default function Sidebar({ rowsLength = 0 }) {
    const OpenSidebarModalSetting = () => setOpenSidebarModal((prev) => !prev)
 
    const handleCloseSettings = () => {
-      setOpenSidebarModal(false) // Закрываем модалку
-      setActiveSetting(false) // Убираем серый фон (active state)
+      setOpenSidebarModal(false)
+      setActiveSetting(false)
    }
 
    const [activeSetting, setActiveSetting] = useState(false)
@@ -59,13 +59,18 @@ export default function Sidebar({ rowsLength = 0 }) {
       localStorage.setItem('lastBoard', bg)
    }
 
+   const currentWorkspace = useMemo(() => {
+      return main?.find((w) => w.id === Number(id))
+   }, [main, id])
+
    useEffect(() => {
       if (token) {
          dispatch(MAIN_THUNK.getAllMain({ token }))
       }
    }, [dispatch, token])
 
-   useEffect(() => {SidebarItem
+   useEffect(() => {
+      SidebarItem
       if (id) {
          dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(id))
       }
@@ -89,10 +94,16 @@ export default function Sidebar({ rowsLength = 0 }) {
                {open ? (
                   <MiniLMS>
                      <LeftIcon />
-                     <LMSSpan>LMS</LMSSpan>
+                     <LMSSpan>
+                        {currentWorkspace
+                           ? currentWorkspace.name
+                           : 'Task Tracker'}
+                     </LMSSpan>
                   </MiniLMS>
                ) : (
-                  <span>L</span>
+                  <span>
+                     {currentWorkspace ? currentWorkspace.name[0] : 'T'}
+                  </span>
                )}
             </CircleIconButton>
 
@@ -291,7 +302,13 @@ const MiniLMS = styled('div')({
    gap: 11,
 })
 
-const LMSSpan = styled('span')({ width: 135 })
+const LMSSpan = styled('span')({
+   width: 135,
+
+   whiteSpace: 'nowrap',
+   overflow: 'hidden',
+   textOverflow: 'ellipsis',
+})
 
 const MenuButton = styled(IconButton)({
    width: 23,
