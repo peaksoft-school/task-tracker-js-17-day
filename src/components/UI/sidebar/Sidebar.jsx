@@ -29,6 +29,11 @@ export default function Sidebar({ rowsLength = 0 }) {
    const [OpenSidebarModal, setOpenSidebarModal] = useState(false)
    const OpenSidebarModalSetting = () => setOpenSidebarModal((prev) => !prev)
 
+   const handleCloseSettings = () => {
+      setOpenSidebarModal(false) // Закрываем модалку
+      setActiveSetting(false) // Убираем серый фон (active state)
+   }
+
    const [activeSetting, setActiveSetting] = useState(false)
 
    const [open, setOpen] = useState(false)
@@ -60,7 +65,7 @@ export default function Sidebar({ rowsLength = 0 }) {
       }
    }, [dispatch, token])
 
-   useEffect(() => {
+   useEffect(() => {SidebarItem
       if (id) {
          dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(id))
       }
@@ -175,9 +180,15 @@ export default function Sidebar({ rowsLength = 0 }) {
 
          <CustomModal
             isVisible={OpenSidebarModal}
-            handleVisible={OpenSidebarModalSetting}
+            handleVisible={handleCloseSettings}
          >
-            <SidebarSettingModal />
+            <SidebarSettingModal
+               onClose={handleCloseSettings}
+               id={Number(id)}
+               workspaceName={
+                  main?.find((w) => w.id === Number(id))?.name || ''
+               }
+            />
          </CustomModal>
 
          <Divider open={open} />

@@ -1,5 +1,5 @@
 import { Box, styled } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { AppButton } from '../AppButton'
 import { CustomModal } from '../modal/Modal'
 import { useDispatch, useSelector } from 'react-redux'
@@ -8,31 +8,44 @@ import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 function SidebarSettingModal({ id, workspaceName, onClose }) {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.auth)
+   const { main } = useSelector((state) => state.main)
+
+   const [inputValue, setInputValue] = useState(workspaceName || '')
 
    const [openDeleteWorkspace, setOpenDeleteWorkspace] = useState(false)
+
+   useEffect(() => {
+      setInputValue(workspaceName || '')
+   }, [workspaceName])
 
    const toggleDeleteModal = () => {
       setOpenDeleteWorkspace((prev) => !prev)
    }
 
    const handleDelete = () => {
-      if (id && token) {
-         dispatch(MAIN_THUNK.deleteWorkspace({ id, token }))
+      const targetWorkspace = main?.find((w) => w.name === inputValue)
+      const idToDelete = targetWorkspace ? targetWorkspace.id : id
+
+      if (idToDelete && token) {
+         dispatch(MAIN_THUNK.deleteWorkspace({ id: idToDelete, token }))
             .unwrap()
             .then(() => {
-               toggleDeleteModal()
+               setOpenDeleteWorkspace(false)
                if (onClose) onClose()
             })
             .catch((err) => console.error(err))
+      } else {
+         console.error('Workspace с таким именем не найден')
       }
    }
    return (
       <BoxSidebarSetting>
          <Title>Setting</Title>
-         <StyledInput defaultValue={workspaceName} />
-         <DeleteText onClick={toggleDeleteModal}>
-            Delete this workspace?
-         </DeleteText>
+         <StyledInput
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Enter workspace name"
+         />
 
          <CustomModal
             isVisible={openDeleteWorkspace}
@@ -41,7 +54,7 @@ function SidebarSettingModal({ id, workspaceName, onClose }) {
             <BoxDeleteWorkspace>
                <Title>Delete workspace</Title>
                <DeleteWorkspaceText>
-                  Are you sure to delete this workspace?
+                  Are you sure to delete this workspace "{inputValue}"?
                </DeleteWorkspaceText>
 
                <ButtonContainer>
@@ -59,7 +72,9 @@ function SidebarSettingModal({ id, workspaceName, onClose }) {
             <AppButtonSettingCancel onClick={onClose}>
                Cancel
             </AppButtonSettingCancel>
-            <AppButton>Save</AppButton>
+            <AppButtonDelete onClick={toggleDeleteModal}>
+               Delete
+            </AppButtonDelete>
          </ButtonContainer>
       </BoxSidebarSetting>
    )
@@ -108,18 +123,6 @@ const StyledInput = styled('input')({
    outline: 'none',
    '&:focus': {
       borderColor: 'rgba(0, 121, 191, 1)',
-   },
-})
-
-const DeleteText = styled('div')({
-   fontFamily: 'Inter, sans-serif',
-   fontSize: '14px',
-   color: 'red',
-   margin: 0,
-   cursor: 'pointer',
-   alignSelf: 'flex-start',
-   '&:hover': {
-      textDecoration: 'underline',
    },
 })
 
