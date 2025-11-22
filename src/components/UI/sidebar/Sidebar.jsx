@@ -19,15 +19,17 @@ import SidebarSettingModal from './SidebarModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 import CreateModal from '../../../pages/mainWorkSpace/mainModal/CreateModal'
+import { BOARDS_THUNK } from '../../../store/slices/board/BoardsThunk'
+import { setBoardBackground } from '../../../store/slices/board/BoardsSlice'
 
 export default function Sidebar({ rowsLength = 0 }) {
-   const Title = ['Title', 'Title', 'Title', 'Title', 'Title']
-
    const [CrateSidebarModal, setCrateSidebarModal] = useState(false)
    const OpenSidebarModalCrate = () => setCrateSidebarModal((prev) => !prev)
 
    const [OpenSidebarModal, setOpenSidebarModal] = useState(false)
    const OpenSidebarModalSetting = () => setOpenSidebarModal((prev) => !prev)
+
+   const [activeSetting, setActiveSetting] = useState(false)
 
    const [open, setOpen] = useState(false)
    const [activeIndex, setActiveIndex] = useState(null)
@@ -40,14 +42,29 @@ export default function Sidebar({ rowsLength = 0 }) {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
-
    const { participans } = useSelector((state) => state.participans)
+   const { boards } = useSelector((state) => state.boards)
+
+   const handleBoardClick = (board) => {
+      setActiveIndex(board.id)
+      setActiveSetting(false)
+      const bg = board.backgroundUrl || board.backgroundColor
+      dispatch(setBoardBackground(bg))
+
+      localStorage.setItem('lastBoard', bg)
+   }
 
    useEffect(() => {
       if (token) {
          dispatch(MAIN_THUNK.getAllMain({ token }))
       }
    }, [dispatch, token])
+
+   useEffect(() => {
+      if (id) {
+         dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(id))
+      }
+   }, [dispatch, id])
 
    const location = useLocation()
    const currentPath = location.pathname
@@ -102,15 +119,21 @@ export default function Sidebar({ rowsLength = 0 }) {
 
          {open && showBoards && (
             <BoardsContainer>
-               {Title.map((label, idx) => (
-                  <TitleItem
-                     key={idx}
-                     isActive={activeIndex === idx}
-                     onClick={() => setActiveIndex(idx)}
-                  >
-                     {label}
+               {boards && boards.length > 0 ? (
+                  boards.map((board) => (
+                     <TitleItem
+                        key={board.id}
+                        isActive={activeIndex === board.id}
+                        onClick={() => handleBoardClick(board)}
+                     >
+                        {board.name}
+                     </TitleItem>
+                  ))
+               ) : (
+                  <TitleItem style={{ color: 'gray', cursor: 'default' }}>
+                     No boards
                   </TitleItem>
-               ))}
+               )}
             </BoardsContainer>
          )}
 
@@ -141,8 +164,11 @@ export default function Sidebar({ rowsLength = 0 }) {
             <SidebarItem
                icon={<ToolsIcon />}
                label="Setting"
-               isActive={activeIndex}
-               onClick={OpenSidebarModalSetting}
+               isActive={activeSetting}
+               onClick={() => {
+                  setActiveSetting(true)
+                  OpenSidebarModalSetting()
+               }}
                open={open}
             />
          </MainIcons>
@@ -162,9 +188,12 @@ export default function Sidebar({ rowsLength = 0 }) {
                   <GraphicIcon />
                </GraphicIconWrapper>
 
-               <HeaderLabelContainer open={open}>
+               <HeaderLabelContainer
+                  open={open}
+                  onClick={OpenSidebarModalCrate}
+               >
                   <LabelText>Workspaces</LabelText>
-                  <PlusIconWrapper onClick={OpenSidebarModalCrate}>
+                  <PlusIconWrapper>
                      <PlusIcon />
                   </PlusIconWrapper>
                </HeaderLabelContainer>
@@ -284,18 +313,29 @@ const BoardsContainer = styled('div')({
    display: 'flex',
    flexDirection: 'column',
    borderLeft: '1px solid rgba(224,224,224,1)',
-   minHeight: 200,
+   minHeight: 40,
 })
 
 const TitleItem = styled('div')(({ isActive }) => ({
-   maxWidth: isActive ? 172 : 54,
-   borderRadius: isActive ? '0 24px 24px 0' : undefined,
-   background: isActive ? 'rgba(230,234,237,1)' : undefined,
+   width: '100%',
+   maxWidth: 180,
    height: 36,
    display: 'flex',
    alignItems: 'center',
-   padding: '0 21px',
+   padding: '0 16px',
    cursor: 'pointer',
+   borderRadius: '0 18px 18px 0',
+   background: isActive ? 'rgba(230,234,237,1)' : undefined,
+   whiteSpace: 'nowrap',
+   overflow: 'hidden',
+   textOverflow: 'ellipsis',
+   fontSize: 14,
+   lineHeight: '16px',
+   color: '#2d2d2d',
+   transition: 'background 0.2s',
+   '&:hover': {
+      background: 'rgba(230,234,237,0.6)',
+   },
 }))
 
 const MainIcons = styled('div')(({ open }) => ({

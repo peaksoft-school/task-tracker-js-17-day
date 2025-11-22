@@ -50,7 +50,6 @@ const deleteWorkspace = createAsyncThunk(
       try {
          await axiosInstance.delete(`/api/workspaces/${id}`)
 
-         // После удаления обновляем список всех воркспейсов
          dispatch(getAllMain({ token }))
 
          return id

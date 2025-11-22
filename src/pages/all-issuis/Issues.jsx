@@ -10,6 +10,8 @@ import { IssuesTable } from './IssuesTable'
 import { StyledBackground, MainLayout, IssuesContainer } from './issues.styles'
 import { ISSUES_THUNK } from '../../store/slices/issuses/IssusesThunk'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
+import { setBoardBackground } from '../../store/slices/board/BoardsSlice'
+import { BOARDS_THUNK } from '../../store/slices/board/BoardsThunk'
 
 const mapApiColorToHex = (colorType) => {
    const colors = {
@@ -27,11 +29,36 @@ export default function Issues() {
 
    const { issues: rawIssues, isLoading } = useSelector((state) => state.issues)
 
+   const { currentBackground, boards } = useSelector((state) => state.boards)
+
    const [startDate, setStartDate] = useState(null)
    const [endDate, setEndDate] = useState(null)
    const [selectedLabels, setSelectedLabels] = useState([])
    const [selectedAssignees, setSelectedAssignees] = useState([])
    const [showWithChecklist, setShowWithChecklist] = useState(false)
+
+   useEffect(() => {
+      if (!currentBackground && id) {
+         dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(id))
+      }
+   }, [dispatch, id, currentBackground])
+
+   useEffect(() => {
+      if (!currentBackground) {
+         const savedBg = localStorage.getItem('lastBoardBg')
+         if (savedBg) {
+            dispatch(setBoardBackground(savedBg))
+         }
+      }
+   }, [dispatch, currentBackground])
+
+   useEffect(() => {
+      if (!currentBackground && boards.length > 0) {
+         console.log(
+            'Доски загружены, но конкретная доска не выбрана, фон остается дефолтным'
+         )
+      }
+   }, [boards, currentBackground, dispatch])
 
    useEffect(() => {
       const filterParams = {
@@ -100,7 +127,7 @@ export default function Issues() {
    }, [rawIssues])
 
    return (
-      <StyledBackground>
+      <StyledBackground background={currentBackground}>
          <Header />
          <MainLayout>
             <Sidebar rowsLength={count} />

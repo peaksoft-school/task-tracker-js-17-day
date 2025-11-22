@@ -72,7 +72,6 @@ const mainSlice = createSlice({
          })
          .addCase(MAIN_THUNK.deleteWorkspace.fulfilled, (state) => {
             state.isloading = false
-            // Список обновится через getAllMain, который вызовется в thunk
          })
          .addCase(MAIN_THUNK.deleteWorkspace.rejected, (state, action) => {
             state.isloading = false

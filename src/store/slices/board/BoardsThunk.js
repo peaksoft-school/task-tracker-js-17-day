@@ -15,6 +15,19 @@ const getBoardsByWorkspaceId = createAsyncThunk(
    }
 )
 
+const getBoardById = createAsyncThunk(
+   'boards/getBoardById',
+   async (boardId, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.get(`/api/boards/${boardId}`)
+         return data
+      } catch (error) {
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
 export const BOARDS_THUNK = {
    getBoardsByWorkspaceId,
+   getBoardById,
 }

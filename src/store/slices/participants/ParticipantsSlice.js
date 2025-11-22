@@ -48,7 +48,6 @@ const participants = createSlice({
             }
          )
 
-         // --- CHANGE ROLE ---
          .addCase(PARTISPANTS_THUNK.changeParticipantRole.pending, (state) => {
             state.isLoading = true
             state.error = null
@@ -67,7 +66,6 @@ const participants = createSlice({
             }
          )
 
-         // --- DELETE (НОВОЕ) ---
          .addCase(PARTISPANTS_THUNK.deleteParticipant.pending, (state) => {
             state.isLoading = true
             state.error = null

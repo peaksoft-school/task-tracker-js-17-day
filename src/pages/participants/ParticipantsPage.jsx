@@ -9,15 +9,29 @@ import { useDispatch, useSelector } from 'react-redux'
 import { PARTISPANTS_THUNK } from '../../store/slices/participants/ParticipantsThunk'
 import { Box, CircularProgress } from '@mui/material'
 import { useParams } from 'react-router-dom'
+import { BOARDS_THUNK } from '../../store/slices/board/BoardsThunk'
+import { setBoardBackground } from '../../store/slices/board/BoardsSlice'
 
 function ParticipantsPage() {
    const dispatch = useDispatch()
    const { id } = useParams()
    const { participans, isLoading } = useSelector((state) => state.participans)
+   const { currentBackground } = useSelector((state) => state.boards)
 
    const [filterRole, setFilterRole] = useState('ALL')
 
    const currentWorkspaceId = Number(id)
+
+   useEffect(() => {
+      if (!currentBackground) {
+         const savedBg = localStorage.getItem('lastBoardBg')
+         if (savedBg) {
+            dispatch(setBoardBackground(savedBg))
+         } else if (currentWorkspaceId) {
+            dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(currentWorkspaceId))
+         }
+      }
+   }, [dispatch, currentBackground, currentWorkspaceId])
 
    useEffect(() => {
       if (currentWorkspaceId) {
@@ -32,7 +46,7 @@ function ParticipantsPage() {
    }, [dispatch, filterRole, currentWorkspaceId])
 
    return (
-      <StyledBackground>
+      <StyledBackground background={currentBackground}>
          <Header />
          <div style={{ display: 'flex' }}>
             <Sidebar />

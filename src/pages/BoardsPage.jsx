@@ -2,15 +2,21 @@ import React, { useEffect } from 'react'
 import Sidebar from '../components/UI/sidebar/Sidebar'
 import { Header } from '../layouts/header/Header'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import styled from '@emotion/styled'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import { BOARDS_THUNK } from '../store/slices/board/BoardsThunk'
+import { setBoardBackground } from '../store/slices/board/BoardsSlice'
+import { StyledBackground } from './all-issuis/issues.styles'
 
 function BoardsPage() {
    const dispatch = useDispatch()
-   const { id } = useParams() // Получаем ID из URL (workspace/:id/boards)
-   const { boards, isLoading } = useSelector((state) => state.boards)
+   const navigate = useNavigate()
+   const { id } = useParams()
+
+   const { boards, isLoading, currentBackground } = useSelector(
+      (state) => state.boards
+   )
 
    useEffect(() => {
       if (id) {
@@ -18,8 +24,14 @@ function BoardsPage() {
       }
    }, [dispatch, id])
 
+   const handleBoardClick = (board) => {
+      const bg = board.backgroundUrl || board.backgroundColor
+      dispatch(setBoardBackground(bg))
+      localStorage.setItem('lastBoardBg', bg)
+   }
+
    return (
-      <Box>
+      <StyledBackground background={currentBackground}>
          <Header />
          <div style={{ display: 'flex' }}>
             <Sidebar />
@@ -33,17 +45,16 @@ function BoardsPage() {
                   </LoaderContainer>
                ) : (
                   <BoardsGrid>
-                     {/* Отрисовка полученных досок */}
                      {boards?.map((board) => (
                         <BoardCard
                            key={board.id}
-                           bg={board.backgroundUrl} // Используем URL из ответа
+                           bg={board.backgroundUrl}
+                           onClick={() => handleBoardClick(board)}
                         >
                            <BoardName>{board.name}</BoardName>
                         </BoardCard>
                      ))}
 
-                     {/* Кнопка создания новой доски (заглушка для UI) */}
                      <CreateBoardCard>
                         <span>Create new board</span>
                      </CreateBoardCard>
@@ -51,18 +62,15 @@ function BoardsPage() {
                )}
             </PageContainer>
          </div>
-      </Box>
+      </StyledBackground>
    )
 }
-
 export default BoardsPage
-
-// --- Styled Components ---
 
 const PageContainer = styled('div')({
    padding: '20px 40px',
    width: '100%',
-   marginTop: '60px', // Отступ от хедера
+   marginTop: '60px',
 })
 
 const Title = styled(Typography)({
@@ -101,7 +109,7 @@ const BoardName = styled('span')({
    color: '#fff',
    fontWeight: 'bold',
    fontSize: '16px',
-   textShadow: '0px 1px 2px rgba(0,0,0,0.8)', // Тень, чтобы текст читался на картинке
+   textShadow: '0px 1px 2px rgba(0,0,0,0.8)',
    overflow: 'hidden',
    display: '-webkit-box',
    WebkitLineClamp: 2,

@@ -67,11 +67,21 @@ export const commonButtonStyle = {
    padding: '7px 14px 7px 16px',
 }
 
-export const StyledBackground = styled('div')({
-   minHeight: '100vh',
-   backgroundImage: 'url(/src/assets/backgroundImg/backImg/bgBluu.jpg)',
-   backgroundSize: 'cover',
+export const StyledBackground = styled('div')(({ background }) => {
+   const isUrl = background && (background.startsWith('http') || background.startsWith('url'));
+   
+   return {
+      minHeight: '100vh',
+      background: background 
+         ? (isUrl ? `url(${background})` : background) 
+         : '#ffffff', 
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      transition: 'background 0.3s ease' 
+   }
 })
+
 export const MainLayout = styled(Box)({ display: 'flex' })
 export const IssuesContainer = styled(TableContainer)({
    width: '90%',

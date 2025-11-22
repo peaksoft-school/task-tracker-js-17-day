@@ -7,7 +7,7 @@ import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 
 function SidebarSettingModal({ id, workspaceName, onClose }) {
    const dispatch = useDispatch()
-   const { token } = useSelector((state) => state.auth) 
+   const { token } = useSelector((state) => state.auth)
 
    const [openDeleteWorkspace, setOpenDeleteWorkspace] = useState(false)
 
@@ -20,8 +20,8 @@ function SidebarSettingModal({ id, workspaceName, onClose }) {
          dispatch(MAIN_THUNK.deleteWorkspace({ id, token }))
             .unwrap()
             .then(() => {
-               toggleDeleteModal() 
-               if (onClose) onClose() 
+               toggleDeleteModal()
+               if (onClose) onClose()
             })
             .catch((err) => console.error(err))
       }
@@ -45,59 +45,20 @@ function SidebarSettingModal({ id, workspaceName, onClose }) {
                </DeleteWorkspaceText>
 
                <ButtonContainer>
-                  <AppButton
-                     onClick={toggleDeleteModal}
-                     sx={{
-                        backgroundColor: 'rgba(245, 245, 245, 1)',
-                        color: 'rgba(141, 147, 153, 1)',
-                        fontSize: '14px',
-                        fontWeight: '400',
-                        borderRadius: '24px',
-                        padding: '8px 16px',
-                        '&:hover': {
-                           backgroundColor: 'rgba(230, 230, 230, 1)',
-                        },
-                     }}
-                  >
+                  <AppButtonCancel onClick={toggleDeleteModal}>
                      Cancel
-                  </AppButton>
+                  </AppButtonCancel>
 
-                  <AppButton
-                     onClick={handleDelete}
-                     sx={{
-                        backgroundColor: '#D91212',
-                        color: '#ffffff',
-                        fontSize: '14px',
-                        fontWeight: '400',
-                        borderRadius: '24px',
-                        padding: '8px 16px',
-                        '&:hover': {
-                           backgroundColor: '#cd2b2b',
-                        },
-                     }}
-                  >
+                  <AppButtonDelete onClick={handleDelete}>
                      Delete
-                  </AppButton>
+                  </AppButtonDelete>
                </ButtonContainer>
             </BoxDeleteWorkspace>
          </CustomModal>
          <ButtonContainer>
-            <AppButton
-               onClick={onClose}
-               sx={{
-                  backgroundColor: 'rgba(245, 245, 245, 1)',
-                  color: 'rgba(141, 147, 153, 1)',
-                  fontSize: '14px',
-                  fontWeight: '400',
-                  borderRadius: '24px',
-                  padding: '8px 16px',
-                  '&:hover': {
-                     backgroundColor: 'rgba(230, 230, 230, 1)',
-                  },
-               }}
-            >
+            <AppButtonSettingCancel onClick={onClose}>
                Cancel
-            </AppButton>
+            </AppButtonSettingCancel>
             <AppButton>Save</AppButton>
          </ButtonContainer>
       </BoxSidebarSetting>
@@ -167,4 +128,40 @@ const ButtonContainer = styled(Box)({
    justifyContent: 'flex-end',
    gap: '12px',
    marginTop: '24px',
+})
+
+const AppButtonCancel = styled(AppButton)({
+   backgroundColor: 'rgba(245, 245, 245, 1)',
+   color: 'rgba(141, 147, 153, 1)',
+   fontSize: '14px',
+   fontWeight: '400',
+   borderRadius: '24px',
+   padding: '8px 16px',
+   '&:hover': {
+      backgroundColor: 'rgba(230, 230, 230, 1)',
+   },
+})
+
+const AppButtonDelete = styled(AppButton)({
+   backgroundColor: '#D91212',
+   color: '#ffffff',
+   fontSize: '14px',
+   fontWeight: '400',
+   borderRadius: '24px',
+   padding: '8px 16px',
+   '&:hover': {
+      backgroundColor: '#cd2b2b',
+   },
+})
+
+const AppButtonSettingCancel = styled(AppButton)({
+   backgroundColor: 'rgba(245, 245, 245, 1)',
+   color: 'rgba(141, 147, 153, 1)',
+   fontSize: '14px',
+   fontWeight: '400',
+   borderRadius: '24px',
+   padding: '8px 16px',
+   '&:hover': {
+      backgroundColor: 'rgba(230, 230, 230, 1)',
+   },
 })
