@@ -89,7 +89,6 @@ export default function Sidebar({ rowsLength = 0 }) {
 
    return (
       <SidebarContainer open={open}>
-         {/* Передаем open в TopSection для стилизации */}
          <TopSection open={open}>
             <CircleIconButton open={open} onClick={toggleSidebar}>
                {open ? (
@@ -109,7 +108,6 @@ export default function Sidebar({ rowsLength = 0 }) {
             </CircleIconButton>
 
             <MenuButton onClick={toggleSidebar}>
-               {/* Логика смены иконки: если открыто - Left (или Close), иначе Right */}
                {open ? <MenuIconLeft /> : <MenuIconRight />}
             </MenuButton>
          </TopSection>

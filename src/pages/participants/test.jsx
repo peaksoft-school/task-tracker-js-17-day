@@ -206,24 +206,6 @@ function TableParticipantsPage() {
                         <StylesAvatar />
                         <Box>Unassigned</Box>
                      </StylesBoxUsers>
-                     {/* {  .map((assignee) => (
-                        <StylesBoxUsers>
-                           <input
-                              type="checkbox"
-                              onChange={() => handleAssigneeChange(assignee.id)}
-                              checked={selectedAssignees[0] === assignee.id}
-                           />
-                           <StylesAvatar src={assignee.avatarUrl} />
-                           <Box className="user-info">
-                              <span className="user-name">
-                                 {assignee.firstName} {assignee.lastName}
-                              </span>
-                              <span className="user-email">
-                                 {assignee.email}
-                              </span>
-                           </Box>
-                        </StylesBoxUsers>
-                     ))} */}
                   </StylesConteinerBoxProfilesUser>
                </Popover>
 
