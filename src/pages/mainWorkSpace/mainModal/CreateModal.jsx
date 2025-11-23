@@ -1,19 +1,20 @@
-import React, { useState } from 'react'
-import styled from '@emotion/styled'
-import { Box, Typography } from '@mui/material'
-import { AppButton } from '../../../components/UI/AppButton'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 import { useDispatch, useSelector } from 'react-redux'
+import { Box, Typography, styled } from '@mui/material'
+import { AppButton } from '../../../components/UI/AppButton'
+import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 
 function CreateModal({ onClose }) {
-   const dispatch = useDispatch()
-
-   const { token } = useSelector((state) => state.auth)
-
    const [emails, setEmails] = useState([])
    const [emailInput, setEmailInput] = useState('')
    const [emailError, setEmailError] = useState('')
+
+   const { token } = useSelector((state) => state.auth)
+
+   const link = window.location.origin + '/workspace'
+
+   const dispatch = useDispatch()
 
    const {
       register,
@@ -28,6 +29,7 @@ function CreateModal({ onClose }) {
    const handleKeyDown = (e) => {
       if (e.key === 'Enter') {
          e.preventDefault()
+
          const email = emailInput.trim()
 
          const emailRegex = /^\S+@\S+$/i
@@ -50,15 +52,15 @@ function CreateModal({ onClose }) {
       }
    }
 
-   const handleRemoveEmail = (indexToRemove) => {
+   const handleRemoveEmail = (indexToRemove) =>
       setEmails(emails.filter((_, index) => index !== indexToRemove))
-   }
 
    const onSubmit = async (data) => {
       const finalData = {
          name: data.name,
          emails: emails,
-         role: 'OWNER',
+         role: 'MEMBER',
+         link,
       }
 
       dispatch(
@@ -73,6 +75,7 @@ function CreateModal({ onClose }) {
          <InputContainer>
             <InputGroup>
                <Label htmlFor="workspace-name">Name of the workspace*</Label>
+
                <InputTextName
                   id="workspace-name"
                   type="text"
@@ -80,8 +83,8 @@ function CreateModal({ onClose }) {
                   {...register('name', { required: 'Имя обязательно' })}
                />
 
-               {errors.name && (
-                  <ErrorMessage>{errors.name.message}</ErrorMessage>
+               {errors?.name && (
+                  <ErrorMessage>{errors?.name?.message}</ErrorMessage>
                )}
             </InputGroup>
 
@@ -89,9 +92,10 @@ function CreateModal({ onClose }) {
                <Label htmlFor="member-email">Invite members</Label>
 
                <TagsInputContainer isError={!!emailError}>
-                  {emails.map((email, index) => (
+                  {emails?.map((email, index) => (
                      <Tag key={index}>
                         <TagLabel>{email}</TagLabel>
+
                         <TagClose onClick={() => handleRemoveEmail(index)}>
                            &times;
                         </TagClose>
@@ -101,7 +105,7 @@ function CreateModal({ onClose }) {
                   <StyledInput
                      id="member-email"
                      type="text"
-                     placeholder={emails.length > 0 ? '' : 'example@gmail.com'}
+                     placeholder={emails?.length > 0 ? '' : 'example@gmail.com'}
                      value={emailInput}
                      onChange={(e) => {
                         setEmailInput(e.target.value)
@@ -120,6 +124,7 @@ function CreateModal({ onClose }) {
             <CancelButton onClick={onClose} type="button">
                Cancel
             </CancelButton>
+
             <CreateButton type="submit">Create</CreateButton>
          </ContainerButton>
       </ContainerModalCreate>
