@@ -14,13 +14,32 @@ import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
 import { useState } from 'react'
 import { auth, provider } from '../../configs/firebase'
+import { useNavigate } from 'react-router-dom'
 
 export const SignUp = () => {
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
 
+   const { status, acceptToken } = useSelector((state) => state.main)
+
    const dispatch = useDispatch()
 
-   const onSubmit = (values) => dispatch(AUTH_THUNK.signUP({ values }))
+   const navigate = useNavigate()
+
+   const onSubmit = (values) => {
+      if (status === 'NOT_FOUND') {
+         const registerValues = {
+            name: values.name,
+            lastName: values.lastName,
+            password: values.password,
+         }
+
+         dispatch(
+            AUTH_THUNK.register({ registerValues, acceptToken, navigate })
+         )
+      } else {
+         dispatch(AUTH_THUNK.signUP({ values }))
+      }
+   }
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {

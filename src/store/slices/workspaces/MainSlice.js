@@ -5,6 +5,8 @@ const initialState = {
    isloading: false,
    main: [],
    error: null,
+   status: null,
+   acceptToken: null,
 }
 
 const mainSlice = createSlice({
@@ -76,6 +78,22 @@ const mainSlice = createSlice({
          .addCase(MAIN_THUNK.deleteWorkspace.rejected, (state, action) => {
             state.isloading = false
             state.error = action.payload
+         })
+         .addCase(MAIN_THUNK.invitationAccept.pending, (state) => {
+            state.isloading = true
+         })
+         .addCase(
+            MAIN_THUNK.invitationAccept.fulfilled,
+            (state, { payload }) => {
+               console.log(payload)
+               state.isloading = false
+               state.status = payload.status
+               state.acceptToken = payload.url
+            }
+         )
+         .addCase(MAIN_THUNK.invitationAccept.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.error
          })
    },
 })

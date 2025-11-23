@@ -7,7 +7,7 @@ import {
    LayoutIcon,
    LeftIcon,
    MenuIconRight,
-   MenuIconLeft, 
+   MenuIconLeft,
    PeopleIcon,
    PlusIcon,
    ToolsIcon,
@@ -48,7 +48,6 @@ export default function Sidebar({ rowsLength = 0 }) {
    const dispatch = useDispatch()
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
-   const { participans } = useSelector((state) => state.participans)
    const { boards } = useSelector((state) => state.boards)
 
    const handleBoardClick = (board) => {
@@ -83,8 +82,8 @@ export default function Sidebar({ rowsLength = 0 }) {
    const toggleAL = (id) => setDownAL((prev) => ({ ...prev, [id]: !prev[id] }))
    const toggleBoards = () => setShowBoards((prev) => !prev)
 
-   const pathBoards = `/workspace/${id}/boards`
-   const pathAllIssues = `/workspace/${id}/boards/all-issuis`
+   const pathBoards = `/workspace/${id}`
+   const pathAllIssues = `/workspace/${id}/all-issuis`
    const pathParticipants = `/workspace/${id}/participants`
 
    return (
@@ -169,7 +168,7 @@ export default function Sidebar({ rowsLength = 0 }) {
             <SidebarItem
                icon={<PeopleIcon />}
                label="Participants"
-               count={`(${participans?.length || 0})`}
+               count={0}
                isActive={currentPath === pathParticipants}
                onClick={() => {
                   navigate(`/workspace/${id}/participants`)
@@ -254,7 +253,6 @@ export default function Sidebar({ rowsLength = 0 }) {
    )
 }
 
-
 const SidebarContainer = styled('div')(({ open }) => ({
    width: open ? '250px' : 116,
    transition: 'width 0.5s',
@@ -279,11 +277,11 @@ const TopSection = styled('div')(({ open }) => ({
    display: 'flex',
    alignItems: 'center',
    justifyContent: open ? 'space-between' : 'center',
-   width: '100%', 
-   padding: open ? '0 20px' : '0', 
+   width: '100%',
+   padding: open ? '0 20px' : '0',
    boxSizing: 'border-box',
    marginBottom: 22,
-   gap: open ? 0 : 10, 
+   gap: open ? 0 : 10,
 }))
 
 const CircleIconButton = styled('div')(({ open }) => ({
@@ -312,7 +310,7 @@ const LMSSpan = styled('span')({
    whiteSpace: 'nowrap',
    overflow: 'hidden',
    textOverflow: 'ellipsis',
-   fontWeight: 600, 
+   fontWeight: 600,
 })
 
 const MenuButton = styled(IconButton)({

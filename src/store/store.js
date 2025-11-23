@@ -4,14 +4,12 @@ import { authSlice } from './slices/auth/authSlice'
 import { issuesSlice } from './slices/issuses/IssusesSlise'
 import storage from 'redux-persist/lib/storage'
 import { mainSlice } from './slices/workspaces/MainSlice'
-import { participants } from './slices/participants/ParticipantsSlice'
 import { boardsSlice } from './slices/board/BoardsSlice'
 
 const rootReducer = combineReducers({
    [authSlice.name]: authSlice.reducer,
    [issuesSlice.name]: issuesSlice.reducer,
    [mainSlice.name]: mainSlice.reducer,
-   [participants.name]: participants.reducer,
    [boardsSlice.name]: boardsSlice.reducer,
 })
 

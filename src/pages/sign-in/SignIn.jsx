@@ -16,29 +16,35 @@ import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router-dom'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, provider } from '../../configs/firebase'
+
 export const SignIn = () => {
+   const [showPassword, setShowPassword] = useState(false)
+
    const dispatch = useDispatch()
    const navigate = useNavigate()
+
    const onSubmit = (values) =>
       dispatch(AUTH_THUNK.signIn({ values, navigate }))
+
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
          email: '',
          password: '',
       },
+
       validationSchema: VALIDATION_SIGN_IN,
       onSubmit,
    })
-   const [showPassword, setShowPassword] = useState(false)
-   const inputPassword = () => {
-      setShowPassword(!showPassword)
-   }
+
+   const inputPassword = () => setShowPassword(!showPassword)
+
    const hndlerGoogel = async () => {
       await signInWithPopup(auth, provider)
          .then((response) => {
             dispatch(
                AUTH_THUNK.authWithGoogle({
                   tokenId: response?.user?.accessToken,
+                  navigate,
                })
             )
          })
@@ -46,6 +52,7 @@ export const SignIn = () => {
             return error
          })
    }
+
    return (
       <StylesBox onSubmit={handleSubmit}>
          <StylesBoxRight>
