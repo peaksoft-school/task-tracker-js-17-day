@@ -7,7 +7,7 @@ import PrivateRoute from './PrivateRoute'
 import Issues from '../pages/all-issuis/Issues'
 import Main from '../pages/mainWorkSpace/Main'
 import BoardsPage from '../pages/BoardsPage'
-import ParticipantsPage from '../pages/participants/ParticipantsPage'
+import ParticipantsPage from '../pages/ParticipantsPage'
 
 export const routes = createBrowserRouter([
    {
