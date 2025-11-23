@@ -36,8 +36,9 @@ export const routes = createBrowserRouter([
          />
       ),
    },
+
    {
-      path: '/workspace/:id/boards',
+      path: '/workspace/:id',
       element: (
          <PrivateRoute
             Component={<BoardsPage />}
@@ -46,6 +47,18 @@ export const routes = createBrowserRouter([
          />
       ),
    },
+
+   {
+      path: '/workspace',
+      element: (
+         <PrivateRoute
+            Component={<BoardsPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+
    {
       path: '/workspace/:id/boards/all-issuis',
       element: (

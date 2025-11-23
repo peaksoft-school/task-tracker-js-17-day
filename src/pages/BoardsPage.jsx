@@ -1,22 +1,35 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import Sidebar from '../components/UI/sidebar/Sidebar'
 import { Header } from '../layouts/header/Header'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate } from 'react-router-dom'
-import styled from '@emotion/styled'
-import { Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography, styled } from '@mui/material'
 import { BOARDS_THUNK } from '../store/slices/board/BoardsThunk'
 import { setBoardBackground } from '../store/slices/board/BoardsSlice'
 import { StyledBackground } from './all-issuis/issues.styles'
+import { MAIN_THUNK } from '../store/slices/workspaces/mainThunk'
 
 function BoardsPage() {
    const dispatch = useDispatch()
    const navigate = useNavigate()
+
    const { id } = useParams()
 
    const { boards, isLoading, currentBackground } = useSelector(
       (state) => state.boards
    )
+
+   const search = window.location.search
+
+   const { token } = useSelector((state) => state.auth)
+
+   useEffect(() => {
+      if (search.includes('token=')) {
+         const acceptToken = search.split('token=')[1]
+
+         dispatch(MAIN_THUNK.invitationAccept({ token, acceptToken, navigate }))
+      }
+   }, [search, dispatch, navigate])
 
    useEffect(() => {
       if (id) {
@@ -26,7 +39,9 @@ function BoardsPage() {
 
    const handleBoardClick = (board) => {
       const bg = board.backgroundUrl || board.backgroundColor
+
       dispatch(setBoardBackground(bg))
+
       localStorage.setItem('lastBoardBg', bg)
    }
 

@@ -82,8 +82,8 @@ export default function Sidebar({ rowsLength = 0 }) {
    const toggleAL = (id) => setDownAL((prev) => ({ ...prev, [id]: !prev[id] }))
    const toggleBoards = () => setShowBoards((prev) => !prev)
 
-   const pathBoards = `/workspace/${id}/boards`
-   const pathAllIssues = `/workspace/${id}/boards/all-issuis`
+   const pathBoards = `/workspace/${id}`
+   const pathAllIssues = `/workspace/${id}/all-issuis`
    const pathParticipants = `/workspace/${id}/participants`
 
    return (
