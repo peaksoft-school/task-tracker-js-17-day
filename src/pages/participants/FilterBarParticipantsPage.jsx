@@ -4,7 +4,7 @@ import { DownIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { useState } from 'react'
-import ModalCreateParticipants from './modalParticipans/ModalCrateParticipans'
+import ModalCreateParticipants from './modalParticipants/ModalCreateParticipants'
 
 function FilterBarParticipantsPage({
    totalCount,

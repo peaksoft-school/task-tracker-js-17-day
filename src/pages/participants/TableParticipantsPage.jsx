@@ -1,5 +1,4 @@
-import styled from '@emotion/styled'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
    Box,
    Table,
@@ -9,10 +8,11 @@ import {
    TableRow,
    Menu,
    MenuItem,
+   styled,
 } from '@mui/material'
 import { DeleteIcon, DownIcon, CheckIcon } from '../../assets/AllExportIcon'
 import { useDispatch } from 'react-redux'
-import { PARTISPANTS_THUNK } from '../../store/slices/participants/ParticipantsThunk'
+import { PARTISPANTS_THUNK } from '../../store/slices/participants/participansThunk'
 
 const RoleSelect = ({ currentRole, onChange }) => {
    const [anchorEl, setAnchorEl] = useState(null)
