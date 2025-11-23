@@ -25,7 +25,7 @@ function CreateModal({ onClose }) {
 
    const onSubmit = async (data) => {
       const finalData = {
-         ...data, 
+         ...data,
          role: 'MEMBER',
          link: `${link}/workspace`,
       }

@@ -4,7 +4,7 @@ import { DownIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { useState } from 'react'
-import ModalCrateParticipans from './ModalParticipans/ModalCrateParticipans'
+import ModalCreateParticipants from './modalParticipans/ModalCrateParticipans'
 
 function FilterBarParticipantsPage({
    totalCount,
@@ -71,7 +71,7 @@ function FilterBarParticipantsPage({
                   isVisible={createModalParticipans}
                   handleVisible={OpenCreateParticipans}
                >
-                  <ModalCrateParticipans
+                  <ModalCreateParticipants
                      onClose={OpenCreateParticipans}
                      workspaceId={workspaceId}
                   />

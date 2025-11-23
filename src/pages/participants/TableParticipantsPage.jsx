@@ -150,6 +150,7 @@ function TableParticipantsPage({ rows, workspaceId, currentFilterRole }) {
 }
 
 export default TableParticipantsPage
+
 const StyledMenu = styled(Menu)({
    '& .MuiPaper-root': {
       width: '165px',
