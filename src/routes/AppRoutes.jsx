@@ -7,7 +7,7 @@ import PrivateRoute from './PrivateRoute'
 import Issues from '../pages/all-issuis/Issues'
 import Main from '../pages/mainWorkSpace/Main'
 import BoardsPage from '../pages/BoardsPage'
-import ParticipantsPage from '../pages/ParticipantsPage'
+import ParticipantsPage from '../pages/participants/ParticipantsPage'
 
 export const routes = createBrowserRouter([
    {
@@ -60,7 +60,7 @@ export const routes = createBrowserRouter([
    },
 
    {
-      path: '/workspace/:id/boards/all-issuis',
+      path: '/workspace/:id/all-issuis',
       element: (
          <PrivateRoute
             Component={<Issues />}
