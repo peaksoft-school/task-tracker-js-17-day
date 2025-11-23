@@ -5,6 +5,8 @@ const initialState = {
    isloading: false,
    main: [],
    error: null,
+   status: null,
+   acceptToken: null,
 }
 
 const mainSlice = createSlice({
@@ -63,6 +65,22 @@ const mainSlice = createSlice({
             state.isloading = false
          })
          .addCase(MAIN_THUNK.getAllBoards.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.error
+         })
+         .addCase(MAIN_THUNK.invitationAccept.pending, (state) => {
+            state.isloading = true
+         })
+         .addCase(
+            MAIN_THUNK.invitationAccept.fulfilled,
+            (state, { payload }) => {
+               console.log(payload)
+               state.isloading = false
+               state.status = payload.status
+               state.acceptToken = payload.url
+            }
+         )
+         .addCase(MAIN_THUNK.invitationAccept.rejected, (state, action) => {
             state.isloading = false
             state.error = action.error
          })

@@ -43,7 +43,7 @@ function Main() {
       dispach(MAIN_THUNK.getAllBoards({ id }))
          .unwrap()
          .then(() => {
-            navigate(`/workspace/${id}/boards`)
+            navigate(`/workspace/${id}`)
          })
          .catch((error) => {
             console.error('Ошибка при переходе к доскам:', error)
@@ -96,9 +96,9 @@ function Main() {
                                     onClick={() => handleFavoriteToogle(row.id)}
                                  >
                                     {row.favorite ? (
-                                       <FavoriteIconstarBlue color="primary" />
-                                    ) : (
                                        <FavoriteIconstarSilver color="action" />
+                                    ) : (
+                                       <FavoriteIconstarBlue color="primary" />
                                     )}
                                  </FavoriteIconBox>
                               </TableCell>
