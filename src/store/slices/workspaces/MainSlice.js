@@ -68,6 +68,17 @@ const mainSlice = createSlice({
             state.isloading = false
             state.error = action.error
          })
+
+         .addCase(MAIN_THUNK.deleteWorkspace.pending, (state) => {
+            state.isloading = true
+         })
+         .addCase(MAIN_THUNK.deleteWorkspace.fulfilled, (state) => {
+            state.isloading = false
+         })
+         .addCase(MAIN_THUNK.deleteWorkspace.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.payload
+         })
          .addCase(MAIN_THUNK.invitationAccept.pending, (state) => {
             state.isloading = true
          })

@@ -1,141 +1,166 @@
-import React, { useState, useMemo } from 'react'
-import { Paper } from '@mui/material'
+import React, { useState, useMemo, useEffect } from 'react'
+import { Paper, Box, CircularProgress } from '@mui/material'
 import { Header } from '../../layouts/header/Header'
-import Sidebar from '../../components/UI/sidebar/Sidebar'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
-
-// 1. Импортируем наши новые компоненты
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
 import { IssuesFilterBar } from './IssuesFilterBar'
 import { IssuesTable } from './IssuesTable'
-// 2. Импортируем моковые данные (allRows - это rows из твоего старого файла)
-import { rows as allRows } from './issues.data'
-// 3. Импортируем стили
 import { StyledBackground, MainLayout, IssuesContainer } from './issues.styles'
+import { ISSUES_THUNK } from '../../store/slices/issuses/IssusesThunk'
+import Sidebar from '../../components/UI/sidebar/Sidebar'
+import { setBoardBackground } from '../../store/slices/board/BoardsSlice'
+import { BOARDS_THUNK } from '../../store/slices/board/BoardsThunk'
+
+const mapApiColorToHex = (colorType) => {
+   const colors = {
+      RED: '#EB5A46',
+      GREEN: '#61BD4F',
+      BLUE: '#0079BF',
+      ORANGE: '#EB8900',
+   }
+   return colors[colorType] || '#82ca9d'
+}
 
 export default function Issues() {
-   // 4. Вся логика фильтрации ЖИВЕТ ЗДЕСЬ, В РОДИТЕЛЕ
+   const dispatch = useDispatch()
+   const { id } = useParams()
+
+   const { issues: rawIssues, isLoading } = useSelector((state) => state.issues)
+
+   const { currentBackground, boards } = useSelector((state) => state.boards)
+
    const [startDate, setStartDate] = useState(null)
    const [endDate, setEndDate] = useState(null)
-   // Добавляем стейты для остальных фильтров
    const [selectedLabels, setSelectedLabels] = useState([])
    const [selectedAssignees, setSelectedAssignees] = useState([])
    const [showWithChecklist, setShowWithChecklist] = useState(false)
 
-   // 5. Расширенная логика фильтрации
-   const filteredRows = useMemo(() => {
-      return allRows.filter((row) => {
-         // --- Фильтр по дате ---
-         const rowDate = dayjs(row.created)
-         let isAfterStart = true
-         let isBeforeEnd = true
+   useEffect(() => {
+      if (!currentBackground && id) {
+         dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(id))
+      }
+   }, [dispatch, id, currentBackground])
 
-         if (startDate) {
-            isAfterStart =
-               rowDate.isAfter(startDate, 'day') ||
-               rowDate.isSame(startDate, 'day')
+   useEffect(() => {
+      if (!currentBackground) {
+         const savedBg = localStorage.getItem('lastBoardBg')
+         if (savedBg) {
+            dispatch(setBoardBackground(savedBg))
          }
-         if (endDate) {
-            isBeforeEnd =
-               rowDate.isBefore(endDate, 'day') ||
-               rowDate.isSame(endDate, 'day')
-         }
+      }
+   }, [dispatch, currentBackground])
 
-         // --- Фильтр по Ярлыкам (Labels) ---
-         // (Предполагаем, что 'NO_LABEL' - это строка, которую ты будешь
-         //  добавлять в `selectedLabels`, если нажат чекбокс "No labels")
-         const byLabel =
-            selectedLabels.length === 0
-               ? true // Если ничего не выбрано, показываем все
-               : (() => {
-                    // Проверяем, хочет ли пользователь "No labels" И у ряда нет labels
-                    if (
-                       selectedLabels.includes('NO_LABEL') &&
-                       row.labels.length === 0
-                    ) {
-                       return true
-                    }
-                    // Проверяем, есть ли у ряда хотя бы один из выбранных цветных ярлыков
-                    if (
-                       row.labels.some((label) =>
-                          selectedLabels.includes(label)
-                       )
-                    ) {
-                       return true
-                    }
-                    return false // Не совпало ни одно условие
-                 })()
-
-         // --- Фильтр по Исполнителям (Assignee) ---
-         // (Предполагаем, что 'UNASSIGNED' - строка для "Unassigned")
-         // ВНИМАНИЕ: Твои моковые данные для `row.assignee` - это ['/avatars/1.png', ...].
-         // Эта логика НЕ СРАБОТАЕТ, т.к. фильтр выбирает по email или ID.
-         // Я ВРЕМЕННО использую `row.creator` для примера.
-         // Когда `row.assignee` будет содержать email'ы или ID, ты должен будешь
-         // изменить `row.creator` на `row.assignee.some(a => ...)`
-         const byAssignee =
-            selectedAssignees.length === 0
-               ? true // Если никто не выбран, показываем всех
-               : (() => {
-                    if (
-                       selectedAssignees.includes('UNASSIGNED') &&
-                       row.assignee.length === 0 // Используем `assignee` для проверки на "Unassigned"
-                    ) {
-                       return true
-                    }
-                    // TODO: Замени `row.creator` на правильную логику
-                    // когда `row.assignee` будет содержать ID или email
-                    if (selectedAssignees.includes(row.creator)) {
-                       return true
-                    }
-                    return false
-                 })()
-
-         // --- Фильтр по Чек-листу (Checklist) ---
-         // (Если `showWithChecklist` = true, показываем только ряды,
-         // где `row.checklist` не пустой)
-         const byChecklist = !showWithChecklist
-            ? true
-            : row.checklist && row.checklist.length > 0
-
-         // --- Возвращаем результат ---
-         return (
-            isAfterStart && isBeforeEnd && byLabel && byAssignee && byChecklist
+   useEffect(() => {
+      if (!currentBackground && boards.length > 0) {
+         console.log(
+            'Доски загружены, но конкретная доска не выбрана, фон остается дефолтным'
          )
-      })
+      }
+   }, [boards, currentBackground, dispatch])
+
+   useEffect(() => {
+      const filterParams = {
+         id,
+         startDate: startDate?.format('YYYY.MM.DD').replaceAll('.', '-'),
+         endDate: endDate?.format('YYYY.MM.DD').replaceAll('.', '-'),
+         labelId: selectedLabels,
+         assigneeId: selectedAssignees[0],
+         hasChecklist: showWithChecklist,
+      }
+      console.log('ID для thunk :', id)
+
+      dispatch(ISSUES_THUNK.getAllIssues(filterParams))
    }, [
+      dispatch,
+      id,
       startDate,
       endDate,
       selectedLabels,
       selectedAssignees,
       showWithChecklist,
-      allRows,
-   ]) // 5.1 Обновляем зависимости useMemo
+   ])
+
+   console.log(startDate?.format('YYYY.MM.DD').replaceAll('.', '-'))
+
+   const transformedRows = useMemo(() => {
+      let filteredIssues = rawIssues || []
+
+      if (showWithChecklist) {
+         filteredIssues = filteredIssues.filter((issue) => {
+            return (
+               issue.checklistProgress !== '1/1' &&
+               issue.checklistProgress !== '0/0'
+            )
+         })
+      }
+
+      return filteredIssues.map((row) => ({
+         created: dayjs(row.createdDate).format('YYYY.MM.DD'),
+         period: row.period,
+         creator: row.creatorEmail,
+         column: row.columnTitle,
+         assignee: row.assignees?.map((a) => a.avatarUrl) || [],
+         labels: row.labels?.map((l) => mapApiColorToHex(l.colorType)) || [],
+         checklist: row.checklistProgress,
+         description: row.description,
+      }))
+   }, [rawIssues, showWithChecklist])
+
+   const count = transformedRows.length
+
+   const allAssignees = useMemo(() => {
+      const assigneeMap = new Map()
+
+      const safeIssues = rawIssues || []
+
+      safeIssues.forEach((issue) => {
+         issue.assignees?.forEach((assignee) => {
+            if (!assigneeMap.has(assignee.id)) {
+               assigneeMap.set(assignee.id, assignee)
+            }
+         })
+      })
+
+      return Array.from(assigneeMap.values())
+   }, [rawIssues])
 
    return (
-      <StyledBackground>
+      <StyledBackground background={currentBackground}>
          <Header />
          <MainLayout>
-            <Sidebar />
+            <Sidebar rowsLength={count} />
             <IssuesContainer component={Paper}>
-               {/* 6. Передаем все сеттеры и значения в FilterBar */}
                <IssuesFilterBar
-                  rowsLength={filteredRows.length}
+                  rowsLength={count}
                   startDate={startDate}
                   setStartDate={setStartDate}
                   endDate={endDate}
                   setEndDate={setEndDate}
-                  // Передаем новые пропсы
                   selectedLabels={selectedLabels}
                   setSelectedLabels={setSelectedLabels}
                   selectedAssignees={selectedAssignees}
                   setSelectedAssignees={setSelectedAssignees}
+                  allAssignees={allAssignees}
                   showWithChecklist={showWithChecklist}
                   setShowWithChecklist={setShowWithChecklist}
                />
 
-               {/* 7. Передаем отфильтрованные данные в Таблицу */}
-               <IssuesTable rows={filteredRows} />
+               {isLoading ? (
+                  <Box
+                     sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        height: '400px',
+                     }}
+                  >
+                     <CircularProgress />
+                  </Box>
+               ) : (
+                  <IssuesTable rows={transformedRows} />
+               )}
             </IssuesContainer>
          </MainLayout>
       </StyledBackground>

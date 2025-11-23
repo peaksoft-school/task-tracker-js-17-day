@@ -11,10 +11,6 @@ import {
 } from '@mui/material'
 import { Input } from '../../components/UI/Input'
 
-// ============================
-// 🔹 Styled Components
-// ============================
-
 export const StyledChekbox = {
    '& input': {
       appearance: 'none',
@@ -71,20 +67,29 @@ export const commonButtonStyle = {
    padding: '7px 14px 7px 16px',
 }
 
-// Layout
-export const StyledBackground = styled('div')({
-   backgroundColor: '#537081',
-   minHeight: '100vh',
-})
-export const MainLayout = styled(Box)({ display: 'flex' })
-export const IssuesContainer = styled(TableContainer)({
-   width: '91.9%',
-   margin: '12px 24px 12px 20px',
-   borderRadius: '8px',
-   background: 'rgba(248, 248, 248, 0.9)',
+export const StyledBackground = styled('div')(({ background }) => {
+   const isUrl = background && (background.startsWith('http') || background.startsWith('url'));
+   
+   return {
+      minHeight: '100vh',
+      background: background 
+         ? (isUrl ? `url(${background})` : background) 
+         : '#ffffff', 
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      transition: 'background 0.3s ease' 
+   }
 })
 
-// Filter
+export const MainLayout = styled(Box)({ display: 'flex' })
+export const IssuesContainer = styled(TableContainer)({
+   width: '90%',
+   margin: '12px 24px 12px 20px',
+   borderRadius: '8px',
+   background: 'rgba(255, 255, 255, 0.6)',
+})
+
 export const FilterSection = styled(Box)({ margin: '22px 0 0 16px' })
 export const FilterHeader = styled(Box)({
    width: '80%',
@@ -126,7 +131,6 @@ export const TotalBox = styled(Box)({
    },
 })
 
-// Table
 export const TableIssues = styled(Table)({
    borderCollapse: 'collapse',
    width: '100%',
@@ -138,8 +142,6 @@ export const TableHeadGrayLine = styled(TableHead)({
    width: '100%',
    borderBottom: '1px solid rgba(215,215,215,1)',
 })
-
-// Header cells
 
 export const StyledTableCellCreated = styled(TableCell)({
    ...baseHeaderCell,
@@ -174,7 +176,6 @@ export const StyledTableCellDescription = styled(TableCell)({
    width: '32%',
 })
 
-// Body
 export const StyledTableBody = styled(TableBody)({
    display: 'block',
    maxHeight: '766px',
@@ -213,7 +214,6 @@ export const StyledTableCellBodyDescription = styled(TableCell)({
    width: '32%',
 })
 
-// Label
 export const Label = styled('span')(({ color }) => ({
    display: 'inline-block',
    width: '32px',
@@ -222,8 +222,6 @@ export const Label = styled('span')(({ color }) => ({
    backgroundColor: color,
    marginRight: '4px',
 }))
-
-// Buttons & Inputs
 
 export const StartDateButton = styled(Box)({
    ...commonButtonStyle,
@@ -235,9 +233,6 @@ export const EndDateButton = styled(Box)({
    ...commonButtonStyle,
    width: '110px',
 })
-// ============================
-// 🔹 MUI COMPONENT STYLES
-// ============================
 export const LabelsSelect = styled(Box)({
    ...commonButtonStyle,
    width: '154px',

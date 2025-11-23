@@ -3,10 +3,11 @@ import { ROLES } from './routes'
 import { SignIn } from '../pages/sign-in/SignIn'
 import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
-import IssuesPage from '../pages/all-issuis/Issues'
 import PrivateRoute from './PrivateRoute'
+import Issues from '../pages/all-issuis/Issues'
 import Main from '../pages/mainWorkSpace/Main'
 import BoardsPage from '../pages/BoardsPage'
+import ParticipantsPage from '../pages/ParticipantsPage'
 
 export const routes = createBrowserRouter([
    {
@@ -59,15 +60,26 @@ export const routes = createBrowserRouter([
    },
 
    {
-      path: '/all-issuis',
+      path: '/workspace/:id/boards/all-issuis',
       element: (
          <PrivateRoute
-            Component={<IssuesPage />}
+            Component={<Issues />}
             isAllowed={true}
             fallBacPath="/"
          />
       ),
    },
+   {
+      path: '/workspace/:id/participants',
+      element: (
+         <PrivateRoute
+            Component={<ParticipantsPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+
    {
       path: '*',
       element: <h1>Этой страницы не существует!!!</h1>,

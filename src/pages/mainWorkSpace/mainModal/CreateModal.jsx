@@ -1,8 +1,8 @@
+import { Box, Typography, styled } from '@mui/material'
+import { AppButton } from '../../../components/UI/AppButton'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Typography, styled } from '@mui/material'
-import { AppButton } from '../../../components/UI/AppButton'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 
 function CreateModal({ onClose }) {
@@ -81,6 +81,7 @@ function CreateModal({ onClose }) {
                   type="text"
                   placeholder="Name"
                   {...register('name', { required: 'Имя обязательно' })}
+                  maxLength={11}
                />
 
                {errors?.name && (

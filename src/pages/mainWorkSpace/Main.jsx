@@ -50,7 +50,6 @@ function Main() {
          })
    }
 
-   console.log(main)
    return (
       <ConteinerBoxMain>
          <Header status={true} />
@@ -76,26 +75,28 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {main && main.length > 0 ? (
-                        main.map((row, i) => (
-                           <TableRow key={row.id}>
+                     {main && main?.length > 0 ? (
+                        main?.map((row, i) => (
+                           <TableRow key={row?.id}>
                               <TableCell>{i + 1}</TableCell>
                               <TableCell>
-                                 <a onClick={() => openoardMain(row.id)}>
-                                    {row.name}
+                                 <a onClick={() => openoardMain(row?.id)}>
+                                    {row?.name}
                                  </a>
                               </TableCell>
                               <TableCell>
                                  <LeadBox>
-                                    <Avatar src={row.urlPhoto} />
-                                    <span>{row.lead}</span>
+                                    <Avatar src={row?.urlPhoto} />
+                                    <span>{row?.lead}</span>
                                  </LeadBox>
                               </TableCell>
                               <TableCell>
                                  <FavoriteIconBox
-                                    onClick={() => handleFavoriteToogle(row.id)}
+                                    onClick={() =>
+                                       handleFavoriteToogle(row?.id)
+                                    }
                                  >
-                                    {row.favorite ? (
+                                    {row?.favorite ? (
                                        <FavoriteIconstarSilver color="action" />
                                     ) : (
                                        <FavoriteIconstarBlue color="primary" />

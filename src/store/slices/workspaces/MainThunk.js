@@ -72,6 +72,31 @@ const favoritesWorkSpase = createAsyncThunk(
    }
 )
 
+const deleteWorkspace = createAsyncThunk(
+   'delete/deleteWorkspace',
+   async ({ id, token }, { dispatch, rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.delete(`/api/workspaces/${id}`)
+
+         showNotification({
+            message: response?.data?.message || 'Remote workplace',
+         })
+
+         dispatch(getAllMain({ token }))
+
+         return id
+      } catch (error) {
+         showNotification({
+            title: 'Error',
+            message: error?.response?.data?.message || 'something went wrong',
+            type: 'error',
+         })
+
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
 const invitationAccept = createAsyncThunk(
    'post/invitationAccept',
 
@@ -140,5 +165,6 @@ export const MAIN_THUNK = {
    favoritesWorkSpase,
    modalCreateWorkSpase,
    getAllBoards,
+   deleteWorkspace,
    invitationAccept,
 }
