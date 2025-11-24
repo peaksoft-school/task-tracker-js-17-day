@@ -1,9 +1,10 @@
 import { Box, styled } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { AppButton } from '../AppButton'
-import { CustomModal } from '../modal/Modal'
+// import { CustomModal } from '../modal/Modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
+import CustomModal from '../modal/Modal'
 
 function SidebarSettingModal({ id, workspaceName, onClose }) {
    const dispatch = useDispatch()

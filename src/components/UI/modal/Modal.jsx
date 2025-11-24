@@ -1,16 +1,24 @@
-import { Modal as MuiModal, Box, styled } from '@mui/material'
+import { Modal as MuiModal, Box, IconButton, styled } from '@mui/material'
 
-export const CustomModal = ({ children, isVisible, handleVisible }) => (
+const CustomModal = ({ open, onClose, children, title, ...props }) => (
    <StyledModal
-      open={isVisible}
-      onClose={handleVisible}
-      aria-labelledby="basic-modal-title"
-      aria-describedby="basic-modal-desc"
-      keepMounted
+      open={open}
+      onClose={onClose}
+      aria-labelledby="modal-title"
+      aria-describedby="modal-description"
+      aria-hidden={!open}
+      inert={!open ? '' : undefined}
+      disableEnforceFocus
+      {...props}
    >
-      <ContentBox>{children}</ContentBox>
+      <ContentBox>
+         {/* ваше содержимое */}
+         {children}
+      </ContentBox>
    </StyledModal>
 )
+
+export default CustomModal
 
 const StyledModal = styled(MuiModal)({
    display: 'flex',

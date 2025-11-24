@@ -15,13 +15,13 @@ import {
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import SidebarItem from './SidebarItem'
 import Section from './Section'
-import { CustomModal } from '../modal/Modal'
 import SidebarSettingModal from './SidebarModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 import CreateModal from '../../../pages/mainWorkSpace/mainModal/CreateModal'
 import { BOARDS_THUNK } from '../../../store/slices/board/BoardsThunk'
 import { setBoardBackground } from '../../../store/slices/board/BoardsSlice'
+import CustomModal from '../modal/Modal'
 
 export default function Sidebar({ rowsLength = 0 }) {
    const [CrateSidebarModal, setCrateSidebarModal] = useState(false)
@@ -162,7 +162,7 @@ export default function Sidebar({ rowsLength = 0 }) {
                count={`(${rowsLength})`}
                isActive={currentPath === pathAllIssues}
                onClick={() => {
-                  navigate(`/workspace/${id}/boards/all-issuis`)
+                  navigate(pathAllIssues)
                }}
                open={open}
             />

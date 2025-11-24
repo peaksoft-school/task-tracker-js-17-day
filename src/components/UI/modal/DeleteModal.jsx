@@ -8,6 +8,9 @@ const DeleteModal = ({ children, isVisible, handleVisible, onDelete }) => (
       onClose={handleVisible}
       aria-labelledby="delete-title"
       aria-describedby="delete-desc"
+      aria-hidden={!isVisible}
+      inert={!isVisible ? '' : undefined}
+      disableEnforceFocus
       keepMounted
    >
       <ContentBox>
