@@ -22,7 +22,6 @@ const getAllParticipant = createAsyncThunk(
       }
    }
 )
-
 const postParticipant = createAsyncThunk(
    'post/postParticipant',
    async ({ workspaceId, email, role }, { dispatch, rejectWithValue }) => {
@@ -34,16 +33,16 @@ const postParticipant = createAsyncThunk(
          }
 
          console.log(
-            '📤 Пробуем отправить на /api/workspaces/invite:',
+            `📤 Отправляем на: /api/workspaces/invite/${workspaceId}`,
             dataToSend
          )
 
          await axiosInstance.post(
-            `/api/workspaces/invite/${workspaceId}`,
+            `/api/workspaces/invite/${workspaceId}`, 
             dataToSend
          )
 
-         console.log('✅ Приглашение отправлено!')
+         console.log('✅ Приглашение успешно отправлено!')
 
          dispatch(
             getAllParticipant({
@@ -57,6 +56,7 @@ const postParticipant = createAsyncThunk(
             message: error?.response?.data?.message || 'something went wrong',
             type: 'error',
          })
+         console.error('❌ Ошибка invite:', error)
          return rejectWithValue(error.response?.data || error.message)
       }
    }
