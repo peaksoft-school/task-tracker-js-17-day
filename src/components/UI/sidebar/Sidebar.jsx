@@ -49,6 +49,7 @@ export default function Sidebar({ rowsLength = 0 }) {
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
    const { boards } = useSelector((state) => state.boards)
+   const { participans } = useSelector((state) => state.participans)
 
    const handleBoardClick = (board) => {
       setActiveIndex(board.id)
@@ -168,7 +169,7 @@ export default function Sidebar({ rowsLength = 0 }) {
             <SidebarItem
                icon={<PeopleIcon />}
                label="Participants"
-               count={0}
+               count={`(${participans?.length || 0})`}
                isActive={currentPath === pathParticipants}
                onClick={() => {
                   navigate(`/workspace/${id}/participants`)
