@@ -47,11 +47,14 @@ const mainSlice = createSlice({
             state.isloading = false
 
             const { favorite } = action.payload
+            const workspaceId = action.meta.arg.id
 
-            const index = state.main.findIndex()
+            const index = state.main.findIndex(
+               (item) => item.id === workspaceId
+            )
 
             if (index !== -1) {
-               state.main[index].fav = favorite
+               state.main[index].favorite = favorite
             }
          })
          .addCase(MAIN_THUNK.favoritesWorkSpase.rejected, (state, action) => {
@@ -97,14 +100,12 @@ const mainSlice = createSlice({
             state.error = action.error
          })
 
-      builder
-         // Обработчик для получения количества избранного
-         .addCase(
-            MAIN_THUNK.getFavoritesCount.fulfilled,
-            (state, { payload }) => {
-               state.favouritesCount = payload // Сохраняем полученное количество
-            }
-         )
+      builder.addCase(
+         MAIN_THUNK.getFavoritesCount.fulfilled,
+         (state, { payload }) => {
+            state.favouritesCount = payload
+         }
+      )
    },
 })
 

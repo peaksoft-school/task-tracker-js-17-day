@@ -42,7 +42,13 @@ function Main() {
 
    const handleFavoriteToogle = (id) => {
       dispach(MAIN_THUNK.favoritesWorkSpase({ id, token }))
-      fetchFavoritesCount()
+         .unwrap()
+         .then(() => {
+            fetchFavoritesCount()
+         })
+         .catch((error) => {
+            console.error('Ошибка при переключении избранного:', error)
+         })
    }
 
    const openoardMain = (id) => {
