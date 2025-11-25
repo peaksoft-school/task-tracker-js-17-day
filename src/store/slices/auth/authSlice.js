@@ -18,11 +18,12 @@ const authSlice = createSlice({
    extraReducers: (builder) => {
       builder
          .addCase('auth/signUp/fulfilled', (state, action) => {
-            state.role = action.payload.role
-            state.email = action.payload.email
-            state.token = action.payload.token
-            state.userId = action.payload.userId
-            state.isAuth = true
+            const { role, email, token, userId } = action.payload || {}
+            state.role = role || state.role
+            state.email = email
+            state.token = token
+            state.userId = userId
+            state.isAuth = !!token
             state.isLoading = false
          })
          .addCase(AUTH_THUNK.signUP.pending, (state) => {
