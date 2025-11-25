@@ -169,12 +169,9 @@ const getFavoritesCount = createAsyncThunk(
                Authorization: `Bearer ${token}`,
             },
          })
-         // Сервер возвращает: { favoriteWorkSpaces: [...], favoriteBoards: [...] }
          const workSpacesCount = response.data.favoriteWorkSpaces.length
-         const boardsCount = response.data.favoriteBoards.length
 
-         // Возвращаем общее количество
-         return workSpacesCount + boardsCount
+         return workSpacesCount
       } catch (error) {
          return rejectWithValue(error.response.data.message)
       }
