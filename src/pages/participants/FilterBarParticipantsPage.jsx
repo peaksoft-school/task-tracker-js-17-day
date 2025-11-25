@@ -2,9 +2,9 @@ import { Box, styled, Menu, MenuItem } from '@mui/material'
 import { FilterTitle, TotalBox } from '../all-issuis/issues.styles'
 import { DownIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
-import { CustomModal } from '../../components/UI/modal/Modal'
 import { useState } from 'react'
 import ModalCreateParticipants from './modalParticipants/ModalCreateParticipants'
+import CustomModal from '../../components/UI/modal/Modal'
 
 function FilterBarParticipantsPage({
    totalCount,
@@ -68,8 +68,8 @@ function FilterBarParticipantsPage({
                </CrateAppButton>
 
                <CustomModalCrate
-                  isVisible={createModalParticipans}
-                  handleVisible={OpenCreateParticipans}
+                  open={createModalParticipans}
+                  onClose={OpenCreateParticipans}
                >
                   <ModalCreateParticipants
                      onClose={OpenCreateParticipans}

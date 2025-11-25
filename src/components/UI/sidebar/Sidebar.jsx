@@ -15,13 +15,13 @@ import {
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import SidebarItem from './SidebarItem'
 import Section from './Section'
-import { CustomModal } from '../modal/Modal'
 import SidebarSettingModal from './SidebarModal'
 import { useDispatch, useSelector } from 'react-redux'
 import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
 import CreateModal from '../../../pages/mainWorkSpace/mainModal/CreateModal'
 import { BOARDS_THUNK } from '../../../store/slices/board/BoardsThunk'
 import { setBoardBackground } from '../../../store/slices/board/BoardsSlice'
+import CustomModal from '../modal/Modal'
 
 export default function Sidebar({ rowsLength = 0 }) {
    const [CrateSidebarModal, setCrateSidebarModal] = useState(false)
@@ -49,6 +49,7 @@ export default function Sidebar({ rowsLength = 0 }) {
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
    const { boards } = useSelector((state) => state.boards)
+   const { participans } = useSelector((state) => state.participans)
 
    const handleBoardClick = (board) => {
       setActiveIndex(board.id)
@@ -161,14 +162,14 @@ export default function Sidebar({ rowsLength = 0 }) {
                count={`(${rowsLength})`}
                isActive={currentPath === pathAllIssues}
                onClick={() => {
-                  navigate(`/workspace/${id}/boards/all-issuis`)
+                  navigate(pathAllIssues)
                }}
                open={open}
             />
             <SidebarItem
                icon={<PeopleIcon />}
                label="Participants"
-               count={0}
+               count={`(${participans?.length || 0})`}
                isActive={currentPath === pathParticipants}
                onClick={() => {
                   navigate(`/workspace/${id}/participants`)
@@ -188,10 +189,7 @@ export default function Sidebar({ rowsLength = 0 }) {
             />
          </MainIcons>
 
-         <CustomModal
-            isVisible={OpenSidebarModal}
-            handleVisible={handleCloseSettings}
-         >
+         <CustomModal open={OpenSidebarModal} onClose={handleCloseSettings}>
             <SidebarSettingModal
                onClose={handleCloseSettings}
                id={Number(id)}
@@ -220,8 +218,8 @@ export default function Sidebar({ rowsLength = 0 }) {
                </HeaderLabelContainer>
 
                <CustomModalCrate
-                  isVisible={CrateSidebarModal}
-                  handleVisible={OpenSidebarModalCrate}
+                  open={CrateSidebarModal}
+                  onClose={OpenSidebarModalCrate}
                >
                   <CreateModal onClose={OpenSidebarModalCrate} />
                </CustomModalCrate>

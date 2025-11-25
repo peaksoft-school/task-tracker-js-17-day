@@ -10,7 +10,8 @@ import {
 import SidebarItemDetalis from './SidebarItemDetalis'
 import { useNavigate, useParams } from 'react-router-dom'
 import SidebarSettingModal from './SidebarModal'
-import { CustomModal } from '../modal/Modal'
+import CustomModal from '../modal/Modal'
+// import { CustomModal } from '../modal/Modal'
 
 function Section({
    label,
@@ -67,8 +68,8 @@ function Section({
                />
 
                <CustomModal
-                  isVisible={OpenSidebarModal}
-                  handleVisible={OpenSidebarModalSetting}
+                  open={OpenSidebarModal}
+                  onClose={OpenSidebarModalSetting}
                >
                   <SidebarSettingModal
                      id={id}

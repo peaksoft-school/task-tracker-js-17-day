@@ -17,9 +17,9 @@ import {
 } from '../../assets/AllExportIcon'
 import { useEffect, useState } from 'react'
 import { MAIN_THUNK } from '../../store/slices/workspaces/mainThunk'
-import { CustomModal } from '../../components/UI/modal/Modal'
 import CreateModal from './mainModal/CreateModal'
 import { useNavigate } from 'react-router-dom'
+import CustomModal from '../../components/UI/modal/Modal'
 
 function Main() {
    const { token } = useSelector((state) => state.auth)
@@ -58,8 +58,8 @@ function Main() {
                <H2Workspaces>Workspaces</H2Workspaces>
                <MainAppButton onClick={OpenModalCrate}>Create</MainAppButton>
                <CustomModalCrate
-                  isVisible={CrateModal}
-                  handleVisible={OpenModalCrate}
+                  open={CrateModal}
+                  openClose={OpenModalCrate}
                >
                   <CreateModal onClose={OpenModalCrate} />
                </CustomModalCrate>
