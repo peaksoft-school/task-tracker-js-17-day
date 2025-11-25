@@ -7,9 +7,12 @@ export const innerpageThunk = createAsyncThunk(
    'innerpage/innerpageThunk',
    async ({ id }, { rejectWithValue }) => {
       try {
-         const { data } = await axiosInstance.get(`/boards/${id}/columns-with-cards`)
+         const { data } = await axiosInstance.get(`/api/boards/${id}/columns-with-cards`)
          return data
       } catch (error) {
+         console.log("SERVER ERROR:", error.response?.data)  // <<< ВОТ СЮДА
+         console.log("FULL ERROR:", error)                    // (тоже полезно)
+         
          return rejectWithValue(error.response?.data || error.message)
       }
    }

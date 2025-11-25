@@ -54,17 +54,19 @@ const password = createAsyncThunk('auth/password', async ({ values }) => {
 
 const authWithGoogle = createAsyncThunk(
    'auth/authWithGoogle',
-
    async ({ token, navigate }) => {
       try {
-         await axiosInstance.post('/api/auth/google', JSON.stringify(token), {
-            headers: { 'Content-Type': 'application/json' },
-         })
+         const { data } = await axiosInstance.post(
+            '/api/auth/google',
+            token
+            // { headers: { 'Content-Type': 'application/json' } }
+         )
+
          navigate('/main-page')
-         console.log(navigate, 'navigate');
-         
+
+         return data
       } catch (error) {
-         console.log(error.massage)
+         console.log(error.message)
       }
    }
 )

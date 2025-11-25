@@ -47,6 +47,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
    const [ikonDown, setIkonDown] = useState(null)
 
    const { id } = useParams()
+   console.log(id, 'id')
+
    const dispatch = useDispatch()
    const { board } = useSelector((state) => state.innerpage)
 
@@ -848,6 +850,7 @@ const StyledBox = styled(Box)(({ background }) => {
       color: isWhite ? 'black' : 'white',
       display: 'grid',
       gridTemplateColumns: '240px 1fr',
+
       width: '100%',
       height: '100%',
    }

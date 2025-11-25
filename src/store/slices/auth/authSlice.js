@@ -24,7 +24,6 @@ const authSlice = createSlice({
             state.userId = action.payload.userId
             state.isAuth = true
             state.isLoading = false
-            
          })
          .addCase(AUTH_THUNK.signUP.pending, (state) => {
             state.isLoading = true
@@ -43,6 +42,20 @@ const authSlice = createSlice({
             state.isLoading = true
          })
          .addCase(AUTH_THUNK.signIn.rejected, (state) => {
+            state.isLoading = false
+         })
+         .addCase(AUTH_THUNK.authWithGoogle.fulfilled, (state, action) => {
+            console.log(action, 'google')
+            state.role = action.payload.role
+            state.email = action.payload.email
+            state.token = action.payload.token
+            state.isAuth = true
+            state.isLoading = false
+         })
+         .addCase(AUTH_THUNK.authWithGoogle.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(AUTH_THUNK.authWithGoogle.rejected, (state) => {
             state.isLoading = false
          })
    },

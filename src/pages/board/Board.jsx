@@ -1,4 +1,11 @@
-import { Box, CircularProgress, styled, Typography } from '@mui/material'
+import {
+   Box,
+   CircularProgress,
+   styled,
+   TableCell,
+   TableRow,
+   Typography,
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Header } from '../../layouts/header/Header'
@@ -131,8 +138,25 @@ export default function Board() {
                   </AppButton>
                </StyledBoxHeaders>
 
-               {loading ? (
-                  <Typography>Loading...</Typography>
+               {boards.length === 0 ? (
+                  <StyledBoxDefoldimg>
+                     <TableRow>
+                        <TableCell colSpan={4} align="center">
+                           <Box>
+                              <p>
+                                 <img
+                                    src="https://cdn-icons-png.flaticon.com/512/7466/7466073.png"
+                                    alt="нету данных"
+                                 />
+                              </p>
+                              <h3 style={{ marginTop: '10px' }}>Нет данных</h3>
+                              <p style={{ color: '#666' }}>
+                                 У вас пока нет рабочих пространств.
+                              </p>
+                           </Box>
+                        </TableCell>
+                     </TableRow>
+                  </StyledBoxDefoldimg>
                ) : (
                   <StyledCardBoard>
                      {boards.map((item) => (
@@ -141,7 +165,7 @@ export default function Board() {
                            id={item.id}
                            name={item.name}
                            background={item.backgroundUrl}
-                           fevered={item.fevered}
+                           favorite={item.favorite}
                            description={item.description}
                         />
                      ))}
@@ -275,6 +299,13 @@ export default function Board() {
       </>
    )
 }
+const StyledBoxDefoldimg = styled(Box)({
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
+   flexDirection: 'column',
+   padding: '40px',
+})
 
 const StyledOverlay = styled(Box)({
    position: 'absolute',

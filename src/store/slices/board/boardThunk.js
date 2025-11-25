@@ -22,7 +22,7 @@ const boardPost = createAsyncThunk(
 
    async (
       { name, description, backgroundUrl, workspaceId },
-      { rejectWithValue,  dispatch  }
+      { rejectWithValue, dispatch }
    ) => {
       try {
          const body = { name, description, backgroundUrl }
@@ -49,7 +49,6 @@ const uploadImage = createAsyncThunk('board/uploadImage', async (file) => {
          '/api/s3file/upload',
          formData
       )
-      
 
       return data
    } catch (error) {
@@ -57,6 +56,23 @@ const uploadImage = createAsyncThunk('board/uploadImage', async (file) => {
    }
 })
 
+const favoritesBoards = createAsyncThunk(
+   'board/favoritesBoards',
+   async ({ boardId }, { rejectWithValue }) => {
+      try {
+         const { data } = await axiosInstance.post(
+            `/api/favorites/board/${boardId}`
+         )
+         return data
+      } catch (error) {
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
 
-
-export const BOARD_THUNK = { workSpaceById, boardPost, uploadImage, }
+export const BOARD_THUNK = {
+   workSpaceById,
+   boardPost,
+   uploadImage,
+   favoritesBoards,
+}

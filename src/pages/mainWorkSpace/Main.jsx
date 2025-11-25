@@ -24,6 +24,9 @@ import { useNavigate } from 'react-router-dom'
 function Main() {
    const { token } = useSelector((state) => state.auth)
    const { main } = useSelector((state) => state.main)
+   console.log(main, 'mainworkspaces');
+   
+   
 
    const dispach = useDispatch()
    const navigate = useNavigate()
@@ -41,13 +44,17 @@ function Main() {
 
    const openoardMain = (id) => {
       dispach(MAIN_THUNK.getAllBoards({ id }))
+      
          .unwrap()
          .then(() => {
             navigate(`/workspace/${id}/boards`)
          })
+         
+         
          .catch((error) => {
             console.error('Ошибка при переходе к доскам:', error)
          })
+         console.log(id,'woerkspaceId');
    }
 
    return (

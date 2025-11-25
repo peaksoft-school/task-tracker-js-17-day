@@ -7,100 +7,218 @@ import { COLUMN_THUNK } from '../../store/slices/column/columnThunk'
 import { ThreeDotsIcon } from '../../assets/AllExportIcon'
 import { Card } from '../card/Card'
 import { CustomModal } from '../../components/UI/modal/Modal'
-import { createCardThunk } from '../../store/slices/card/cardThunk'
+import { CARD_THUNK } from '../../store/slices/card/cardThunk'
+import { DndContext } from '@dnd-kit/core'
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import SortableCard from '../card/SortableCard'
+import { useParams } from 'react-router-dom'
 
 export default function BordCard({ IdBoard }) {
    const [modalOpen, setModalOpen] = useState(false)
    const [open, setOpen] = useState(false)
+   const [addCardOpen, setAddCardOpen] = useState({})
    const [name, setName] = useState('')
-   const dispatch = useDispatch()
+   const [titeleValue, setTiteleValue] = useState('')
+   const [currentColId, setCurrentColId] = useState(null)
+
    const columns = useSelector((state) => state.column.columns)
+   console.log(columns, 'columns')
+
+   const { cards } = useSelector((state) => state.card)
+
+   const { id } = useParams()
+
+   const dispatch = useDispatch()
+
    const firstColumnId = columns[0]?.id
-   // console.log('firstColumnId', firstColumnId)
 
    const handleOpen = () => setOpen(true)
    const handleClose = () => setOpen(false)
-   const hadlerOpenModal = async (colId) => {
-      setModalOpen((prev) => !prev)
-
-      // ждем, пока thunk выполнится
-      await dispatch(
-         createCardThunk({
-            columnId: colId,
-            title: 'New card',
-         })
-      )
-      console.log(colId, 'colId')
-   }
 
    useEffect(() => {
-      dispatch(COLUMN_THUNK.getColumnsThunk(IdBoard, dispatch))
-   }, [dispatch, IdBoard])
-   const handleCreate = async () => {
-      if (!name.trim()) return
-      await dispatch(COLUMN_THUNK.columnThunk({ id: IdBoard, name }))
-      setName('')
-      setOpen(false)
+      dispatch({ type: 'column/resetColumns' })
+
+      dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
+   }, [IdBoard, dispatch])
+
+   const handleOpenModal = (cardId) =>
+      dispatch(CARD_THUNK.getCardsThunk({ cardId, setModalOpen }))
+
+   const handleCloseModal = () => setModalOpen(false)
+
+   const openAddCard = (colId) =>
+      setAddCardOpen((prev) => ({ ...prev, [colId]: true }))
+
+   const closeAddCard = (colId) =>
+      setAddCardOpen((prev) => ({ ...prev, [colId]: false }))
+
+   const handleAddCard = (colId) => {
+      if (!titeleValue.trim()) return
+
+      dispatch(
+         CARD_THUNK.createCardThunk({ columnId: colId, title: titeleValue, id })
+      )
+
+      setTiteleValue('')
+      closeAddCard(colId)
    }
 
+   const handleAddColumn = async () => {
+      if (!name.trim()) return
+
+      const resultAction = await dispatch(
+         COLUMN_THUNK.columnThunk({ id: IdBoard, name })
+      )
+
+      if (COLUMN_THUNK.columnThunk.fulfilled.match(resultAction)) {
+         setName('') // очищаем инпут
+      } else {
+         console.error('Ошибка при создании колонки:', resultAction.payload)
+      }
+   }
+
+
+   
+
+
+
+
+
    return (
-      <StyledBoxColumnContainer>
-         {columns.map((col) => {
-            const titleObj = JSON.parse(col.title) // превращаем строку JSON в объект
-            return (
-               <StyledFormContainer key={col.id}>
-                  <StyledBoxNweContainerHeader>
-                     <StyledTypographyTitle>
-                        {titleObj.name}
-                     </StyledTypographyTitle>
-                     <ThreeDotsIcon />
-                  </StyledBoxNweContainerHeader>
-                  {/* <StyledBoxContainerZadacha onClick={hadlerOpenModal}>
-                     <StyledTypographyTitle></StyledTypographyTitle>
-                  </StyledBoxContainerZadacha> */}
-                  <button onClick={() => hadlerOpenModal(col.id)}>
-                     + Add a card
-                  </button>
+      <DndContext>
+         <StyledBoxColumnContainer>
+            {columns?.map((col) => {
+               const title = JSON.parse(col.title).name
+
+               const isCardOpen = addCardOpen[col.id] || false
+
+               console.log(isCardOpen, 'isCardOpen')
+
+               return (
+                  <StyledFormContainer key={col.id}>
+                     <StyledBoxNweContainerHeader>
+                        <StyledTypographyTitle>{title}</StyledTypographyTitle>
+                        <ThreeDotsIcon />
+                     </StyledBoxNweContainerHeader>
+
+                     {col?.cards?.map((card) => (
+                        <StyledBoxContainerZadacha
+                           key={card.id}
+                           onClick={() => handleOpenModal(card.id)}
+                        >
+                           <StyledTypographyTitlele>
+                              {card.title}
+                           </StyledTypographyTitlele>
+                        </StyledBoxContainerZadacha>
+                     ))}
+
+                     {!isCardOpen ? (
+                        <StyledButtonApp onClick={() => openAddCard(col.id)}>
+                           + Add a card
+                        </StyledButtonApp>
+                     ) : (
+                        <Box>
+                           <StyledBoxAddCard>
+                              <StyledInputAddCard
+                                 type="text"
+                                 value={titeleValue}
+                                 onChange={(e) =>
+                                    setTiteleValue(e.target.value)
+                                 }
+                                 placeholder="Enter card title"
+                              />
+                              <StyledButtonApp
+                                 onClick={() => handleAddCard(col.id)}
+                              >
+                                 + Add a card
+                              </StyledButtonApp>
+                           </StyledBoxAddCard>
+                        </Box>
+                     )}
+                  </StyledFormContainer>
+               )
+            })}
+
+            {modalOpen && (
+               <CustomModal
+                  isVisible={modalOpen}
+                  handleVisible={handleCloseModal}
+                  onClose={handleCloseModal}
+               >
+                  <StyledModalBox>
+                     <Card
+                        titele={cards.title}
+                        id={cards.id}
+                        handler={handleCloseModal}
+                     />
+                  </StyledModalBox>
+               </CustomModal>
+            )}
+
+            {!open ? (
+               <StyledBoxCardContainer onClick={handleOpen}>
+                  <StyledTypographyButton>
+                     + Add a column
+                  </StyledTypographyButton>
+               </StyledBoxCardContainer>
+            ) : (
+               <StyledFormContainer>
+                  <FormHeader>
+                     <StyledTypography>Name of the column</StyledTypography>
+                     <IconButton onClick={handleClose} size="small">
+                        <CloseIcon fontSize="small" />
+                     </IconButton>
+                  </FormHeader>
+
+                  <StyledTextField
+                     placeholder="Name"
+                     size="small"
+                     value={name}
+                     onChange={(e) => setName(e.target.value)}
+                  />
+
+                  <StyledButton variant="contained" onClick={handleAddColumn}>
+                     Create
+                  </StyledButton>
                </StyledFormContainer>
-            )
-         })}
-
-         {modalOpen && (
-            <CustomModal isVisible={modalOpen} handleVisible={hadlerOpenModal}>
-               <StyledModalBox>
-                  <Card handler={hadlerOpenModal} />
-               </StyledModalBox>
-            </CustomModal>
-         )}
-
-         {!open ? (
-            <StyledBoxCardContainer onClick={handleOpen}>
-               <StyledTypographyButton>+ Add a column</StyledTypographyButton>
-            </StyledBoxCardContainer>
-         ) : (
-            <StyledFormContainer>
-               <FormHeader>
-                  <StyledTypography>Name of the column</StyledTypography>
-                  <IconButton onClick={handleClose} size="small">
-                     <CloseIcon fontSize="small" />
-                  </IconButton>
-               </FormHeader>
-
-               <StyledTextField
-                  placeholder="Name"
-                  size="small"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-               />
-
-               <StyledButton variant="contained" onClick={handleCreate}>
-                  Create
-               </StyledButton>
-            </StyledFormContainer>
-         )}
-      </StyledBoxColumnContainer>
+            )}
+         </StyledBoxColumnContainer>
+      </DndContext>
    )
 }
+const StyledTypographyTitlele = styled(Typography)(() => ({
+   color: '#000',
+   fontSize: '16px',
+   fontWeight: 500,
+   display: 'flex',
+   justifyContent: 'start',
+}))
+
+const StyledInputAddCard = styled('input')({
+   border: 'none',
+   height: '25px',
+   border: 'none',
+   padding: '0 10px',
+   borderRadius: '8px',
+})
+
+const StyledBoxAddCard = styled(Box)(() => ({
+   display: 'flex',
+   justifyContent: 'space-between',
+   alignItems: 'center',
+   padding: '10px 8px',
+   cursor: 'pointer',
+   borderRadius: '8px',
+}))
+
+const StyledButtonApp = styled('button')(() => ({
+   border: 'none',
+   background: 'none',
+   cursor: 'pointer',
+   fontWeight: '500',
+   display: 'flex',
+   justifyContent: 'start',
+}))
 
 const StyledModalBox = styled(Box)(() => ({
    width: '1000px',
@@ -115,6 +233,8 @@ const StyledBoxContainerZadacha = styled(Box)(() => ({
    backgroundColor: '#fff',
    width: '264px',
    height: '100%',
+   cursor: 'pointer',
+   color: '#000000',
 }))
 
 const StyledTypographyTitle = styled(Typography)(() => ({
@@ -131,7 +251,7 @@ const StyledBoxNweContainerHeader = styled(Box)(() => ({
 
 const StyledBoxColumnContainer = styled(Box)(() => ({
    display: 'grid',
-   gridTemplateColumns: '1fr 1fr 1fr',
+   gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr',
    gap: '8px',
 }))
 

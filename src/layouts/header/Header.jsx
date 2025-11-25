@@ -14,6 +14,9 @@ export const Header = ({ favouritesCount, notificationCount }) => {
    const statusInput = status
    const navigate = useNavigate()
    const { boardCount, isLoading } = useSelector((state) => state.favoriteCount)
+   const data = useSelector((state) => state.profile)
+   console.log(data.profileFul.avatarUrl, 'dd')
+
    const dispatch = useDispatch()
 
    const [modalFavorites, setModalFavorites] = useState(false)
@@ -51,7 +54,6 @@ export const Header = ({ favouritesCount, notificationCount }) => {
    const hedlerUser = () => {
       setModalUser((prev) => !prev)
    }
-  
 
    return (
       <header>
@@ -65,7 +67,7 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                </StylesTypography>
 
                <StylesBoxOneHeaderDoucher>
-                  {favorites && favorites > 0 && (
+                  { favorites > 0 && (
                      <StyledTypography onClick={hendlerFavorites}>
                         Favourites({favorites})
                         <img src={StrelkaDown} alt="" />
@@ -127,14 +129,11 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                         </StyledBoxModal>
                      </StyledModal>
                   )}
-                  <StylesNonotificationBox>
-                     {notificationCount}
-                  </StylesNonotificationBox>
                </StylesBoxImg>
                <StylesImgUser
                   onClick={hedlerUser}
                   alt="Remy Sharp"
-                  src={UserImage}
+                  src={data.profileFul.avatarUrl}
                />
                {modalUser && (
                   <StyledModalProfile
@@ -189,9 +188,9 @@ const StyledBoxModal = styled(Box)(({}) => ({
 }))
 
 const StyledModal = styled(CustomModal)(({}) => ({
-   display:'flex',
-   justifyContent:'center',
-   alignItems:'center',
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'center',
 }))
 
 const StyledBoxNonotificationKrug = styled(Box)(({}) => ({
@@ -247,6 +246,7 @@ const StylesBoxOneHeaderDoucher = styled(Box)(({}) => ({
 const StylesBoxImg = styled(Box)(({}) => ({
    display: 'flex',
    alignItems: 'center',
+   marginRight: '8px',
 }))
 
 const StylesImg = styled('img')(({}) => ({

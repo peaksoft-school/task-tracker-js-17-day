@@ -8,16 +8,21 @@ import { HideIcon, ShowIcon } from '../../assets/AllExportIcon'
 import { useDispatch, useSelector } from 'react-redux'
 import { PROFILE_THUNK } from '../../store/profile/profileThunk'
 import UserImage from '../../assets/images/icon/iconpeople/ikonmen.jpg'
+import { useNavigate } from 'react-router-dom'
 
 export const Profile = () => {
    const data = useSelector((state) => state.profile)
+
    const dispatch = useDispatch()
 
+   const navigate=useNavigate();
+
    const [form, setForm] = useState({
-      name: '',
+      firstName: '',
       lastName: '',
       avatarUrl: '',
    })
+
 
    const [passwords, setPasswords] = useState({
       oldPassword: '',
@@ -63,9 +68,7 @@ export const Profile = () => {
    }
    const handleSaveProfile = async () => {
       try {
-
          await dispatch(PROFILE_THUNK.updateProfile(form)).unwrap()
-
 
          if (passwords.oldPassword && passwords.newPassword) {
             await dispatch(PROFILE_THUNK.updatePassword(passwords)).unwrap()
@@ -96,7 +99,7 @@ export const Profile = () => {
                               label="name"
                               name="firstName"
                               placeholder={data.profileFul.name}
-                              value={form.name}
+                              value={form.firstName}
                               onChange={handleChange}
                            />
                            <StyledInput
@@ -118,7 +121,7 @@ export const Profile = () => {
                               type={showPassword ? 'text' : 'password'}
                               value={passwords.oldPassword}
                               onChange={handlePasswordChange}
-                              placeholder="••••••••"
+                              placeholder="Старый пароль"
                               iconPosition="end"
                               icon={
                                  showPassword ? (
@@ -139,7 +142,7 @@ export const Profile = () => {
                               type={showNewPassword ? 'text' : 'password'}
                               value={passwords.newPassword}
                               onChange={handlePasswordChange}
-                              placeholder="••••••••"
+                              placeholder="Новый пароль"
                               iconPosition="end"
                               icon={
                                  showNewPassword ? (
@@ -174,11 +177,11 @@ export const Profile = () => {
 
                      <StyledBoxWorkspace>
                         {data.profileFul?.workspaces?.map((el) => (
-                           <StyledBoxAvatar key={el.id}>
+                           <StyledBoxAvatar key={el.id} onClick={() => navigate(`/workspace/${el.id}/boards`)}>
                               <Box>
                                  <StyledAvatarName
                                     alt={el.name}
-                                    src="/broken-image.jpg"
+                                    src={el.avatarUrl}
                                  />
                               </Box>
                               <Box>
@@ -219,6 +222,7 @@ const StyledBoxAvatar = styled(Box)({
    alignItems: 'center',
    gap: '20px',
    marginTop: '20px',
+   cursor: 'pointer',
 })
 
 const StyledTypograpthy = styled(Box)({

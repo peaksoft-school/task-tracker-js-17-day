@@ -18,7 +18,7 @@ const updateProfile = createAsyncThunk(
    'profile/updateProfile',
    async (updatedData, {  dispatch }) => {
       try {
-         const { data } = await axiosInstance.put(`/api/profile`, updatedData)
+         const { data } = await axiosInstance.put(`/api/profile/update-profile`, updatedData)
          dispatch(profileSlice()) 
          return data
       } catch (error) {

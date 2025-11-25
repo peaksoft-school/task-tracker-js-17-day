@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
    ArchiveIcon,
    AttachIcon,
@@ -13,43 +13,195 @@ import {
    VectorIcon,
    XIcon,
 } from '../../assets/AllExportIcon'
-import { Box, styled, Typography, TextField, Button } from '@mui/material'
+import {
+   Box,
+   styled,
+   Typography,
+   TextField,
+   Button,
+   Avatar,
+} from '@mui/material'
 import { AppButton } from '../../components/UI/AppButton'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import CustomDateRangeCalendar from '../../components/UI/DatePicker'
 import { Select } from '../../components/UI/Select'
 import { useDispatch, useSelector } from 'react-redux'
+import { CARD_THUNK } from '../../store/slices/card/cardThunk'
+import { LABEL_THUNK } from '../../store/slices/label/labelThunk'
+import { LABEL_OPTIONS } from '../../assets/colorsLabel/colorsLabel'
+import dayjs from 'dayjs'
 
-export const Card = ({ handler }) => {
+
+export const Card = ({ handler, id, titele }) => {
    const [openDescription, setOpenDescription] = useState(false)
    const [description, setDescription] = useState('')
    const [modalMembers, setModalMembers] = useState(false)
    const [modalEstimation, setModalEstimation] = useState(false)
    const [modalLabel, setModalLabel] = useState(false)
    const [modalChecklist, setModalChecklist] = useState(false)
+   const [selectValue, setSelectValue] = useState('')
+
+   const [checklistValue, setChecklistValue] = useState('')
+   const [titeleZadacha, setTiteleZadacha] = useState('')
+
+   const [labels, setLabels] = useState({
+      GREEN: '',
+      ORANGE: '',
+      BLUE: '',
+      RED: '',
+   })
+
+   const dispatch = useDispatch()
+   const createdCard = useSelector((state) => state.card.createdCard)
+
+   const { cards } = useSelector((state) => state.card)
+   console.log(cards, 'cards')
+
+   const label = useSelector((state) => state.label.labels)
+
+   const { main } = useSelector((state) => state.main)
+   const userId = main[0]?.userId
+
+   console.log(userId, 'userId')
 
    const hendleOpenMembers = () => setModalMembers(!modalMembers)
-   const hendleOpenEstimation = () => setModalEstimation(!modalEstimation)
-   const hendleOpenLabel = () => setModalLabel(!modalLabel)
+   // const hendleOpenEstimation = () => setModalEstimation(!modalEstimation)
+   const hendleOpenLabel = () => {
+      setModalLabel(!modalLabel)
+      dispatch(LABEL_THUNK.getLabel())
+   }
+   const handleInputChange = (colorType, value) => {
+      setLabelValue((prev) => ({ ...prev, [colorType]: value }))
+   }
    const hendleOpenChecklist = () => setModalChecklist(!modalChecklist)
+   const hendleEstimation = () => setModalEstimation(!modalEstimation)
+
+   const handleLabelChange = (colorType, event) => {
+      setLabels((prev) => ({
+         ...prev,
+         [colorType]: event.target.value,
+      }))
+   }
+
+   const hendlerChecklistChange = (e) => {
+      setChecklistValue(e.target.value)
+   }
+
+   const handlerLabel = (colorType) => {
+      const selected = LABEL_OPTIONS.find((l) => l.type === colorType)
+
+      dispatch(
+         CARD_THUNK.labelsThunk({
+            cardId: id,
+            labelId: selected.id,
+         })
+      )
+   }
+
+   const handleAddChecklist = () => {
+      if (!checklistValue) return
+
+      dispatch(
+         CARD_THUNK.checklistThunk({
+            cardId: id,
+            title: checklistValue,
+         })
+      )
+      setChecklistValue('')
+   }
+   const fileInputRef = useRef(null)
+
+   // 👉 2. функции
+   const handleOpenFile = () => {
+      fileInputRef.current.click()
+   }
+
+   const handleFileChange = (e) => {
+      const file = e.target.files[0]
+      console.log(file, 'file')
+
+      if (!file) return
+
+      dispatch(
+         CARD_THUNK.attachmentsThunk({
+            cardId: id,
+            file: file,
+         })
+      )
+   }
+
+   const [dates, setDates] = useState({ start: null, end: null })
+
+   const handleCreate = () => {
+      const { start, end, time } = dates
+
+      const dueDateWithTime = dayjs(end)
+         .hour(time.hour())
+         .minute(time.minute())
+         .second(0)
+
+      const estimatePayload = {
+         startDate: start.toISOString(),
+         dueDateWithTime: dueDateWithTime.toISOString(),
+         reminder: Number(selectValue),
+      }
+
+      dispatch(
+         CARD_THUNK.estimateThunk({ cardId: id, estimate: estimatePayload })
+      )
+   }
+
+   const handlerUsers = () => {
+      dispatch(CARD_THUNK.userThunk({ cardId: id, userId: userId }))
+   }
+
+   const {
+      idd,
+      title,
+      descriptionn,
+      creatorEmail,
+      assignees,
+      labelss,
+      checklists,
+      period,
+      createdDate,
+      columnTitle,
+      state,
+      checklistProgress,
+   } = cards
 
    return (
       <StyledWrapper>
          <StledBoxtitle>
-            <Typography>Какая-то задача, которую нужно выполнить</Typography>
+            <Box
+               display={'flex'}
+               alignItems={'center'}
+               justifyContent={'center'}
+               gap={'10px'}
+            >
+               <EditIcon />
+               <Typography>{title}</Typography>
+            </Box>
+
             <XIcon style={{ cursor: 'pointer' }} onClick={handler} />
          </StledBoxtitle>
          <StyledContiner>
             {/* DESCRIPTION */}
             <Box mt={2}>
+               <Box>
+                  {labelss?.map((item) =>(
+                     <StyledLeibelsColorBox key={item.id} tipe={item.colorType}>
+                        {item.title}
+                     </StyledLeibelsColorBox>
+                  ))}
+               </Box>
                <StyledBoxDowun
                   onClick={() => setOpenDescription(!openDescription)}
                >
                   <DownIcon />
                   <Typography>Description</Typography>
                </StyledBoxDowun>
-
                {openDescription && (
                   <StyledDescriptionBox>
                      <TextField
@@ -60,12 +212,12 @@ export const Card = ({ handler }) => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                      />
-                     <StyledActionsRow>
-                        <StyledButton>Cancel</StyledButton>
-                        <AppButton>Save</AppButton>
-                     </StyledActionsRow>
                   </StyledDescriptionBox>
-               )}
+               )}{' '}
+               <StyledActionsRow>
+                  <StyledButton>Cancel</StyledButton>
+                  <AppButton>Save</AppButton>
+               </StyledActionsRow>
             </Box>
             <Box>
                {/* ADD SECTION */}
@@ -83,12 +235,22 @@ export const Card = ({ handler }) => {
                   </StyledSectionBlock>
 
                   <StyledSectionBlock>
-                     <StyledSectionButton onClick={hendleOpenEstimation}>
+                     <StyledSectionButton onClick={hendleEstimation}>
                         <ClockIcon /> Estimation
                      </StyledSectionButton>
-                     <StyledSectionButton>
-                        <AttachIcon /> Attachment
-                     </StyledSectionButton>
+
+                     <>
+                        <StyledSectionButton onClick={handleOpenFile}>
+                           <AttachIcon /> Attachment
+                        </StyledSectionButton>
+
+                        <input
+                           type="file"
+                           ref={fileInputRef}
+                           style={{ display: 'none' }}
+                           onChange={handleFileChange}
+                        />
+                     </>
                   </StyledSectionBlock>
                </StyledAddSection>
 
@@ -129,8 +291,32 @@ export const Card = ({ handler }) => {
                   </StyledContinerModal>
 
                   <Input icon={<SearchIcon />} iconPosition="end" />
-                  <Typography> Board members</Typography>
-                  <Box></Box>
+                  <StyledTypographyMembers>
+                     {' '}
+                     Board members
+                  </StyledTypographyMembers>
+                  {assignees.map((item) => (
+                     <Box
+                        onClick={handlerUsers}
+                        display={'flex'}
+                        justifyContent={'center'}
+                        alignItems={'center'}
+                        gap={'10px'}
+                        key={item.id}
+                     >
+                        <Avatar src={item.avatarUrl}>
+                           {item.firstName[0]}
+                        </Avatar>
+                        <Box>
+                           <Typography>
+                              {item.firstName} {item.lastName}
+                           </Typography>
+                           <StyledTypographyEmail>
+                              {item.email}
+                           </StyledTypographyEmail>
+                        </Box>
+                     </Box>
+                  ))}
                </StyledBoxModal>
             </CustomModal>
          )}
@@ -138,28 +324,38 @@ export const Card = ({ handler }) => {
          {modalEstimation && (
             <CustomModal
                isVisible={modalEstimation}
-               handleVisible={hendleOpenEstimation}
+               handleVisible={hendleEstimation}
             >
                <StyledModalEstimation>
                   <StyledContinerModal>
                      <Box></Box>
                      <Typography>Estimation</Typography>
-                     <StyledXIcon onClick={hendleOpenEstimation} />
+                     <StyledXIcon onClick={hendleEstimation} />
                   </StyledContinerModal>
-                  <CustomDateRangeCalendar />
+
+                  <CustomDateRangeCalendar
+                     onChange={({ start, end, time }) =>
+                        setDates({ start, end, time })
+                     }
+                  />
+
                   <StyledSelectBox>
                      <Select
                         label="None"
                         options={[
-                           { label: '5 min. before', value: '5' },
-                           { label: '15 min. before', value: '15' },
-                           { label: '30 min. before', value: '30' },
-                           { label: '1 hour before', value: '60' },
+                           { label: '5 min. before', value: 5 },
+                           { label: '15 min. before', value: 15 },
+                           { label: '30 min. before', value: 30 },
+                           { label: '1 hour before', value: 60 },
                         ]}
+                        value={selectValue}
+                        onChange={(val) => setSelectValue(val)}
                      />
                   </StyledSelectBox>
 
-                  <StyledAppButtonn>Create a new template</StyledAppButtonn>
+                  <StyledAppButtonn onClick={handleCreate}>
+                     Create a new template
+                  </StyledAppButtonn>
                </StyledModalEstimation>
             </CustomModal>
          )}
@@ -172,36 +368,29 @@ export const Card = ({ handler }) => {
                      <StyledXIcon onClick={hendleOpenLabel} />
                   </StyledContinerModal>
                   <StyledInputBox>
-                     <StyledInputColorss
-                        color="#61bd4f"
-                        type="text"
-                        placeholder="Done"
-                     />
-                     <EditIcon />
+                     <StyledLebelsBox color="#61bd4f">Done</StyledLebelsBox>
+
+                     <StyledEditIcon onClick={() => handlerLabel('GREEN')} />
                   </StyledInputBox>
+
                   <StyledInputBox>
-                     <StyledInputColorss
-                        color="#eb8900"
-                        type="text"
-                        placeholder="In progress"
-                     />
-                     <EditIcon />
+                     <StyledLebelsBox color={'#eb8900'}>
+                        In progress
+                     </StyledLebelsBox>
+
+                     <StyledEditIcon onClick={() => handlerLabel('ORANGE')} />
                   </StyledInputBox>
+
                   <StyledInputBox>
-                     <StyledInputColorss
-                        color="#0079bf"
-                        type="text"
-                        placeholder="Done"
-                     />
-                     <EditIcon />
+                     <StyledLebelsBox color={'#0079bf'}>Done</StyledLebelsBox>
+
+                     <StyledEditIcon onClick={() => handlerLabel('BLUE')} />
                   </StyledInputBox>
+
                   <StyledInputBox>
-                     <StyledInputColorss
-                        color="#eb5a46"
-                        type="text"
-                        placeholder="Done"
-                     />
-                     <EditIcon />
+                     <StyledLebelsBox color={'#eb5a46'}>Done</StyledLebelsBox>
+
+                     <StyledEditIcon onClick={() => handlerLabel('RED')} />
                   </StyledInputBox>
                </Box>
             </CustomModal>
@@ -217,14 +406,64 @@ export const Card = ({ handler }) => {
                      <Typography>Label</Typography>
                      <StyledXIcon onClick={hendleOpenChecklist} />
                   </StyledContinerModal>
-                  <Input icon={<SearchIcon />} iconPosition="end" />
-                  <StyledAppButton>Add Checklist</StyledAppButton>
+                  <Input
+                     value={checklistValue}
+                     onChange={hendlerChecklistChange}
+                  />
+                  <StyledAppButton onClick={handleAddChecklist}>
+                     Add Checklist
+                  </StyledAppButton>
                </StyledBoxChecklist>
             </CustomModal>
          )}
       </StyledWrapper>
    )
 }
+const StyledLeibelsColorBox = styled(Box)((tipe) => ({
+   backgroundColor:
+      tipe === 'GREEN'
+         ? '#61bd4f'
+         : tipe === 'YELLOW'
+           ? '#eb8900'
+           : tipe === 'BLUE'
+             ? '#0079bf'
+             : tipe === 'RED'
+               ? '#eb5a46'
+               : '',
+   width: '180px',
+   height: '30px',
+}))
+
+const StyledTypographyMembers = styled(Typography)(() => ({
+   marginTop: '10px',
+   marginBottom: '10px',
+}))
+
+const StyledTypographyEmail = styled(Typography)(() => ({
+   fontSize: '14px',
+   color: '#8c8c8c',
+}))
+
+const StyledLebelsBox = styled(Box)((colors) => ({
+   backgroundColor: colors.color,
+   borderRadius: '8px',
+   color: '#ffffff',
+   width: '295px',
+   height: '32px',
+   padding: '6px 16px',
+}))
+
+const StyledEditIcon = styled(EditIcon)(() => ({
+   cursor: 'pointer',
+}))
+
+const StyledInputZadacha = styled('input')(() => ({
+   border: 'none',
+   width: '400px',
+   height: '32px',
+   color: '#000000',
+}))
+
 const StyledInputColorss = styled('input')((color) => ({
    backgroundColor: color.color,
    border: 'none',
@@ -233,6 +472,8 @@ const StyledInputColorss = styled('input')((color) => ({
    borderRadius: '8px',
    height: '32px',
    color: '#ffffff',
+   padding: '0 10px',
+   fontWeight: '500',
 }))
 
 const StyledAppButtonn = styled(AppButton)(() => ({
@@ -251,18 +492,21 @@ const StyledModalEstimation = styled(Box)(() => ({
 const StyledBoxChecklist = styled(Box)(() => ({
    display: 'flex',
    justifyContent: 'center',
-   alignItems: 'center',
    flexDirection: 'column',
+   width: '400px',
+   height: '150px',
 }))
 
 const StyledAppButton = styled(AppButton)(() => ({
    marginTop: '20px',
+   width: '100%',
 }))
 
 const StyledInputBox = styled(Box)(() => ({
    display: 'flex',
    justifyContent: 'space-between',
    alignItems: 'center',
+   padding: '10px',
    gap: '12px',
 }))
 
@@ -342,6 +586,7 @@ const StyledActionsRow = styled(Box)(() => ({
    display: 'flex',
    justifyContent: 'end',
    gap: '10px',
+   marginTop: '20px',
 }))
 
 const StyledAddSection = styled(Box)(() => ({

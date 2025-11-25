@@ -51,6 +51,18 @@ export const boardSlice = createSlice({
             state.loading = false
             state.bgUrl = action.payload
          })
+
+         .addCase(BOARD_THUNK.favoritesBoards.pending, (state) => {
+            state.loading = true
+         })
+         .addCase(BOARD_THUNK.favoritesBoards.fulfilled, (state, action) => {
+            state.loading = false
+            state.boards = action.payload
+         })
+         .addCase(BOARD_THUNK.favoritesBoards.rejected, (state, action) => {
+            state.loading = false
+            state.error = action.payload
+         })
    },
 })
 
