@@ -8,7 +8,7 @@ import {
    ShowIcon,
 } from '../../assets/AllExportIcon'
 import { useFormik } from 'formik'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
