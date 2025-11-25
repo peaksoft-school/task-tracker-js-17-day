@@ -57,16 +57,16 @@ export const routes = createBrowserRouter([
          />
       ),
    },
-   // {
-   //    path: '/workspace',
-   //    element: (
-   //       <PrivateRoute
-   //          Component={<BoardsPage />}
-   //          isAllowed={true}
-   //          fallBacPath="/"
-   //       />
-   //    ),
-   // },
+   {
+      path: '/workspace',
+      element: (
+         <PrivateRoute
+            Component={<BoardsPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
 
    {
       path: '/workspace/:id/all-issuis',
