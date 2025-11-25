@@ -2,6 +2,7 @@ import { Box, styled, Typography } from '@mui/material'
 import { Black, HideIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
 import { Input } from '../../components/UI/Input'
+import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
 
 export const ChangePassword = () => {
    return (
@@ -36,18 +37,11 @@ export const ChangePassword = () => {
          </StylesBoxRight>
 
          <StylesBoxLeft>
-            <StylesImg
-               src="src/assets/images/icon/imgbackraund/Rectangle 77.png"
-               alt=""
-            />
+            <StylesImg src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
 }
-
-const StyledA = styled('a')({
-   color: '#0079c0',
-})
 
 const StyledButton = styled(AppButton)({
    padding: '8px 60px',
