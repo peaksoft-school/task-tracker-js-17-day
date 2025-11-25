@@ -3,9 +3,10 @@ import { axiosInstance } from '../../../configs/axiosinstance'
 import { useNavigate } from 'react-router-dom'
 import { showNotification } from '../../../utils/helpers/notification'
 
-const signUP = createAsyncThunk('auth/signUp', async ({ values }) => {
+const signUP = createAsyncThunk('auth/signUp', async ({ values, navigate }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/sign-up', values)
+      navigate('/main-page')
       showNotification({
          title: 'Success',
          message: 'Успешная регистрация!',
@@ -46,6 +47,7 @@ const signIn = createAsyncThunk('auth/signIn', async ({ values, navigate }) => {
 const password = createAsyncThunk('auth/password', async ({ values }) => {
    try {
       const { data } = await axiosInstance.post('/api/auth/password', values)
+
       return data
    } catch (error) {
       console.log(error.massage)

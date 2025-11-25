@@ -37,7 +37,7 @@ export const SignUp = () => {
             AUTH_THUNK.register({ registerValues, acceptToken, navigate })
          )
       } else {
-         dispatch(AUTH_THUNK.signUP({ values }))
+         dispatch(AUTH_THUNK.signUP({ values, navigate }))
       }
    }
 
