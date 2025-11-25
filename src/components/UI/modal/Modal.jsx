@@ -1,9 +1,9 @@
-import { Modal as MuiModal, Box, IconButton, styled } from '@mui/material'
+import { Modal as MuiModal, Box, styled } from '@mui/material'
 
 const CustomModal = ({ open, onClose, children, title, ...props }) => (
    <StyledModal
-      open={open}
-      onClose={onClose}
+      open={open} // isvisble
+      onClose={onClose} // handlevisble
       aria-labelledby="modal-title"
       aria-describedby="modal-description"
       aria-hidden={!open}

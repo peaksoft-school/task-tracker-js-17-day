@@ -48,10 +48,7 @@ function SidebarSettingModal({ id, workspaceName, onClose }) {
             placeholder="Enter workspace name"
          />
 
-         <CustomModal
-            isVisible={openDeleteWorkspace}
-            handleVisible={toggleDeleteModal}
-         >
+         <CustomModal open={openDeleteWorkspace} onClose={toggleDeleteModal}>
             <BoxDeleteWorkspace>
                <Title>Delete workspace</Title>
                <DeleteWorkspaceText>

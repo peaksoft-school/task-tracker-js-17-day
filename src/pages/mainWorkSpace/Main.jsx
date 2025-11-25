@@ -58,8 +58,8 @@ function Main() {
                <H2Workspaces>Workspaces</H2Workspaces>
                <MainAppButton onClick={OpenModalCrate}>Create</MainAppButton>
                <CustomModalCrate
-                  isVisible={CrateModal}
-                  handleVisible={OpenModalCrate}
+                  open={CrateModal}
+                  openClose={OpenModalCrate}
                >
                   <CreateModal onClose={OpenModalCrate} />
                </CustomModalCrate>

@@ -68,8 +68,8 @@ function FilterBarParticipantsPage({
                </CrateAppButton>
 
                <CustomModalCrate
-                  isVisible={createModalParticipans}
-                  handleVisible={OpenCreateParticipans}
+                  open={createModalParticipans}
+                  onClose={OpenCreateParticipans}
                >
                   <ModalCreateParticipants
                      onClose={OpenCreateParticipans}

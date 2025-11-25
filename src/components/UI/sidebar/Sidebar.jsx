@@ -189,10 +189,7 @@ export default function Sidebar({ rowsLength = 0 }) {
             />
          </MainIcons>
 
-         <CustomModal
-            isVisible={OpenSidebarModal}
-            handleVisible={handleCloseSettings}
-         >
+         <CustomModal open={OpenSidebarModal} onClose={handleCloseSettings}>
             <SidebarSettingModal
                onClose={handleCloseSettings}
                id={Number(id)}
@@ -221,8 +218,8 @@ export default function Sidebar({ rowsLength = 0 }) {
                </HeaderLabelContainer>
 
                <CustomModalCrate
-                  isVisible={CrateSidebarModal}
-                  handleVisible={OpenSidebarModalCrate}
+                  open={CrateSidebarModal}
+                  onClose={OpenSidebarModalCrate}
                >
                   <CreateModal onClose={OpenSidebarModalCrate} />
                </CustomModalCrate>

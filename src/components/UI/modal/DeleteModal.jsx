@@ -2,14 +2,14 @@ import { Modal as MuiModal, Box, IconButton, styled } from '@mui/material'
 import { ExitIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../UI/AppButton'
 
-const DeleteModal = ({ children, isVisible, handleVisible, onDelete }) => (
+const DeleteModal = ({ onClose, open, handleVisible, onDelete }) => (
    <StyledModal
-      open={isVisible}
-      onClose={handleVisible}
+      open={open}
+      onClose={onClose}
       aria-labelledby="delete-title"
       aria-describedby="delete-desc"
-      aria-hidden={!isVisible}
-      inert={!isVisible ? '' : undefined}
+      aria-hidden={!open}
+      inert={!open ? '' : undefined}
       disableEnforceFocus
       keepMounted
    >
@@ -20,7 +20,7 @@ const DeleteModal = ({ children, isVisible, handleVisible, onDelete }) => (
             </IconButton>
          </Header>
 
-         <Body>{children}</Body>
+         <Body>{onClose}</Body>
 
          <Actions>
             <AppButton onClick={handleVisible}>Cancel</AppButton>
