@@ -4,6 +4,7 @@ import { MAIN_THUNK } from './mainThunk'
 const initialState = {
    isloading: false,
    main: [],
+   favouritesCount: 0,
    error: null,
    status: null,
    acceptToken: null,
@@ -95,6 +96,15 @@ const mainSlice = createSlice({
             state.isloading = false
             state.error = action.error
          })
+
+      builder
+         // Обработчик для получения количества избранного
+         .addCase(
+            MAIN_THUNK.getFavoritesCount.fulfilled,
+            (state, { payload }) => {
+               state.favouritesCount = payload // Сохраняем полученное количество
+            }
+         )
    },
 })
 

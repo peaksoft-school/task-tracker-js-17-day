@@ -160,6 +160,27 @@ const modalCreateWorkSpase = createAsyncThunk(
    }
 )
 
+const getFavoritesCount = createAsyncThunk(
+   'main/getFavoritesCount',
+   async ({ token }, { rejectWithValue }) => {
+      try {
+         const response = await axiosInstance.get('/api/favorites', {
+            headers: {
+               Authorization: `Bearer ${token}`,
+            },
+         })
+         // Сервер возвращает: { favoriteWorkSpaces: [...], favoriteBoards: [...] }
+         const workSpacesCount = response.data.favoriteWorkSpaces.length
+         const boardsCount = response.data.favoriteBoards.length
+
+         // Возвращаем общее количество
+         return workSpacesCount + boardsCount
+      } catch (error) {
+         return rejectWithValue(error.response.data.message)
+      }
+   }
+)
+
 export const MAIN_THUNK = {
    getAllMain,
    favoritesWorkSpase,
@@ -167,4 +188,5 @@ export const MAIN_THUNK = {
    getAllBoards,
    deleteWorkspace,
    invitationAccept,
+   getFavoritesCount,
 }
