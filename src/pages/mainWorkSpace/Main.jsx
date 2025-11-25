@@ -23,7 +23,7 @@ import CustomModal from '../../components/UI/modal/Modal'
 
 function Main() {
    const { token } = useSelector((state) => state.auth)
-   const { main } = useSelector((state) => state.main)
+   const { main, favouritesCount } = useSelector((state) => state.main)
 
    const dispach = useDispatch()
    const navigate = useNavigate()
@@ -31,12 +31,18 @@ function Main() {
    const [CrateModal, setCrateModal] = useState(false)
    const OpenModalCrate = () => setCrateModal((prev) => !prev)
 
+   const fetchFavoritesCount = () => {
+      dispach(MAIN_THUNK.getFavoritesCount({ token }))
+   }
+
    useEffect(() => {
       dispach(MAIN_THUNK.getAllMain({ token }))
+      fetchFavoritesCount()
    }, [])
 
    const handleFavoriteToogle = (id) => {
       dispach(MAIN_THUNK.favoritesWorkSpase({ id, token }))
+      fetchFavoritesCount()
    }
 
    const openoardMain = (id) => {
@@ -52,15 +58,12 @@ function Main() {
 
    return (
       <ConteinerBoxMain>
-         <Header status={true} />
+         <Header status={true} favouritesCount={favouritesCount} />
          <Content>
             <TopBar>
                <H2Workspaces>Workspaces</H2Workspaces>
                <MainAppButton onClick={OpenModalCrate}>Create</MainAppButton>
-               <CustomModalCrate
-                  open={CrateModal}
-                  openClose={OpenModalCrate}
-               >
+               <CustomModalCrate open={CrateModal} openClose={OpenModalCrate}>
                   <CreateModal onClose={OpenModalCrate} />
                </CustomModalCrate>
             </TopBar>
