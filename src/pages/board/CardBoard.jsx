@@ -42,13 +42,6 @@ export const CardBoard = ({
             <StyledTypography>{name}</StyledTypography>
             <Typography>{description}</Typography>
          </StyledCardBox>
-         <FavoriteIconBox onClick={() => handleFavoriteToogle(id)}>
-            {favorite ? (
-               <StyledFavoriteIconstarSilver  />
-            ) : (
-               <FavoriteIconstarBlue  />
-            )}
-         </FavoriteIconBox>
       </Box>
    )
 }

@@ -19,6 +19,7 @@ import { Input } from '../../components/UI/Input'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
 import CheckIcon from '@mui/icons-material/Check'
 import { useParams } from 'react-router-dom'
+import { XIcon } from '../../assets/AllExportIcon'
 
 export default function Board() {
    const { id } = useParams()
@@ -150,9 +151,7 @@ export default function Board() {
                                  />
                               </p>
                               <h3 style={{ marginTop: '10px' }}>Нет данных</h3>
-                              <p style={{ color: '#666' }}>
-                                 У вас пока нет рабочих пространств.
-                              </p>
+                             
                            </Box>
                         </TableCell>
                      </TableRow>
@@ -196,7 +195,7 @@ export default function Board() {
                   </StyledBoxSeeMore>
 
                   <StyledCardModal>
-                     {backgroundImages.slice(0, 3).map((bgItem) => (
+                     {backgroundImages.slice(0, 4).map((bgItem) => (
                         <StyledCardModalImg
                            key={bgItem}
                            onClick={() => handlerClickIdBackImg(bgItem)}
@@ -262,14 +261,25 @@ export default function Board() {
                handleVisible={handlerModelImg}
             >
                <Box>
-                  <StyledModalTypography>Photo</StyledModalTypography>
+                  <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                     <Box></Box>
+                     <StyledModalTypography>Photo</StyledModalTypography>
+                     <StyledXIcon onClick={handlerModelImg} />
+                  </Box>
+
                   <StyledBoxModalsBack>
-                     {backgroundImages.map((bgItem) => (
+                     {backgroundImages?.map((bgItem) => (
                         <StyledBoxBg
                            key={bgItem}
                            onClick={() => handlerClickIdBackImg(bgItem)}
                            bg={bgItem}
-                        />
+                        >
+                           {selectedItem === bgItem && (
+                              <StyledOverlay>
+                                 <CheckIcon />
+                              </StyledOverlay>
+                           )}
+                        </StyledBoxBg>
                      ))}
                   </StyledBoxModalsBack>
                </Box>
@@ -283,14 +293,30 @@ export default function Board() {
             >
                <Box>
                   {' '}
+                  <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} >
+                     <Box></Box>
                   <StyledModalTypography>Colors</StyledModalTypography>
+                  <StyledXIcon onClick={handlerModelColor} />
+                  </Box>
+                 
                   <StyledBoxModalsColors>
                      {Colors.map((items) => (
                         <StyledColorsModal
                            key={items}
                            onClick={() => handlerClickIdColor(items)}
                            colors={items}
-                        />
+                        >
+                            {loadingItem === items && (
+                              <StyledOverlay>
+                                 <CircularProgress size={24} color="inherit" />
+                              </StyledOverlay>
+                           )}
+                           {selectedItem === items && (
+                              <StyledOverlay>
+                                 <CheckIcon />
+                              </StyledOverlay>
+                           )}
+                        </StyledColorsModal>
                      ))}
                   </StyledBoxModalsColors>
                </Box>
@@ -299,6 +325,11 @@ export default function Board() {
       </>
    )
 }
+
+const StyledXIcon = styled(XIcon)(() => ({
+   cursor: 'pointer',
+}))
+
 const StyledBoxDefoldimg = styled(Box)({
    display: 'flex',
    justifyContent: 'center',
@@ -314,7 +345,7 @@ const StyledOverlay = styled(Box)({
    width: '100%',
    height: '100%',
    borderRadius: '8px',
-   backgroundColor: 'rgba(249, 242, 242, 0.3)',
+   // backgroundColor: 'rgba(249, 242, 242, 0.3)',
    display: 'flex',
    alignItems: 'center',
    justifyContent: 'center',
@@ -349,6 +380,7 @@ const StyledBoxModalsBack = styled(Box)({
    display: 'grid',
    gridTemplateColumns: '1fr 1fr',
    gap: '16px',
+   cursor: 'pointer',
 })
 
 const StyledColorsModal = styled(Box)(({ colors }) => ({
@@ -373,8 +405,11 @@ const StyledBoxBg = styled(Box)(({ bg }) => ({
    width: '132px',
    height: '62px',
    borderRadius: '8px',
-   display: 'inline-block',
+   display: 'flex',
+   flexWrap: 'wrap',
+   flexDirection: 'column',
    marginRight: '8px',
+   cursor: 'pointer',
    '&:hover': {
       transform: 'scale(1.05)',
       cursor: 'pointer',
@@ -481,6 +516,7 @@ const StyledCardBoard = styled(Box)({
 const StyledBoxBoards = styled(Box)({
    display: 'grid',
    gridTemplateColumns: '250px 1fr',
+
 })
 
 const StyledBoxHeaders = styled(Box)({

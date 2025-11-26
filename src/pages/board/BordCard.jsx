@@ -8,21 +8,32 @@ import { ThreeDotsIcon } from '../../assets/AllExportIcon'
 import { Card } from '../card/Card'
 import { CustomModal } from '../../components/UI/modal/Modal'
 import { CARD_THUNK } from '../../store/slices/card/cardThunk'
-import { DndContext } from '@dnd-kit/core'
-import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import SortableCard from '../card/SortableCard'
+import {
+   closestCorners,
+   DndContext,
+   DragOverlay,
+   KeyboardSensor,
+   PointerSensor,
+   useSensor,
+   useSensors,
+} from '@dnd-kit/core'
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable'
+import { Item } from '../card/SortableCard'
 import { useParams } from 'react-router-dom'
+import ZadachaCards from '../card/ZadachaCards'
 
 export default function BordCard({ IdBoard }) {
    const [modalOpen, setModalOpen] = useState(false)
    const [open, setOpen] = useState(false)
+   const [deleetOpen, setDeleettOpen] = useState(false)
    const [addCardOpen, setAddCardOpen] = useState({})
    const [name, setName] = useState('')
    const [titeleValue, setTiteleValue] = useState('')
    const [currentColId, setCurrentColId] = useState(null)
 
    const columns = useSelector((state) => state.column.columns)
-   console.log(columns, 'columns')
+   const flatCards = columns.flatMap((col) => col.cards)
+   console.log(flatCards, 'flatCarddds')
 
    const { cards } = useSelector((state) => state.card)
 
@@ -41,6 +52,14 @@ export default function BordCard({ IdBoard }) {
       dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
    }, [IdBoard, dispatch])
 
+   const handleOpenDelete = () => {
+      setDeleettOpen(true)
+   }
+
+   const handlerDelete = () => {
+      dispatch(COLUMN_THUNK.deleteColumnThunk({ id }))
+      setDeleettOpen(false)
+   }
    const handleOpenModal = (cardId) =>
       dispatch(CARD_THUNK.getCardsThunk({ cardId, setModalOpen }))
 
@@ -77,15 +96,183 @@ export default function BordCard({ IdBoard }) {
       }
    }
 
+   ///dnd
 
-   
+   const wrapperStyle = {
+      display: 'flex',
+      flexDirection: 'row',
+   }
 
+   const [items, setItems] = useState(null)
 
+   useEffect(() => {
+      if (!columns) return
 
+      const converted = {}
 
+      columns.forEach((col) => {
+         converted[col.id] = col?.cards?.map((c) => c.id) || []
+      })
 
+      setItems(converted)
+   }, [columns])
+
+   const [activeId, setActiveId] = useState()
+
+   const sensors = useSensors(
+      useSensor(PointerSensor),
+      useSensor(KeyboardSensor, {
+         coordinateGetter: sortableKeyboardCoordinates,
+      })
+   )
+
+   const defaultAnnouncements = {
+      onDragStart(id) {
+         console.log(`Picked up draggable item ${id}.`)
+      },
+      onDragOver(id, overId) {
+         if (overId) {
+            console.log(
+               `Draggable item ${id} was moved over droppable area ${overId}.`
+            )
+            return
+         }
+
+         console.log(`Draggable item ${id} is no longer over a droppable area.`)
+      },
+      onDragEnd(id, overId) {
+         if (overId) {
+            console.log(
+               `Draggable item ${id} was dropped over droppable area ${overId}`
+            )
+            return
+         }
+
+         console.log(`Draggable item ${id} was dropped.`)
+      },
+      onDragCancel(id) {
+         console.log(
+            `Dragging was cancelled. Draggable item ${id} was dropped.`
+         )
+      },
+   }
+
+   function findContainer(id) {
+      if (id in items) {
+         return id
+      }
+
+      return Object.keys(items).find((key) => items[key].includes(id))
+   }
+
+   function handleDragStart(event) {
+      const { active } = event
+      const { id } = active
+
+      setActiveId(id)
+   }
+
+   function handleDragOver(event) {
+      const { active, over, draggingRect } = event
+      const { id } = active
+
+      const { id: overId } = over
+      // Find the containers
+      const activeContainer = findContainer(id)
+      const overContainer = findContainer(overId)
+
+      if (
+         !activeContainer ||
+         !overContainer ||
+         activeContainer === overContainer
+      ) {
+         return
+      }
+
+      setItems((prev) => {
+         const activeItems = prev[activeContainer]
+         const overItems = prev[overContainer]
+
+         // Find the indexes for the items
+         const activeIndex = activeItems.indexOf(id)
+         const overIndex = overItems.indexOf(overId)
+
+         let newIndex
+         if (overId in prev) {
+            // We're at the root droppable of a container
+            newIndex = overItems.length + 1
+         } else {
+            const isBelowLastItem =
+               over &&
+               overIndex === overItems.length - 1 &&
+               draggingRect?.offsetTop >
+                  over?.rect?.offsetTop + over?.rect?.height
+
+            const modifier = isBelowLastItem ? 1 : 0
+
+            newIndex =
+               overIndex >= 0 ? overIndex + modifier : overItems.length + 1
+         }
+
+         return {
+            ...prev,
+            [activeContainer]: [
+               ...prev[activeContainer].filter((item) => item !== active.id),
+            ],
+            [overContainer]: [
+               ...prev[overContainer].slice(0, newIndex),
+               items[activeContainer][activeIndex],
+               ...prev[overContainer].slice(
+                  newIndex,
+                  prev[overContainer].length
+               ),
+            ],
+         }
+      })
+   }
+
+   function handleDragEnd(event) {
+      const { active, over } = event
+      const { id } = active
+      const { id: overId } = over
+
+      const activeContainer = findContainer(id)
+      const overContainer = findContainer(overId)
+
+      if (
+         !activeContainer ||
+         !overContainer ||
+         activeContainer !== overContainer
+      ) {
+         return
+      }
+
+      const activeIndex = items[activeContainer].indexOf(active.id)
+      const overIndex = items[overContainer].indexOf(overId)
+
+      if (activeIndex !== overIndex) {
+         setItems((items) => ({
+            ...items,
+            [overContainer]: arrayMove(
+               items[overContainer],
+               activeIndex,
+               overIndex
+            ),
+         }))
+      }
+
+      setActiveId(null)
+   }
+   //dnd
    return (
-      <DndContext>
+      <DndContext
+         announcements={defaultAnnouncements}
+         sensors={sensors}
+         collisionDetection={closestCorners}
+         onDragStart={handleDragStart}
+         onDragOver={handleDragOver}
+         onDragEnd={handleDragEnd}
+      >
          <StyledBoxColumnContainer>
             {columns?.map((col) => {
                const title = JSON.parse(col.title).name
@@ -98,8 +285,24 @@ export default function BordCard({ IdBoard }) {
                   <StyledFormContainer key={col.id}>
                      <StyledBoxNweContainerHeader>
                         <StyledTypographyTitle>{title}</StyledTypographyTitle>
-                        <ThreeDotsIcon />
+                        <ThreeDotsIcon onClick={handleOpenDelete} />
                      </StyledBoxNweContainerHeader>
+                     {/* {!columns && 'Loading...'}
+
+                     <StyledBoxContainerZadacha>
+                        {columns &&
+                           columns?.map((key) => (
+                              <ZadachaCards
+                                 key={key}
+                                 id={key}
+                                 items={flatCards}
+                              />
+                           ))}
+                     </StyledBoxContainerZadacha>
+
+                     <DragOverlay>
+                        {activeId ? <Item id={activeId} /> : null}
+                     </DragOverlay> */}
 
                      {col?.cards?.map((card) => (
                         <StyledBoxContainerZadacha
@@ -109,6 +312,7 @@ export default function BordCard({ IdBoard }) {
                            <StyledTypographyTitlele>
                               {card.title}
                            </StyledTypographyTitlele>
+                           <StyledTypographyTitlele>d</StyledTypographyTitlele>
                         </StyledBoxContainerZadacha>
                      ))}
 
@@ -138,7 +342,21 @@ export default function BordCard({ IdBoard }) {
                   </StyledFormContainer>
                )
             })}
-
+            {deleetOpen && (
+               <CustomModal
+                  isVisible={deleetOpen}
+                  handleVisible={handleOpenDelete}
+                  onClose={handleOpenDelete}
+               >
+                  <Box>
+                     <Typography>Удалить колонку</Typography>
+                     <Box>
+                        <Button onClick={handlerDelete}>Да</Button>
+                        <Button onClick={handleOpenDelete}>Нет</Button>
+                     </Box>
+                  </Box>
+               </CustomModal>
+            )}
             {modalOpen && (
                <CustomModal
                   isVisible={modalOpen}
@@ -186,6 +404,7 @@ export default function BordCard({ IdBoard }) {
       </DndContext>
    )
 }
+
 const StyledTypographyTitlele = styled(Typography)(() => ({
    color: '#000',
    fontSize: '16px',

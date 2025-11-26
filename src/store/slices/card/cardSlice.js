@@ -54,7 +54,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.attachmentsThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards.push(action.payload)
+            state.cards = action.payload
          })
          .addCase(CARD_THUNK.attachmentsThunk.rejected, (state, action) => {
             state.loading = false

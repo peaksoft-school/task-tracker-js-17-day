@@ -31,9 +31,9 @@ import { CARD_THUNK } from '../../store/slices/card/cardThunk'
 import { LABEL_THUNK } from '../../store/slices/label/labelThunk'
 import { LABEL_OPTIONS } from '../../assets/colorsLabel/colorsLabel'
 import dayjs from 'dayjs'
+import { Chipp } from '../../components/UI/Chip'
 
-
-export const Card = ({ handler, id, titele }) => {
+export const Card = ({ handler, titele }) => {
    const [openDescription, setOpenDescription] = useState(false)
    const [description, setDescription] = useState('')
    const [modalMembers, setModalMembers] = useState(false)
@@ -45,7 +45,7 @@ export const Card = ({ handler, id, titele }) => {
    const [checklistValue, setChecklistValue] = useState('')
    const [titeleZadacha, setTiteleZadacha] = useState('')
 
-   const [labels, setLabels] = useState({
+   const [labelss, setLabels] = useState({
       GREEN: '',
       ORANGE: '',
       BLUE: '',
@@ -56,7 +56,8 @@ export const Card = ({ handler, id, titele }) => {
    const createdCard = useSelector((state) => state.card.createdCard)
 
    const { cards } = useSelector((state) => state.card)
-   console.log(cards, 'cards')
+   console.log(cards.id, 'cards000009')
+   const id = cards.id
 
    const label = useSelector((state) => state.label.labels)
 
@@ -65,7 +66,10 @@ export const Card = ({ handler, id, titele }) => {
 
    console.log(userId, 'userId')
 
-   const hendleOpenMembers = () => setModalMembers(!modalMembers)
+   const hendleOpenMembers = () => {
+      setModalMembers(!modalMembers)
+      dispatch(CARD_THUNK.userThunk({ cardId: id, userId: userId }))
+   }
    // const hendleOpenEstimation = () => setModalEstimation(!modalEstimation)
    const hendleOpenLabel = () => {
       setModalLabel(!modalLabel)
@@ -152,9 +156,9 @@ export const Card = ({ handler, id, titele }) => {
       )
    }
 
-   const handlerUsers = () => {
-      dispatch(CARD_THUNK.userThunk({ cardId: id, userId: userId }))
-   }
+   // const handlerUsers = () => {
+   //    dispatch(CARD_THUNK.userThunk({ cardId: id, userId: userId }))
+   // }
 
    const {
       idd,
@@ -162,7 +166,7 @@ export const Card = ({ handler, id, titele }) => {
       descriptionn,
       creatorEmail,
       assignees,
-      labelss,
+      labels,
       checklists,
       period,
       createdDate,
@@ -170,6 +174,8 @@ export const Card = ({ handler, id, titele }) => {
       state,
       checklistProgress,
    } = cards
+
+   console.log(labels, 'test009')
 
    return (
       <StyledWrapper>
@@ -190,10 +196,8 @@ export const Card = ({ handler, id, titele }) => {
             {/* DESCRIPTION */}
             <Box mt={2}>
                <Box>
-                  {labelss?.map((item) =>(
-                     <StyledLeibelsColorBox key={item.id} tipe={item.colorType}>
-                        {item.title}
-                     </StyledLeibelsColorBox>
+                  {labels?.map((item) => (
+                     <Chipp color={item.colorType} label={item.titele} />
                   ))}
                </Box>
                <StyledBoxDowun
@@ -218,6 +222,15 @@ export const Card = ({ handler, id, titele }) => {
                   <StyledButton>Cancel</StyledButton>
                   <AppButton>Save</AppButton>
                </StyledActionsRow>
+               <Box>
+                  {checklists.map((item) => (
+                     <StyledBoxCheklistt>
+                        <Typography>
+                           <EditIcon /> {item.title}
+                        </Typography>
+                     </StyledBoxCheklistt>
+                  ))}
+               </Box>
             </Box>
             <Box>
                {/* ADD SECTION */}
@@ -297,7 +310,7 @@ export const Card = ({ handler, id, titele }) => {
                   </StyledTypographyMembers>
                   {assignees.map((item) => (
                      <Box
-                        onClick={handlerUsers}
+                        // onClick={handlerUsers}
                         display={'flex'}
                         justifyContent={'center'}
                         alignItems={'center'}
@@ -368,27 +381,31 @@ export const Card = ({ handler, id, titele }) => {
                      <StyledXIcon onClick={hendleOpenLabel} />
                   </StyledContinerModal>
                   <StyledInputBox>
-                     <StyledLebelsBox color="#61bd4f">Done</StyledLebelsBox>
+                     <StyledLebelsBox color="#61bd4f">Сделано</StyledLebelsBox>
 
                      <StyledEditIcon onClick={() => handlerLabel('GREEN')} />
                   </StyledInputBox>
 
                   <StyledInputBox>
                      <StyledLebelsBox color={'#eb8900'}>
-                        In progress
+                        Обратите на это внимание
                      </StyledLebelsBox>
 
                      <StyledEditIcon onClick={() => handlerLabel('ORANGE')} />
                   </StyledInputBox>
 
                   <StyledInputBox>
-                     <StyledLebelsBox color={'#0079bf'}>Done</StyledLebelsBox>
+                     <StyledLebelsBox color={'#0079bf'}>
+                        Хорошего всем настроения, друзья
+                     </StyledLebelsBox>
 
                      <StyledEditIcon onClick={() => handlerLabel('BLUE')} />
                   </StyledInputBox>
 
                   <StyledInputBox>
-                     <StyledLebelsBox color={'#eb5a46'}>Done</StyledLebelsBox>
+                     <StyledLebelsBox color={'#eb5a46'}>
+                        Срочно начать с этого
+                     </StyledLebelsBox>
 
                      <StyledEditIcon onClick={() => handlerLabel('RED')} />
                   </StyledInputBox>
@@ -419,19 +436,18 @@ export const Card = ({ handler, id, titele }) => {
       </StyledWrapper>
    )
 }
+const StyledBoxCheklistt = styled(Box)(() => ({
+   display: 'flex',
+   justifyContent: 'center',
+   alignItems: 'start',
+   flexDirection: 'column',
+}))
+
 const StyledLeibelsColorBox = styled(Box)((tipe) => ({
-   backgroundColor:
-      tipe === 'GREEN'
-         ? '#61bd4f'
-         : tipe === 'YELLOW'
-           ? '#eb8900'
-           : tipe === 'BLUE'
-             ? '#0079bf'
-             : tipe === 'RED'
-               ? '#eb5a46'
-               : '',
+   backgroundColor: tipe,
    width: '180px',
    height: '30px',
+   color: tipe,
 }))
 
 const StyledTypographyMembers = styled(Typography)(() => ({
@@ -487,6 +503,7 @@ const StyledSelectBox = styled(Box)(() => ({
 
 const StyledModalEstimation = styled(Box)(() => ({
    height: '700px',
+   width: '370px',
 }))
 
 const StyledBoxChecklist = styled(Box)(() => ({

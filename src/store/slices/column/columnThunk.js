@@ -36,4 +36,21 @@ const columnThunk = createAsyncThunk(
    }
 )
 
-export const COLUMN_THUNK = { columnThunk, getColumnsThunk }
+const deleteColumnThunk = createAsyncThunk(
+   'column/deleteColumnThunk',
+   async ({ id, columnId }, { rejectWithValue, dispatch }) => {
+      try {
+         const { data } = await axiosInstance.delete(
+            `/api/boards/${id}/columns/${columnId}`
+         )
+
+         dispatch(getColumnsThunk({ id }))
+
+         return data
+      } catch (error) {
+         return rejectWithValue(error.response?.data || error.message)
+      }
+   }
+)
+
+export const COLUMN_THUNK = { columnThunk, getColumnsThunk,deleteColumnThunk }

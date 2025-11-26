@@ -27,7 +27,7 @@ const createCardThunk = createAsyncThunk(
             title,
          })
 
-         dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
+         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
 
          return data
       } catch (error) {
@@ -43,7 +43,7 @@ const checklistThunk = createAsyncThunk(
          const { data } = await axiosInstance.post(
             `/cards/${cardId}/checklists?title=${encodeURIComponent(title)}`
          )
-         dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
+         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
          return data
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)
@@ -62,7 +62,7 @@ const labelsThunk = createAsyncThunk(
                params: { labelId },
             }
          )
-         dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
+         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
          return data
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)
@@ -87,7 +87,7 @@ const attachmentsThunk = createAsyncThunk(
                },
             }
          )
-         dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
+         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
 
          return data
       } catch (error) {
@@ -101,14 +101,14 @@ const estimateThunk = createAsyncThunk(
    async ({ cardId, estimate,id}, { rejectWithValue, dispatch }) => {
       try {
          const { data } = await axiosInstance.patch(
-            `/cards/${cardId}/estimation`,
+            `/cards/${cardId}/attachments`,
             {
                startDate: estimate.startDate,
                dueDateWithTime: estimate.dueDateWithTime,
                reminder: estimate.reminder,
             }
          )
-         dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
+         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
 
          return data
       } catch (error) {
@@ -128,7 +128,7 @@ const userThunk = createAsyncThunk(
        )
  
        // обновляем колонки, если нужно
-       dispatch(COLUMN_THUNK.getColumnsThunk({ id: cardId }))
+       dispatch(COLUMN_THUNK.getCardsThunk({ id: cardId }))
  
        return data
      } catch (error) {

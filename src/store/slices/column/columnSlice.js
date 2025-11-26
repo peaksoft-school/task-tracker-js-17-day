@@ -36,6 +36,15 @@ export const columnSlice = createSlice({
          .addCase(COLUMN_THUNK.columnThunk.pending, (state) => {
             state.loading = true
          })
+         .addAsyncThunk(COLUMN_THUNK.deleteColumnThunk.pending, (state) => {
+            state.loading = true
+         })
+         .addAsyncThunk(COLUMN_THUNK.deleteColumnThunk.fulfilled, (state) => {
+            state.loading = false
+         })
+         .addAsyncThunk(COLUMN_THUNK.deleteColumnThunk.rejected, (state) => {
+            state.loading = false
+         })
    },
 })
 
