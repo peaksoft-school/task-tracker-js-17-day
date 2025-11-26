@@ -87,10 +87,17 @@ export default function Sidebar({ rowsLength = 0 }) {
    const pathAllIssues = `/workspace/${id}/all-issuis`
    const pathParticipants = `/workspace/${id}/participants`
 
+   const navigateToMain = () => {
+      navigate('/main-page')
+   }
+
    return (
       <SidebarContainer open={open}>
          <TopSection open={open}>
-            <CircleIconButton open={open} onClick={toggleSidebar}>
+            <CircleIconButton
+               open={open}
+               onClick={open ? navigateToMain : toggleSidebar}
+            >
                {open ? (
                   <MiniLMS>
                      <LeftIcon />
