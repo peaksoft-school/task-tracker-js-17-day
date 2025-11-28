@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { CARD_THUNK } from './cardThunk'
 
 const initialState = {
-   cards: [],
+   card: null,
    loading: false,
    error: null,
    members: [],
@@ -20,7 +20,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.createCardThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards = action.payload
+            state.card = action.payload
          })
          .addCase(CARD_THUNK.createCardThunk.rejected, (state, action) => {
             state.loading = false
@@ -31,7 +31,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.checklistThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards = action.payload
+            state.card = action.payload
          })
          .addCase(CARD_THUNK.checklistThunk.rejected, (state, action) => {
             state.loading = false
@@ -42,7 +42,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.labelsThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards = action.payload
+            state.card = action.payload
          })
          .addCase(CARD_THUNK.labelsThunk.rejected, (state, action) => {
             state.loading = false
@@ -54,7 +54,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.attachmentsThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards = action.payload
+            state.card = action.payload
          })
          .addCase(CARD_THUNK.attachmentsThunk.rejected, (state, action) => {
             state.loading = false
@@ -66,7 +66,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.getCardsThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards = action.payload
+            state.card = action.payload
          })
          .addCase(CARD_THUNK.getCardsThunk.rejected, (state, action) => {
             state.loading = false
@@ -78,7 +78,7 @@ export const cardSlice = createSlice({
          })
          .addCase(CARD_THUNK.estimateThunk.fulfilled, (state, action) => {
             state.loading = false
-            state.cards = action.payload
+            state.card = action.payload
          })
          .addCase(CARD_THUNK.estimateThunk.rejected, (state, action) => {
             state.loading = false

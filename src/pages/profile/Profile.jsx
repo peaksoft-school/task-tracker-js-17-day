@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const Profile = () => {
    const data = useSelector((state) => state.profile)
+   
 
    const dispatch = useDispatch()
 
@@ -22,7 +23,7 @@ export const Profile = () => {
       lastName: '',
       avatarUrl: '',
    })
-
+console.log(data, "data.profileFul.avatarUrl");
 
    const [passwords, setPasswords] = useState({
       oldPassword: '',

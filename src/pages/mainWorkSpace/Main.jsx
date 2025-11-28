@@ -17,16 +17,14 @@ import {
 } from '../../assets/AllExportIcon'
 import { useEffect, useState } from 'react'
 import { MAIN_THUNK } from '../../store/slices/workspaces/mainThunk'
-import { CustomModal } from '../../components/UI/modal/Modal'
 import CreateModal from './mainModal/CreateModal'
 import { useNavigate } from 'react-router-dom'
+import CustomModal from '../../components/UI/modal/Modal'
 
 function Main() {
    const { token } = useSelector((state) => state.auth)
-   const { main } = useSelector((state) => state.main)
-   console.log(main, 'mainworkspaces');
-   
-   
+   const { main, favouritesCount } = useSelector((state) => state.main)
+
 
    const dispach = useDispatch()
    const navigate = useNavigate()
@@ -34,12 +32,24 @@ function Main() {
    const [CrateModal, setCrateModal] = useState(false)
    const OpenModalCrate = () => setCrateModal((prev) => !prev)
 
+   const fetchFavoritesCount = () => {
+      dispach(MAIN_THUNK.getFavoritesCount({ token }))
+   }
+
    useEffect(() => {
       dispach(MAIN_THUNK.getAllMain({ token }))
+      fetchFavoritesCount()
    }, [])
 
    const handleFavoriteToogle = (id) => {
       dispach(MAIN_THUNK.favoritesWorkSpase({ id, token }))
+         .unwrap()
+         .then(() => {
+            fetchFavoritesCount()
+         })
+         .catch((error) => {
+            console.error('Ошибка при переключении избранного:', error)
+         })
    }
 
    const openoardMain = (id) => {
@@ -59,15 +69,12 @@ function Main() {
 
    return (
       <ConteinerBoxMain>
-         <Header status={true} favouritesCount={'workspaceCount'} />
+         <Header status={true} favouritesCount={favouritesCount} />
          <Content>
             <TopBar>
                <H2Workspaces>Workspaces</H2Workspaces>
                <MainAppButton onClick={OpenModalCrate}>Create</MainAppButton>
-               <CustomModalCrate
-                  isVisible={CrateModal}
-                  handleVisible={OpenModalCrate}
-               >
+               <CustomModalCrate open={CrateModal} openClose={OpenModalCrate}>
                   <CreateModal onClose={OpenModalCrate} />
                </CustomModalCrate>
             </TopBar>
@@ -82,26 +89,28 @@ function Main() {
                      </TableRow>
                   </TableHead>
                   <TableBody>
-                     {main && main.length > 0 ? (
-                        main.map((row, i) => (
-                           <TableRow key={row.id}>
+                     {main && main?.length > 0 ? (
+                        main?.map((row, i) => (
+                           <TableRow key={row?.id}>
                               <TableCell>{i + 1}</TableCell>
                               <TableCell>
-                                 <a onClick={() => openoardMain(row.id)}>
-                                    {row.name}
+                                 <a onClick={() => openoardMain(row?.id)}>
+                                    {row?.name}
                                  </a>
                               </TableCell>
                               <TableCell>
                                  <LeadBox>
-                                    <Avatar src={row.urlPhoto} />
-                                    <span>{row.lead}</span>
+                                    <Avatar src={row?.urlPhoto} />
+                                    <span>{row?.lead}</span>
                                  </LeadBox>
                               </TableCell>
                               <TableCell>
                                  <FavoriteIconBox
-                                    onClick={() => handleFavoriteToogle(row.id)}
+                                    onClick={() =>
+                                       handleFavoriteToogle(row?.id)
+                                    }
                                  >
-                                    {row.favorite ? (
+                                    {row?.favorite ? (
                                        <FavoriteIconstarSilver color="action" />
                                     ) : (
                                        <FavoriteIconstarBlue color="primary" />

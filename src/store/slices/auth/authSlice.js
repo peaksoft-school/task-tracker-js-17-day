@@ -18,11 +18,12 @@ const authSlice = createSlice({
    extraReducers: (builder) => {
       builder
          .addCase('auth/signUp/fulfilled', (state, action) => {
-            state.role = action.payload.role
-            state.email = action.payload.email
-            state.token = action.payload.token
-            state.userId = action.payload.userId
-            state.isAuth = true
+            const { role, email, token, userId } = action.payload || {}
+            state.role = role || state.role
+            state.email = email
+            state.token = token
+            state.userId = userId
+            state.isAuth = !!token
             state.isLoading = false
          })
          .addCase(AUTH_THUNK.signUP.pending, (state) => {
@@ -45,8 +46,6 @@ const authSlice = createSlice({
             state.isLoading = false
          })
          .addCase(AUTH_THUNK.authWithGoogle.fulfilled, (state, action) => {
-            console.log(action, 'google')
-            state.role = action.payload.role
             state.email = action.payload.email
             state.token = action.payload.token
             state.isAuth = true
@@ -56,6 +55,17 @@ const authSlice = createSlice({
             state.isLoading = true
          })
          .addCase(AUTH_THUNK.authWithGoogle.rejected, (state) => {
+            state.isLoading = false
+         })
+         .addCase(AUTH_THUNK.register.fulfilled, (state, action) => {
+            state.token = action.payload.token
+            state.isAuth = true
+            state.isLoading = false
+         })
+         .addCase(AUTH_THUNK.register.pending, (state) => {
+            state.isLoading = true
+         })
+         .addCase(AUTH_THUNK.register.rejected, (state) => {
             state.isLoading = false
          })
    },

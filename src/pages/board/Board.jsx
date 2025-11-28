@@ -14,7 +14,7 @@ import { CardBoard } from './CardBoard'
 import { BOARD_THUNK } from '../../store/slices/board/boardThunk'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import { backgroundImages } from '../../assets/backgroundImg/background'
-import { CustomModal } from '../../components/UI/modal/Modal'
+import CustomModal from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import { Colors } from '../../assets/backgroundImg/backgroundColors'
 import CheckIcon from '@mui/icons-material/Check'
@@ -151,7 +151,6 @@ export default function Board() {
                                  />
                               </p>
                               <h3 style={{ marginTop: '10px' }}>Нет данных</h3>
-                             
                            </Box>
                         </TableCell>
                      </TableRow>
@@ -175,7 +174,7 @@ export default function Board() {
 
          {/* === Модалка создания доски === */}
          {boardsImg && (
-            <ModalBox isVisible={boardsImg} handleVisible={handlerSerImg}>
+            <ModalBox open={boardsImg} onClose={handlerSerImg}>
                <Box>
                   <StyledModalTypography>
                      Create new board
@@ -257,11 +256,15 @@ export default function Board() {
 
          {backgroundModalImages && (
             <StyledModalBakg
-               isVisible={backgroundModalImages}
-               handleVisible={handlerModelImg}
+               open={backgroundModalImages}
+               onClose={handlerModelImg}
             >
                <Box>
-                  <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'}>
+                  <Box
+                     display={'flex'}
+                     alignItems={'center'}
+                     justifyContent={'space-between'}
+                  >
                      <Box></Box>
                      <StyledModalTypography>Photo</StyledModalTypography>
                      <StyledXIcon onClick={handlerModelImg} />
@@ -287,18 +290,18 @@ export default function Board() {
          )}
 
          {backgroundModalColors && (
-            <ModalBox
-               isVisible={backgroundModalColors}
-               handleVisible={handlerModelColor}
-            >
+            <ModalBox open={backgroundModalColors} onClose={handlerModelColor}>
                <Box>
                   {' '}
-                  <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} >
+                  <Box
+                     display={'flex'}
+                     alignItems={'center'}
+                     justifyContent={'space-between'}
+                  >
                      <Box></Box>
-                  <StyledModalTypography>Colors</StyledModalTypography>
-                  <StyledXIcon onClick={handlerModelColor} />
+                     <StyledModalTypography>Colors</StyledModalTypography>
+                     <StyledXIcon onClick={handlerModelColor} />
                   </Box>
-                 
                   <StyledBoxModalsColors>
                      {Colors.map((items) => (
                         <StyledColorsModal
@@ -306,7 +309,7 @@ export default function Board() {
                            onClick={() => handlerClickIdColor(items)}
                            colors={items}
                         >
-                            {loadingItem === items && (
+                           {loadingItem === items && (
                               <StyledOverlay>
                                  <CircularProgress size={24} color="inherit" />
                               </StyledOverlay>
@@ -516,7 +519,6 @@ const StyledCardBoard = styled(Box)({
 const StyledBoxBoards = styled(Box)({
    display: 'grid',
    gridTemplateColumns: '250px 1fr',
-
 })
 
 const StyledBoxHeaders = styled(Box)({

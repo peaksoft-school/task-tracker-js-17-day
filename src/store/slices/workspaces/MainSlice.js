@@ -4,7 +4,10 @@ import { MAIN_THUNK } from './mainThunk'
 const initialState = {
    isloading: false,
    main: [],
+   favouritesCount: 0,
    error: null,
+   status: null,
+   acceptToken: null,
 }
 
 const mainSlice = createSlice({
@@ -44,11 +47,14 @@ const mainSlice = createSlice({
             state.isloading = false
 
             const { favorite } = action.payload
+            const workspaceId = action.meta.arg.id
 
-            const index = state.main.findIndex()
+            const index = state.main.findIndex(
+               (item) => item.id === workspaceId
+            )
 
             if (index !== -1) {
-               state.main[index].fav = favorite
+               state.main[index].favorite = favorite
             }
          })
          .addCase(MAIN_THUNK.favoritesWorkSpase.rejected, (state, action) => {
@@ -66,6 +72,40 @@ const mainSlice = createSlice({
             state.isloading = false
             state.error = action.error
          })
+
+         .addCase(MAIN_THUNK.deleteWorkspace.pending, (state) => {
+            state.isloading = true
+         })
+         .addCase(MAIN_THUNK.deleteWorkspace.fulfilled, (state) => {
+            state.isloading = false
+         })
+         .addCase(MAIN_THUNK.deleteWorkspace.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.payload
+         })
+         .addCase(MAIN_THUNK.invitationAccept.pending, (state) => {
+            state.isloading = true
+         })
+         .addCase(
+            MAIN_THUNK.invitationAccept.fulfilled,
+            (state, { payload }) => {
+               console.log(payload)
+               state.isloading = false
+               state.status = payload.status
+               state.acceptToken = payload.url
+            }
+         )
+         .addCase(MAIN_THUNK.invitationAccept.rejected, (state, action) => {
+            state.isloading = false
+            state.error = action.error
+         })
+
+      builder.addCase(
+         MAIN_THUNK.getFavoritesCount.fulfilled,
+         (state, { payload }) => {
+            state.favouritesCount = payload
+         }
+      )
    },
 })
 

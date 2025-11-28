@@ -16,42 +16,46 @@ import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router-dom'
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth, provider } from '../../configs/firebase'
+
 export const SignIn = () => {
+   const [showPassword, setShowPassword] = useState(false)
+
    const dispatch = useDispatch()
    const navigate = useNavigate()
+
    const onSubmit = (values) =>
       dispatch(AUTH_THUNK.signIn({ values, navigate }))
+
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
          email: '',
          password: '',
       },
+
       validationSchema: VALIDATION_SIGN_IN,
       onSubmit,
    })
-   const [showPassword, setShowPassword] = useState(false)
+   // const [showPassword, setShowPassword] = useState(false)
    const inputPassword = () => {
       setShowPassword(!showPassword)
    }
-   const handlerGoogle = async () => {
-      try {
-         const response = await signInWithPopup(auth, provider)
-
-         // const credential = GoogleAuthProvider.credentialFromResult(response)
-         // const token = credential.accessToken
-
-         const token = response.user.accessToken
-
-         dispatch(
-            AUTH_THUNK.authWithGoogle({
-               token,
-               navigate,
-            })
-         )
-      } catch (error) {
-         console.log(error)
-      }
+   
+   
+   const handlerGoogle= async () => {
+      await signInWithPopup(auth, provider)
+         .then((response) => {
+            dispatch(
+               AUTH_THUNK.authWithGoogle({
+                  tokenId: response?.user?.accessToken,
+                  navigate,
+               })
+            )
+         })
+         .catch((error) => {
+            return error
+         })
    }
+
    return (
       <StylesBox onSubmit={handleSubmit}>
          <StylesBoxRight>
@@ -120,11 +124,16 @@ export const SignIn = () => {
             </StylesBoxInput>
          </StylesBoxRight>
          <StylesBoxLeft>
-            <img src={BackgroundImage} alt="" />
+            <StyledImg  src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
 }
+const StyledImg = styled('img')({
+   width: '597px',
+   height: '100%',
+})
+
 const StylesBox = styled('form')({
    display: 'flex',
    fontFamily: 'Cera Pro, sans-serif',

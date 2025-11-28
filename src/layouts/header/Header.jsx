@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { FAVORITE_COUNT_THUNK } from '../../store/favoriteCount/favoriteThunk'
-import { CustomModal } from '../../components/UI/modal/Modal'
+import CustomModal from '../../components/UI/modal/Modal'
+
 
 export const Header = ({ favouritesCount, notificationCount }) => {
    const statusInput = status
@@ -67,16 +68,16 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                </StylesTypography>
 
                <StylesBoxOneHeaderDoucher>
-                  { favorites > 0 && (
+                  {favouritesCount > 0 && (
                      <StyledTypography onClick={hendlerFavorites}>
-                        Favourites({favorites})
+                        Favourites({favouritesCount})
                         <img src={StrelkaDown} alt="" />
                      </StyledTypography>
                   )}
                   {modalFavorites && (
                      <CustomModal
-                        isVisible={modalFavorites}
-                        handleVisible={hendlerFavorites}
+                        open={modalFavorites}
+                        onClose={hendlerFavorites}
                      >
                         <Box>
                            <Typography>Favourites</Typography>
@@ -107,10 +108,7 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                      alt="'notify'"
                   />
                   {modalNotify && (
-                     <StyledModal
-                        isVisible={modalNotify}
-                        handleVisible={hendlerNotify}
-                     >
+                     <StyledModal open={modalNotify} onClose={hendlerNotify}>
                         <StyledBoxModal>
                            <Box>
                               <Typography>Notification</Typography>
@@ -136,10 +134,7 @@ export const Header = ({ favouritesCount, notificationCount }) => {
                   src={data.profileFul.avatarUrl}
                />
                {modalUser && (
-                  <StyledModalProfile
-                     isVisible={modalUser}
-                     handleVisible={hedlerUser}
-                  >
+                  <StyledModalProfile open={modalUser} onClose={hedlerUser}>
                      <StyledUserProfile>
                         <StyledTypographyProfile onClick={hendlerNavigateUser}>
                            Profile

@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { IconButton, styled } from '@mui/material'
-import { Title, AccountingLMS } from '../../../utils/constants/index'
 import {
    DownIcon,
    FilesAndFoldersIcon,
@@ -8,46 +7,125 @@ import {
    LayoutIcon,
    LeftIcon,
    MenuIconRight,
+   MenuIconLeft,
    PeopleIcon,
    PlusIcon,
    ToolsIcon,
 } from '../../../assets/AllExportIcon'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import SidebarItem from './SidebarItem'
 import Section from './Section'
+import SidebarSettingModal from './SidebarModal'
+import { useDispatch, useSelector } from 'react-redux'
+import { MAIN_THUNK } from '../../../store/slices/workspaces/mainThunk'
+import CreateModal from '../../../pages/mainWorkSpace/mainModal/CreateModal'
+import { BOARDS_THUNK } from '../../../store/slices/board/BoardsThunk'
+import { setBoardBackground } from '../../../store/slices/board/BoardsSlice'
+import CustomModal from '../modal/Modal'
 
-export default function Sidebar() {
+export default function Sidebar({ rowsLength = 0 }) {
+   const [CrateSidebarModal, setCrateSidebarModal] = useState(false)
+   const OpenSidebarModalCrate = () => setCrateSidebarModal((prev) => !prev)
+
+   const [OpenSidebarModal, setOpenSidebarModal] = useState(false)
+   const OpenSidebarModalSetting = () => setOpenSidebarModal((prev) => !prev)
+
+   const handleCloseSettings = () => {
+      setOpenSidebarModal(false)
+      setActiveSetting(false)
+   }
+
+   const [activeSetting, setActiveSetting] = useState(false)
+
    const [open, setOpen] = useState(false)
    const [activeIndex, setActiveIndex] = useState(null)
    const [activeAL, setActiveAL] = useState(null)
    const [downAL, setDownAL] = useState({})
    const [showBoards, setShowBoards] = useState(false)
+   const navigate = useNavigate()
+   const { id } = useParams()
+
+   const dispatch = useDispatch()
+   const { token } = useSelector((state) => state.auth)
+   const { main } = useSelector((state) => state.main)
+   const { boards } = useSelector((state) => state.boards)
+   const { participans } = useSelector((state) => state.participans)
+
+   const handleBoardClick = (board) => {
+      setActiveIndex(board.id)
+      setActiveSetting(false)
+      const bg = board.backgroundUrl || board.backgroundColor
+      dispatch(setBoardBackground(bg))
+
+      localStorage.setItem('lastBoard', bg)
+   }
+
+   const currentWorkspace = useMemo(() => {
+      return main?.find((w) => w.id === Number(id))
+   }, [main, id])
+
+   useEffect(() => {
+      if (token) {
+         dispatch(MAIN_THUNK.getAllMain({ token }))
+      }
+   }, [dispatch, token])
+
+   useEffect(() => {
+      if (id) {
+         dispatch(BOARDS_THUNK.getBoardsByWorkspaceId(id))
+      }
+   }, [dispatch, id])
+
+   const location = useLocation()
+   const currentPath = location.pathname
 
    const toggleSidebar = () => setOpen((prev) => !prev)
    const toggleAL = (id) => setDownAL((prev) => ({ ...prev, [id]: !prev[id] }))
    const toggleBoards = () => setShowBoards((prev) => !prev)
 
+   const pathBoards = `/workspace/${id}`
+   const pathAllIssues = `/workspace/${id}/all-issuis`
+   const pathParticipants = `/workspace/${id}/participants`
+
+   const navigateToMain = () => {
+      navigate('/main-page')
+   }
+
    return (
       <SidebarContainer open={open}>
-         <TopSection>
-            <CircleIconButton open={open} onClick={toggleSidebar}>
+         <TopSection open={open}>
+            <CircleIconButton
+               open={open}
+               onClick={open ? navigateToMain : toggleSidebar}
+            >
                {open ? (
                   <MiniLMS>
                      <LeftIcon />
-                     <LMSSpan>LMS</LMSSpan>
+                     <LMSSpan>
+                        {currentWorkspace
+                           ? currentWorkspace.name
+                           : 'Task Tracker'}
+                     </LMSSpan>
                   </MiniLMS>
                ) : (
-                  <span>L</span>
+                  <span>
+                     {currentWorkspace ? currentWorkspace.name[0] : 'T'}
+                  </span>
                )}
             </CircleIconButton>
 
             <MenuButton onClick={toggleSidebar}>
-               <MenuIconRight />
+               {open ? <MenuIconLeft /> : <MenuIconRight />}
             </MenuButton>
          </TopSection>
 
          <Divider open={open} />
 
-         <SelectedMenuItem open={open}>
+         <SelectedMenuItem
+            open={open}
+            isActive={currentPath === pathBoards}
+            onClick={() => navigate(pathBoards)}
+         >
             <LayoutIcon />
             {open && (
                <>
@@ -64,75 +142,112 @@ export default function Sidebar() {
 
          {open && showBoards && (
             <BoardsContainer>
-               {Title.map((label, idx) => (
-                  <TitleItem
-                     key={idx}
-                     isActive={activeIndex === idx}
-                     onClick={() => setActiveIndex(idx)}
-                  >
-                     {label}
+               {boards && boards.length > 0 ? (
+                  boards.map((board) => (
+                     <TitleItem
+                        key={board.id}
+                        isActive={activeIndex === board.id}
+                        onClick={() => handleBoardClick(board)}
+                     >
+                        {board.name}
+                     </TitleItem>
+                  ))
+               ) : (
+                  <TitleItem style={{ color: 'gray', cursor: 'default' }}>
+                     No boards
                   </TitleItem>
-               ))}
+               )}
             </BoardsContainer>
          )}
 
          <Divider open={open} />
 
-         <MainIcons>
+         <MainIcons open={open}>
             <SidebarItem
                icon={<FilesAndFoldersIcon />}
                label="All issues"
-               count="(267)"
-               isActive={activeIndex === 122}
-               onClick={() => setActiveIndex(122)}
+               count={`(${rowsLength})`}
+               isActive={currentPath === pathAllIssues}
+               onClick={() => {
+                  navigate(pathAllIssues)
+               }}
                open={open}
             />
             <SidebarItem
                icon={<PeopleIcon />}
                label="Participants"
-               count="(17)"
-               isActive={activeIndex === 288}
-               onClick={() => setActiveIndex(288)}
+               count={`(${participans?.length || 0})`}
+               isActive={currentPath === pathParticipants}
+               onClick={() => {
+                  navigate(`/workspace/${id}/participants`)
+               }}
                open={open}
             />
+
             <SidebarItem
                icon={<ToolsIcon />}
                label="Setting"
-               isActive={activeIndex === 377}
-               onClick={() => setActiveIndex(377)}
+               isActive={activeSetting}
+               onClick={() => {
+                  setActiveSetting(true)
+                  OpenSidebarModalSetting()
+               }}
                open={open}
             />
          </MainIcons>
 
+         <CustomModal open={OpenSidebarModal} onClose={handleCloseSettings}>
+            <SidebarSettingModal
+               onClose={handleCloseSettings}
+               id={Number(id)}
+               workspaceName={
+                  main?.find((w) => w.id === Number(id))?.name || ''
+               }
+            />
+         </CustomModal>
+
          <Divider open={open} />
 
-         <Workspaces>
+         <Workspaces open={open}>
             <WorkspaceHeader>
-               <GraphicIconWrapper>
+               <GraphicIconWrapper open={open}>
                   <GraphicIcon />
                </GraphicIconWrapper>
-               {open && (
-                  <>
-                     <LabelText>Workspaces</LabelText>
-                     <PlusIconWrapper>
-                        <PlusIcon />
-                     </PlusIconWrapper>
-                  </>
-               )}
+
+               <HeaderLabelContainer
+                  open={open}
+                  onClick={OpenSidebarModalCrate}
+               >
+                  <LabelText>Workspaces</LabelText>
+                  <PlusIconWrapper>
+                     <PlusIcon />
+                  </PlusIconWrapper>
+               </HeaderLabelContainer>
+
+               <CustomModalCrate
+                  open={CrateSidebarModal}
+                  onClose={OpenSidebarModalCrate}
+               >
+                  <CreateModal onClose={OpenSidebarModalCrate} />
+               </CustomModalCrate>
             </WorkspaceHeader>
 
-            {AccountingLMS.map((label, id) => (
-               <Section
-                  key={id}
-                  id={id}
-                  label={label}
-                  open={open}
-                  downAL={!!downAL[id]}
-                  toggleDownAL={() => toggleAL(id)}
-                  isActive={activeAL === id}
-                  onClick={() => setActiveAL(id)}
-               />
-            ))}
+            {main &&
+               main.length > 0 &&
+               main.map((workspace) => (
+                  <Section
+                     OpenSidebarModalSetting={OpenSidebarModalSetting}
+                     OpenSidebarModal={OpenSidebarModal}
+                     key={workspace.id}
+                     id={workspace.id}
+                     label={workspace.name}
+                     open={open}
+                     downAL={!!downAL[workspace.id]}
+                     toggleDownAL={() => toggleAL(workspace.id)}
+                     isActive={activeAL === workspace.id}
+                     onClick={() => setActiveAL(workspace.id)}
+                  />
+               ))}
 
             <ShowMore>
                <DownIcon />
@@ -144,7 +259,7 @@ export default function Sidebar() {
 }
 
 const SidebarContainer = styled('div')(({ open }) => ({
-   width: open ? 250 : 116,
+   width: open ? '250px' : 116,
    transition: 'width 0.5s',
    height: '93.5vh',
    display: 'flex',
@@ -152,7 +267,7 @@ const SidebarContainer = styled('div')(({ open }) => ({
    paddingTop: 93,
    overflowY: 'auto',
    overflowX: 'hidden',
-   background: 'rgba(248,248,248,0.6)',
+   background: 'rgba(255, 255, 255, 0.6)',
    alignItems: 'center',
 
    scrollbarWidth: 'none',
@@ -163,12 +278,16 @@ const SidebarContainer = styled('div')(({ open }) => ({
    },
 }))
 
-const TopSection = styled('div')({
+const TopSection = styled('div')(({ open }) => ({
    display: 'flex',
    alignItems: 'center',
-   marginLeft: 40,
+   justifyContent: open ? 'space-between' : 'center',
+   width: '100%',
+   padding: open ? '0 20px' : '0',
+   boxSizing: 'border-box',
    marginBottom: 22,
-})
+   gap: open ? 0 : 10,
+}))
 
 const CircleIconButton = styled('div')(({ open }) => ({
    borderRadius: 24,
@@ -191,13 +310,18 @@ const MiniLMS = styled('div')({
    gap: 11,
 })
 
-const LMSSpan = styled('span')({ width: 135 })
+const LMSSpan = styled('span')({
+   width: 135,
+   whiteSpace: 'nowrap',
+   overflow: 'hidden',
+   textOverflow: 'ellipsis',
+   fontWeight: 600,
+})
 
 const MenuButton = styled(IconButton)({
    width: 23,
    height: 22,
    padding: 0,
-   marginLeft: 23,
    '& svg': { width: 20, height: 20 },
 })
 
@@ -206,15 +330,15 @@ const Divider = styled('div')(({ open }) => ({
    border: '1px solid rgba(224,224,224,1)',
 }))
 
-const SelectedMenuItem = styled('div')(({ open }) => ({
-   width: open ? '100%' : 100,
+const SelectedMenuItem = styled('div')(({ open, isActive }) => ({
+   width: open ? '90%' : 100,
    height: 37,
    borderRadius: '0 24px 24px 0',
    display: 'flex',
    alignItems: 'center',
-   justifyContent: 'center',
+   justifyContent: open ? 'space-between' : 'center',
    padding: open ? '8px 32px 8px 32px' : '8px 32px 9px 32px',
-   background: open ? 'rgba(58,104,131,0.6)' : undefined,
+   background: open && isActive ? 'rgba(58,104,131,0.6)' : undefined,
    margin: '10px 0',
 }))
 
@@ -224,51 +348,84 @@ const BoardsContainer = styled('div')({
    display: 'flex',
    flexDirection: 'column',
    borderLeft: '1px solid rgba(224,224,224,1)',
-   minHeight: 200,
+   minHeight: 40,
 })
 
 const TitleItem = styled('div')(({ isActive }) => ({
-   maxWidth: isActive ? 172 : 54,
-   borderRadius: isActive ? '0 24px 24px 0' : undefined,
-   background: isActive ? 'rgba(230,234,237,1)' : undefined,
+   width: '100%',
+   maxWidth: 180,
    height: 36,
    display: 'flex',
    alignItems: 'center',
-   padding: '0 21px',
+   padding: '0 16px',
    cursor: 'pointer',
+   borderRadius: '0 18px 18px 0',
+   background: isActive ? 'rgba(230,234,237,1)' : undefined,
+   whiteSpace: 'nowrap',
+   overflow: 'hidden',
+   textOverflow: 'ellipsis',
+   fontSize: 14,
+   lineHeight: '16px',
+   color: '#2d2d2d',
+   transition: 'background 0.2s',
+   '&:hover': {
+      background: 'rgba(230,234,237,0.6)',
+   },
 }))
 
-const MainIcons = styled('div')({
+const MainIcons = styled('div')(() => ({
    display: 'flex',
    flexDirection: 'column',
    margin: '20px 0',
    gap: 16,
-})
+}))
 
 const PlusIconWrapper = styled('div')({
    marginLeft: 6,
    '& svg': { width: 20, height: 20 },
 })
-const LabelText = styled('span')({ marginLeft: 12 })
 
-const Workspaces = styled('div')({
+const CustomModalCrate = styled(CustomModal)({})
+
+const HeaderLabelContainer = styled('div')(({ open }) => ({
+   display: 'flex',
+   alignItems: 'center',
+   marginLeft: 12,
+   opacity: open ? 1 : 0,
+   visibility: open ? 'visible' : 'hidden',
+   transform: open ? 'translateX(0)' : 'translateX(-10px)',
+   transition: 'opacity 0.3s, transform 0.3s, visibility 0.3s',
+   transitionDelay: '0.1s',
+}))
+
+const LabelText = styled('div')({ marginLeft: 12 })
+
+const Workspaces = styled('div')(({ open }) => ({
+   width: '100%',
+   paddingLeft: open ? '40px' : '45px',
    marginTop: 21.5,
    display: 'flex',
    flexDirection: 'column',
-   alignItems: 'center',
    gap: 16,
+   transition: 'padding-left 0.5s',
+}))
+const WorkspaceHeader = styled('div')({
+   display: 'flex',
+   alignItems: 'center',
 })
-const WorkspaceHeader = styled('div')({ display: 'flex', alignItems: 'center' })
 
-const GraphicIconWrapper = styled('div')({
+const GraphicIconWrapper = styled('div')(({ open }) => ({
+   paddingLeft: open ? '3px' : '4px',
    width: 20,
    height: 20,
-})
+   transition: 'padding-left 0.5s',
+}))
 
 const DownButton = styled(IconButton)({ padding: 0, marginLeft: 7 })
 
 const ShowMore = styled('div')({
    display: 'flex',
    alignItems: 'center',
+   gap: '12px',
    cursor: 'pointer',
 })

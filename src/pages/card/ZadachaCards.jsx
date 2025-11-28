@@ -11,14 +11,14 @@ export default function ZadachaCards({ id, items }) {
    console.log(id, '09')
 
    const { setNodeRef } = useDroppable({ id })
-   const { cards } = useSelector((state) => state.card)
+   const card = useSelector(state => state.card.card)
 
    return (
       <SortableContext items={items} strategy={verticalListSortingStrategy}>
          <StyledBoxContainerZadacha>
             <div ref={setNodeRef} className="droppable-container">
                {items?.map((itemId) => (
-                  <SortableItem key={itemId} id={itemId} title={cards?.title} />
+                  <SortableItem key={itemId} id={itemId} title={card?.title} />
                ))}
             </div>
 

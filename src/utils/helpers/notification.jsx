@@ -8,6 +8,28 @@ import {
    WarningNotificationIcon,
 } from '../../assets/AllExportIcon'
 
+const CustomToastContent = ({
+   closeToast,
+   toastProps,
+   isPaused,
+   title,
+   message,
+   icon,
+   type,
+   ...rest
+}) => (
+   <StyledBox {...rest}>
+      <StyledIcon className={type}> {icon}</StyledIcon>
+
+      <Box>
+         <StyledTitle variant="h1" className={type}>
+            {title}
+         </StyledTitle>
+         <StyledMessage className={type}>{message}</StyledMessage>
+      </Box>
+   </StyledBox>
+)
+
 export const showNotification = ({
    title = 'Success',
    message = 'Successfully',
@@ -19,7 +41,8 @@ export const showNotification = ({
    if (type === 'success') {
       icon = <DoneNotificationIcon />
    } else if (type === 'error') {
-      icon = <ErrorNotificationIcon customFrame="true" />
+      icon = <ErrorNotificationIcon />
+      //  icon = <ErrorNotificationIcon customFrame="true" />
    } else if (type === 'warning') {
       icon = <WarningNotificationIcon color="inherit" />
    } else if (type === 'info') {
@@ -27,17 +50,12 @@ export const showNotification = ({
    }
 
    toast[type](
-      <StyledBox>
-         <StyledIcon className={type}> {icon}</StyledIcon>
-
-         <Box>
-            <StyledTitle variant="h1" className={type}>
-               {title}
-            </StyledTitle>
-            <StyledMessage className={type}>{message}</StyledMessage>
-         </Box>
-      </StyledBox>,
-
+      <CustomToastContent
+         title={title}
+         message={message}
+         icon={icon}
+         type={type}
+      />,
       {
          autoClose: duration,
          closeOnClick: true,

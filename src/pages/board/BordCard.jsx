@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { COLUMN_THUNK } from '../../store/slices/column/columnThunk'
 import { ThreeDotsIcon } from '../../assets/AllExportIcon'
 import { Card } from '../card/Card'
-import { CustomModal } from '../../components/UI/modal/Modal'
+import CustomModal from '../../components/UI/modal/Modal'
 import { CARD_THUNK } from '../../store/slices/card/cardThunk'
 import {
    closestCorners,
@@ -35,7 +35,11 @@ export default function BordCard({ IdBoard }) {
    const flatCards = columns.flatMap((col) => col.cards)
    console.log(flatCards, 'flatCarddds')
 
-   const { cards } = useSelector((state) => state.card)
+   const card = useSelector((state) => state.card.card)
+
+   console.log(card?.title, 'cardddddd')
+
+   const { boards, loading } = useSelector((state) => state.board)
 
    const { id } = useParams()
 
@@ -57,7 +61,9 @@ export default function BordCard({ IdBoard }) {
    }
 
    const handlerDelete = () => {
-      dispatch(COLUMN_THUNK.deleteColumnThunk({ id }))
+      dispatch(
+         COLUMN_THUNK.deleteColumnThunk({ columnId: columns.id, id: boards.id })
+      )
       setDeleettOpen(false)
    }
    const handleOpenModal = (cardId) =>
@@ -91,6 +97,7 @@ export default function BordCard({ IdBoard }) {
 
       if (COLUMN_THUNK.columnThunk.fulfilled.match(resultAction)) {
          setName('') // очищаем инпут
+         setOpen(false)
       } else {
          console.error('Ошибка при создании колонки:', resultAction.payload)
       }
@@ -111,7 +118,7 @@ export default function BordCard({ IdBoard }) {
       const converted = {}
 
       columns.forEach((col) => {
-         converted[col.id] = col?.cards?.map((c) => c.id) || []
+         converted[col.id] = col?.card?.map((c) => c.id) || []
       })
 
       setItems(converted)
@@ -312,7 +319,6 @@ export default function BordCard({ IdBoard }) {
                            <StyledTypographyTitlele>
                               {card.title}
                            </StyledTypographyTitlele>
-                           <StyledTypographyTitlele>d</StyledTypographyTitlele>
                         </StyledBoxContainerZadacha>
                      ))}
 
@@ -343,11 +349,7 @@ export default function BordCard({ IdBoard }) {
                )
             })}
             {deleetOpen && (
-               <CustomModal
-                  isVisible={deleetOpen}
-                  handleVisible={handleOpenDelete}
-                  onClose={handleOpenDelete}
-               >
+               <CustomModal open={deleetOpen} onClose={handleOpenDelete}>
                   <Box>
                      <Typography>Удалить колонку</Typography>
                      <Box>
@@ -357,16 +359,13 @@ export default function BordCard({ IdBoard }) {
                   </Box>
                </CustomModal>
             )}
+
             {modalOpen && (
-               <CustomModal
-                  isVisible={modalOpen}
-                  handleVisible={handleCloseModal}
-                  onClose={handleCloseModal}
-               >
+               <CustomModal open={modalOpen} onClose={handleCloseModal}>
                   <StyledModalBox>
                      <Card
-                        titele={cards.title}
-                        id={cards.id}
+                        titele={card.title}
+                        id={card.id}
                         handler={handleCloseModal}
                      />
                   </StyledModalBox>
@@ -441,7 +440,7 @@ const StyledButtonApp = styled('button')(() => ({
 
 const StyledModalBox = styled(Box)(() => ({
    width: '1000px',
-   height: '450px',
+   height: '100%',
 }))
 
 const StyledBoxContainerZadacha = styled(Box)(() => ({

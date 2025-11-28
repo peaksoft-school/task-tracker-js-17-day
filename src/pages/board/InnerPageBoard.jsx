@@ -25,7 +25,7 @@ import AddIcon from '@mui/icons-material/Add'
 import FilterListIcon from '@mui/icons-material/FilterList'
 import AppsIcon from '@mui/icons-material/Apps'
 import { AppButton } from '../../components/UI/AppButton'
-import { CustomModal } from '../../components/UI/modal/Modal'
+import CustomModal from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import Sidebar from '../../components/UI/sidebar/Sidebar'
 import { backgroundImages } from '../../assets/backgroundImg/background'
@@ -169,8 +169,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                      </StyledTypographyInvite>
                      {participant && (
                         <StyledCustomModalPersson
-                           isVisible={participant}
-                           handleVisible={handlerParticipant}
+                           open={participant}
+                           onClose={handlerParticipant}
                         >
                            <StyledBoxModalPractice>
                               <StyledBoxIconModal>
@@ -211,8 +211,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                      )}
                      {modalInvite && (
                         <CustomModal
-                           isVisible={modalInvite}
-                           handleVisible={handlerOpenModalInvite}
+                           open={modalInvite}
+                           onClose={handlerOpenModalInvite}
                         >
                            <StyledModalBoxInvite>
                               <Typography>Participant</Typography>
@@ -235,8 +235,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                        <DownIcon onClick={handlerIkon} />
                                        {ikon && (
                                           <StyledModalperson
-                                             isVisible={ikon}
-                                             handleVisible={handlerIkon}
+                                             open={ikon}
+                                             onClose={handlerIkon}
                                           >
                                              <StyledBoxModalContent>
                                                 <StyledBoxIkons
@@ -277,8 +277,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                  </StyledTypographyModalInvite>
                                  {participant && (
                                     <StyledCustomModalPersson
-                                       isVisible={participant}
-                                       handleVisible={handlerParticipant}
+                                       open={participant}
+                                       onClose={handlerParticipant}
                                     >
                                        <StyledBoxModalPractice>
                                           <StyledBoxIconModal>
@@ -338,8 +338,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                      </StyledButton>
                      {fellterModal && (
                         <CustomModal
-                           isVisible={fellterModal}
-                           handleVisible={handlerFellterModal}
+                           open={fellterModal}
+                           onClose={handlerFellterModal}
                         >
                            <Box>
                               <Box>
@@ -356,8 +356,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                      </StyledButton>
                      {menuModal && (
                         <CustomModal
-                           isVisible={menuModal}
-                           handleVisible={hendlerOpenMenuModal}
+                           open={menuModal}
+                           onClose={hendlerOpenMenuModal}
                         >
                            <StyledBoxModalContainerMenu>
                               <StyledBoxMenu>
@@ -381,8 +381,8 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                           />
                                           {chatBackground && (
                                              <CustomModal
-                                                isVisible={chatBackground}
-                                                handleVisible={
+                                                open={chatBackground}
+                                                onClose={
                                                    hedlerOpenChatBackground
                                                 }
                                              >
@@ -413,10 +413,10 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                                       />
                                                       {backgroundModalImages && (
                                                          <StyledModalBakg
-                                                            isVisible={
+                                                            open={
                                                                backgroundModalImages
                                                             }
-                                                            handleVisible={
+                                                            onClose={
                                                                handlerModelImg
                                                             }
                                                          >
@@ -472,10 +472,10 @@ export const InnerPageBoard = ({ columns = 1 }) => {
                                                       )}
                                                       {backgroundModalColors && (
                                                          <ModalBox
-                                                            isVisible={
+                                                            open={
                                                                backgroundModalColors
                                                             }
-                                                            handleVisible={
+                                                            onClose={
                                                                handlerModelColor
                                                             }
                                                          >
@@ -844,7 +844,7 @@ const StyledBox = styled(Box)(({ background }) => {
    return {
       backgroundColor: isColor ? background : 'transparent',
       backgroundImage: !isColor && background ? `url(${background})` : 'none',
-      backgroundSize: 'cover',
+      backgroundSize: '100% auto',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
       color: isWhite ? 'black' : 'white',
@@ -852,6 +852,6 @@ const StyledBox = styled(Box)(({ background }) => {
       gridTemplateColumns: '240px 1fr',
 
       width: '100%',
-      height: '100%',
+      height: 'auto',
    }
 })

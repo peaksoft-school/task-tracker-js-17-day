@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://3.72.63.246'
+const BASE_URL = 'http://3.79.59.104'
 
 export const axiosInstanceFile = axios.create({
    baseURL: BASE_URL,

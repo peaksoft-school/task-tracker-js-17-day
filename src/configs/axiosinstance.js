@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://3.72.63.246'
+const BASE_URL = 'http://3.79.59.104'
 
 export const axiosInstance = axios.create({
    baseURL: BASE_URL,
@@ -11,11 +11,11 @@ export const axiosInstance = axios.create({
 })
 
 let customStore
-
 export const injectStore = (store) => {
    customStore = store
 }
 
+// отправлять request в бекенд
 axiosInstance.interceptors.request.use(
    (config) => {
       const updateConfig = { ...config }
@@ -33,7 +33,7 @@ axiosInstance.interceptors.request.use(
       return Promise.reject(error)
    }
 )
-
+// получать response данные с бекенда
 axiosInstance.interceptors.response.use(
    (response) => {
       return Promise.resolve(response)

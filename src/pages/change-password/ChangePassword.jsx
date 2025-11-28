@@ -84,7 +84,7 @@ export const ChangePassword = () => {
          </StylesBoxRight>
 
          <StylesBoxLeft>
-            <img src={BackgroundImage} alt="" />
+            <StylesImg src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
@@ -95,10 +95,6 @@ const StyledIconHide = styled(HideIcon)({
 
 const StyledIconShow = styled(ShowIcon)({
    cursor: 'pointer',
-})
-
-const StyledA = styled('a')({
-   color: '#0079c0',
 })
 
 const StyledButton = styled(AppButton)({

@@ -26,7 +26,6 @@ import {
 export const IssuesTable = ({ rows }) => {
    return (
       <>
-         {/* === Table === */}
          <TableIssues>
             <TableHeadGrayLine>
                <TableRow>

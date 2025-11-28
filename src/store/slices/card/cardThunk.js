@@ -27,8 +27,10 @@ const createCardThunk = createAsyncThunk(
             title,
          })
 
-         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
+         // после создания обновляем колонки
+         dispatch(COLUMN_THUNK.getColumnsThunk({ id }))
 
+         // возвращаем созданную карточку
          return data
       } catch (error) {
          return rejectWithValue(error.response?.data || error.message)
@@ -98,24 +100,24 @@ const attachmentsThunk = createAsyncThunk(
 
 const estimateThunk = createAsyncThunk(
    'card/estimateThunk',
-   async ({ cardId, estimate,id}, { rejectWithValue, dispatch }) => {
-      try {
-         const { data } = await axiosInstance.patch(
-            `/cards/${cardId}/attachments`,
-            {
-               startDate: estimate.startDate,
-               dueDateWithTime: estimate.dueDateWithTime,
-               reminder: estimate.reminder,
-            }
-         )
-         dispatch(COLUMN_THUNK.getCardsThunk({ id }))
-
-         return data
-      } catch (error) {
-         return rejectWithValue(error.response?.data || error.message)
-      }
+   async ({ cardId, startDate, dueDateWithTime, reminder, id }, { rejectWithValue, dispatch }) => {
+     try {
+       const { data } = await axiosInstance.post(
+         `/cards/${cardId}/estimation`, // <-- эндпоинт из Swagger
+         {
+           startDate,
+           dueDateWithTime,
+           reminder,
+         }
+       )
+       dispatch(COLUMN_THUNK.getCardsThunk({ id }))
+       return data
+     } catch (error) {
+       return rejectWithValue(error.response?.data || error.message)
+     }
    }
-)
+ )
+ 
 
 const userThunk = createAsyncThunk(
    'card/userThunk',

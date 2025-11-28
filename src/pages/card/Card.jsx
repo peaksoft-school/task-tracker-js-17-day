@@ -22,7 +22,7 @@ import {
    Avatar,
 } from '@mui/material'
 import { AppButton } from '../../components/UI/AppButton'
-import { CustomModal } from '../../components/UI/modal/Modal'
+import CustomModal from '../../components/UI/modal/Modal'
 import { Input } from '../../components/UI/Input'
 import CustomDateRangeCalendar from '../../components/UI/DatePicker'
 import { Select } from '../../components/UI/Select'
@@ -55,9 +55,10 @@ export const Card = ({ handler, titele }) => {
    const dispatch = useDispatch()
    const createdCard = useSelector((state) => state.card.createdCard)
 
-   const { cards } = useSelector((state) => state.card)
-   console.log(cards.id, 'cards000009')
-   const id = cards.id
+   const card = useSelector((state) => state.card.card)
+   console.log(card, 'card')
+
+   const id = card?.id
 
    const label = useSelector((state) => state.label.labels)
 
@@ -140,20 +141,20 @@ export const Card = ({ handler, titele }) => {
    const handleCreate = () => {
       const { start, end, time } = dates
 
-      const dueDateWithTime = dayjs(end)
-         .hour(time.hour())
-         .minute(time.minute())
-         .second(0)
+      const dueDateWithTime = dayjs(end).hour(time.hour()).minute(time.minute())
 
-      const estimatePayload = {
-         startDate: start.toISOString(),
-         dueDateWithTime: dueDateWithTime.toISOString(),
-         reminder: Number(selectValue),
-      }
+      const startDate = dayjs(start).hour(start.hour()).minute(start.minute())
 
       dispatch(
-         CARD_THUNK.estimateThunk({ cardId: id, estimate: estimatePayload })
+         CARD_THUNK.estimateThunk({
+            cardId: id,
+            startDate: startDate.toISOString(),
+            dueDateWithTime: dueDateWithTime.toISOString(),
+            reminder: Number(selectValue),
+            id,
+         })
       )
+      setModalEstimation(false)
    }
 
    // const handlerUsers = () => {
@@ -165,7 +166,7 @@ export const Card = ({ handler, titele }) => {
       title,
       descriptionn,
       creatorEmail,
-      assignees,
+      attachments,
       labels,
       checklists,
       period,
@@ -173,9 +174,11 @@ export const Card = ({ handler, titele }) => {
       columnTitle,
       state,
       checklistProgress,
-   } = cards
+      dueDate,
+      start_time,
+   } = card
 
-   console.log(labels, 'test009')
+   console.log(start_time, 'test009')
 
    return (
       <StyledWrapper>
@@ -200,6 +203,16 @@ export const Card = ({ handler, titele }) => {
                      <Chipp color={item.colorType} label={item.titele} />
                   ))}
                </Box>
+               <Box>
+                  <Box>
+                     <Typography>Start date</Typography>
+                     <Input value={start_time} />
+                  </Box>
+                  <Box>
+                     <Typography>Due date</Typography>
+                     <Input value={dueDate} />
+                  </Box>
+               </Box>
                <StyledBoxDowun
                   onClick={() => setOpenDescription(!openDescription)}
                >
@@ -216,12 +229,12 @@ export const Card = ({ handler, titele }) => {
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                      />
+                     <StyledActionsRow>
+                        <StyledButton>Cancel</StyledButton>
+                        <AppButton>Save</AppButton>
+                     </StyledActionsRow>
                   </StyledDescriptionBox>
                )}{' '}
-               <StyledActionsRow>
-                  <StyledButton>Cancel</StyledButton>
-                  <AppButton>Save</AppButton>
-               </StyledActionsRow>
                <Box>
                   {checklists.map((item) => (
                      <StyledBoxCheklistt>
@@ -229,6 +242,18 @@ export const Card = ({ handler, titele }) => {
                            <EditIcon /> {item.title}
                         </Typography>
                      </StyledBoxCheklistt>
+                  ))}
+               </Box>
+               <Box>
+                  {attachments?.map((item) => (
+                     <StyledAttechmentBox key={item.id}>
+                        <StyledImgAttechment src={item.fileUrl} alt="img" />
+
+                        <Box>
+                           <Typography>{item.fileType}</Typography>
+                           <Typography>{item.cratedAt}</Typography>
+                        </Box>
+                     </StyledAttechmentBox>
                   ))}
                </Box>
             </Box>
@@ -292,10 +317,7 @@ export const Card = ({ handler, titele }) => {
          </StyledContiner>
 
          {modalMembers && (
-            <CustomModal
-               isVisible={modalMembers}
-               handleVisible={hendleOpenMembers}
-            >
+            <CustomModal open={modalMembers} onClose={hendleOpenMembers}>
                <StyledBoxModal>
                   <StyledContinerModal>
                      <Box></Box>
@@ -335,10 +357,7 @@ export const Card = ({ handler, titele }) => {
          )}
 
          {modalEstimation && (
-            <CustomModal
-               isVisible={modalEstimation}
-               handleVisible={hendleEstimation}
-            >
+            <CustomModal open={modalEstimation} onClose={hendleEstimation}>
                <StyledModalEstimation>
                   <StyledContinerModal>
                      <Box></Box>
@@ -373,7 +392,7 @@ export const Card = ({ handler, titele }) => {
             </CustomModal>
          )}
          {modalLabel && (
-            <CustomModal isVisible={modalLabel} handleVisible={hendleOpenLabel}>
+            <CustomModal open={modalLabel} onClose={hendleOpenLabel}>
                <Box>
                   <StyledContinerModal>
                      <Box></Box>
@@ -413,10 +432,7 @@ export const Card = ({ handler, titele }) => {
             </CustomModal>
          )}
          {modalChecklist && (
-            <CustomModal
-               isVisible={modalChecklist}
-               handleVisible={hendleOpenChecklist}
-            >
+            <CustomModal open={modalChecklist} onClose={hendleOpenChecklist}>
                <StyledBoxChecklist>
                   <StyledContinerModal>
                      <Box></Box>
@@ -436,6 +452,20 @@ export const Card = ({ handler, titele }) => {
       </StyledWrapper>
    )
 }
+const StyledAttechmentBox = styled(Box)(() => ({
+   display: 'flex',
+   flexDirection: 'row', // ← вот это тебе нужно
+   justifyContent: 'start',
+   alignItems: 'center',
+   gap: '10px',
+   marginTop: '15px',
+}))
+
+const StyledImgAttechment = styled('img')(() => ({
+   width: '153px',
+   height: '75px',
+}))
+
 const StyledBoxCheklistt = styled(Box)(() => ({
    display: 'flex',
    justifyContent: 'center',

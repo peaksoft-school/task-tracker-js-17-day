@@ -9,8 +9,11 @@ import Board from '../pages/board/Board'
 import { Profile } from '../pages/profile/Profile'
 import IssuesPage from '../pages/all-issuis/Issues'
 import PrivateRoute from './PrivateRoute'
+import Issues from '../pages/all-issuis/Issues'
 import Main from '../pages/mainWorkSpace/Main'
 
+import BoardsPage from '../pages/BoardsPage'
+import ParticipantsPage from '../pages/participants/ParticipantsPage'
 
 export const routes = createBrowserRouter([
    {
@@ -52,10 +55,10 @@ export const routes = createBrowserRouter([
       ),
    },
    {
-      path: '/all-issuis',
+      path: '/workspace/:id',
       element: (
          <PrivateRoute
-            Component={<IssuesPage />}
+            Component={<BoardsPage />}
             isAllowed={true}
             fallBacPath="/"
          />
@@ -69,6 +72,38 @@ export const routes = createBrowserRouter([
    {
       path: '/boards/:id/columns-with-cards',
       element: <InnerPageBoard/>,
+   },
+
+   {
+      path: '/workspace',
+      element: (
+         <PrivateRoute
+            Component={<BoardsPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+
+   {
+      path: '/workspace/:id/all-issuis',
+      element: (
+         <PrivateRoute
+            Component={<Issues />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
+   },
+   {
+      path: '/workspace/:id/participants',
+      element: (
+         <PrivateRoute
+            Component={<ParticipantsPage />}
+            isAllowed={true}
+            fallBacPath="/"
+         />
+      ),
    },
 
    {

@@ -8,17 +8,20 @@ import {
    ShowIcon,
 } from '../../assets/AllExportIcon'
 import { useFormik } from 'formik'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { VALIDATION_SIGN_UP } from '../../utils/helpers/validation'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
 import { useState } from 'react'
 import { auth, provider } from '../../configs/firebase'
 import { useNavigate } from 'react-router-dom'
+import { signInWithPopup } from 'firebase/auth'
 
 export const SignUp = () => {
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
    const navigate = useNavigate()
+
+   const { status, acceptToken } = useSelector((state) => state.main)
 
    const dispatch = useDispatch()
 
@@ -48,12 +51,13 @@ export const SignUp = () => {
       setShowRepitPassword(!showRepitPassword)
    }
 
-   const hndlerGoogel = async () => {
+   const handlerGoogle= async () => {
       await signInWithPopup(auth, provider)
          .then((response) => {
             dispatch(
                AUTH_THUNK.authWithGoogle({
                   tokenId: response?.user?.accessToken,
+                  navigate,
                })
             )
          })
@@ -73,16 +77,12 @@ export const SignUp = () => {
             <StylesBoxInput>
                <Typography fontSize={18}>Sign Up</Typography>
 
-               <StyledBoxGoogle onClick={hndlerGoogel}>
+               <StyledBoxGoogle onClick={handlerGoogle}>
                   <StyledBox>
-                     <StyledAvatar>R</StyledAvatar>
-
                      <Box>
-                        <StyledH3>Sign Up as Nazira</StyledH3>
-                        <StyledP>example@gmail.com</StyledP>
+                        <Typography>Войти через Google</Typography>
                      </Box>
                   </StyledBox>
-
                   <StyledAvatarGoogle>
                      <GoogleIcon />
                   </StyledAvatarGoogle>
@@ -206,11 +206,15 @@ export const SignUp = () => {
          </StylesBoxRight>
 
          <StylesBoxLeft>
-            <img src={BackgroundImage} alt="" />
+            <StyledImg src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
 }
+const StyledImg = styled('img')({
+   width: '597px',
+   height: '100%',
+})
 
 const StylesBox = styled('form')({
    display: 'flex',
