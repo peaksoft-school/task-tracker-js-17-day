@@ -6,9 +6,7 @@ import { AppButton } from './UI/AppButton'
 export default function DescriptionBox() {
    const [description, setDescription] = useState('')
 
-   const handleSave = () => {
-      console.log('Saved:', description)
-   }
+  
 
    const handleCancel = () => {
       setDescription('')

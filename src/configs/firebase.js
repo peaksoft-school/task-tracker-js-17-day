@@ -11,8 +11,8 @@ const firebaseConfig = {
    measurementId: 'G-REEVTVNLZM',
 }
 
-const app = initializeApp(firebaseConfig, 'task-tracker')
+const app = initializeApp(firebaseConfig) // 🔥 без имени!
 const auth = getAuth(app)
-
 const provider = new GoogleAuthProvider()
+
 export { auth, provider }

@@ -15,31 +15,18 @@ import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.p
 import { useState } from 'react'
 import { auth, provider } from '../../configs/firebase'
 import { useNavigate } from 'react-router-dom'
+import { signInWithPopup } from 'firebase/auth'
 
 export const SignUp = () => {
    const label = { inputProps: { 'aria-label': 'Checkbox demo' } }
+   const navigate = useNavigate()
 
    const { status, acceptToken } = useSelector((state) => state.main)
 
    const dispatch = useDispatch()
 
-   const navigate = useNavigate()
-
-   const onSubmit = (values) => {
-      if (status === 'NOT_FOUND') {
-         const registerValues = {
-            name: values.name,
-            lastName: values.lastName,
-            password: values.password,
-         }
-
-         dispatch(
-            AUTH_THUNK.register({ registerValues, acceptToken, navigate })
-         )
-      } else {
-         dispatch(AUTH_THUNK.signUP({ values, navigate }))
-      }
-   }
+   const onSubmit = (values) =>
+      dispatch(AUTH_THUNK.signUP({ values, navigate }))
 
    const { handleSubmit, values, handleChange, touched, errors } = useFormik({
       initialValues: {
@@ -64,15 +51,15 @@ export const SignUp = () => {
       setShowRepitPassword(!showRepitPassword)
    }
 
-   const hndlerGoogel = async () => {
+   const handlerGoogle= async () => {
       await signInWithPopup(auth, provider)
          .then((response) => {
             dispatch(
                AUTH_THUNK.authWithGoogle({
                   tokenId: response?.user?.accessToken,
+                  navigate,
                })
             )
-            console.log('dl')
          })
          .catch((error) => {
             return error
@@ -90,16 +77,12 @@ export const SignUp = () => {
             <StylesBoxInput>
                <Typography fontSize={18}>Sign Up</Typography>
 
-               <StyledBoxGoogle onClick={hndlerGoogel}>
+               <StyledBoxGoogle onClick={handlerGoogle}>
                   <StyledBox>
-                     <StyledAvatar>R</StyledAvatar>
-
                      <Box>
-                        <StyledH3>Sign Up as Nazira</StyledH3>
-                        <StyledP>example@gmail.com</StyledP>
+                        <Typography>Войти через Google</Typography>
                      </Box>
                   </StyledBox>
-
                   <StyledAvatarGoogle>
                      <GoogleIcon />
                   </StyledAvatarGoogle>
@@ -223,11 +206,15 @@ export const SignUp = () => {
          </StylesBoxRight>
 
          <StylesBoxLeft>
-            <img src={BackgroundImage} alt="" />
+            <StyledImg src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
 }
+const StyledImg = styled('img')({
+   width: '597px',
+   height: '100%',
+})
 
 const StylesBox = styled('form')({
    display: 'flex',

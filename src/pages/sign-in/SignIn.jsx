@@ -14,7 +14,7 @@ import { useState } from 'react'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
 import { AUTH_THUNK } from '../../store/slices/auth/authThunk'
 import { useNavigate } from 'react-router-dom'
-import { signInWithPopup } from 'firebase/auth'
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
 import { auth, provider } from '../../configs/firebase'
 
 export const SignIn = () => {
@@ -35,10 +35,13 @@ export const SignIn = () => {
       validationSchema: VALIDATION_SIGN_IN,
       onSubmit,
    })
-
-   const inputPassword = () => setShowPassword(!showPassword)
-
-   const hndlerGoogel = async () => {
+   // const [showPassword, setShowPassword] = useState(false)
+   const inputPassword = () => {
+      setShowPassword(!showPassword)
+   }
+   
+   
+   const handlerGoogle= async () => {
       await signInWithPopup(auth, provider)
          .then((response) => {
             dispatch(
@@ -62,12 +65,10 @@ export const SignIn = () => {
             </StylesBoxLogo>
             <StylesBoxInput>
                <Typography fontSize={18}>Sign In</Typography>
-               <StyledBoxGoogle onClick={hndlerGoogel}>
+               <StyledBoxGoogle onClick={handlerGoogle}>
                   <StyledBox>
-                     <StyledAvatar>R</StyledAvatar>
                      <Box>
-                        <StyledH3>Sign Up as Nazira</StyledH3>
-                        <StyledP>example@gmail.com</StyledP>
+                        <Typography>Войти через Google</Typography>
                      </Box>
                   </StyledBox>
                   <StyledAvatarGoogle>
@@ -123,11 +124,16 @@ export const SignIn = () => {
             </StylesBoxInput>
          </StylesBoxRight>
          <StylesBoxLeft>
-            <img src={BackgroundImage} alt="" />
+            <StyledImg  src={BackgroundImage} alt="" />
          </StylesBoxLeft>
       </StylesBox>
    )
 }
+const StyledImg = styled('img')({
+   width: '597px',
+   height: '100%',
+})
+
 const StylesBox = styled('form')({
    display: 'flex',
    fontFamily: 'Cera Pro, sans-serif',

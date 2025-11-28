@@ -2,7 +2,7 @@ import { Modal as MuiModal, Box, IconButton, styled } from '@mui/material'
 import { ExitIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../UI/AppButton'
 
-const DeleteModal = ({ onClose, open, handleVisible, onDelete }) => (
+const DeleteModal = ({ onClose, open, onClose, onDelete }) => (
    <StyledModal
       open={open}
       onClose={onClose}
@@ -15,7 +15,7 @@ const DeleteModal = ({ onClose, open, handleVisible, onDelete }) => (
    >
       <ContentBox>
          <Header>
-            <IconButton aria-label="close" onClick={handleVisible} size="small">
+            <IconButton aria-label="close" onClick={onClose} size="small">
                <ExitIcon />
             </IconButton>
          </Header>
@@ -23,7 +23,7 @@ const DeleteModal = ({ onClose, open, handleVisible, onDelete }) => (
          <Body>{onClose}</Body>
 
          <Actions>
-            <AppButton onClick={handleVisible}>Cancel</AppButton>
+            <AppButton onClick={onClose}>Cancel</AppButton>
             <AppButton
                variant="contained"
                color="error"

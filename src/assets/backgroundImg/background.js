@@ -1,16 +1,27 @@
+import bgBluu from '../backgroundImg/backImg/bgBluu.jpg'
+import bgChop from '../backgroundImg/backImg/bgChop.jpg'
+import bgGory from '../backgroundImg/backImg/bgGory.jpg'
+import bgHeripaha from '../backgroundImg/backImg/bgHeripaha.jpg'
+import bgLini from '../backgroundImg/backImg/bgLini.jpg'
+import bgMmdns from '../backgroundImg/backImg/bgMmdns.jpg'
+import bgOkian from '../backgroundImg/backImg/bgOkian.jpg'
+import bgOsero from '../backgroundImg/backImg/BgOsero.jpg'
+import bgSdanie from '../backgroundImg/backImg/bgSdanie.jpg'
+import bgSharik from '../backgroundImg/backImg/bgSharik.jpg'
+import bgStars from '../backgroundImg/backImg/bgStars.jpg'
+import bgWhiteSharik from '../backgroundImg/backImg/bgWhiteSharik.jpg'
+
 export const backgroundImages = [
-    { bg:'src/assets/backgroundImg/backImg/bgBluu.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgChop.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgGory.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgHeripaha.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgLini.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgMmdns.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgOkian.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/BgOsero.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgSdanie.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgSharik.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgStars.jpg' },
-    { bg:'src/assets/backgroundImg/backImg/bgWhiteSharik.jpg' },
-
+   bgBluu,
+   bgChop,
+   bgGory,
+   bgHeripaha,
+   bgLini,
+   bgMmdns,
+   bgOkian,
+   bgOsero,
+   bgSdanie,
+   bgSharik,
+   bgStars,
+   bgWhiteSharik,
 ]
-

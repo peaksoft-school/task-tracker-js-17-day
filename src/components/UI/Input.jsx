@@ -12,6 +12,8 @@ export const Input = forwardRef(function (
       value,
       onChange,
       type,
+      onClick,
+      placeholder=null,
 
       ...rest
    },
@@ -21,7 +23,9 @@ export const Input = forwardRef(function (
    return (
       <>
          <StyledInput
+         placeholder={placeholder}
             error={error}
+            onClick={onClick} 
             inputRef={ref}
             startAdornment={
                iconPosition === 'start' ? (

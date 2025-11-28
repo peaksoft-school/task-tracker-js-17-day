@@ -1,6 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../../configs/axiosinstance'
-import { useNavigate } from 'react-router-dom'
 import { showNotification } from '../../../utils/helpers/notification'
 
 const signUP = createAsyncThunk('auth/signUp', async ({ values, navigate }) => {
@@ -87,12 +86,11 @@ const authWithGoogle = createAsyncThunk(
    async ({ tokenId, navigate }) => {
       try {
          const { data } = await axiosInstance.post('/api/auth/google', tokenId)
-
          navigate('/main-page')
 
          return data
       } catch (error) {
-         console.log(error.massage)
+         console.log(error.message)
       }
    }
 )

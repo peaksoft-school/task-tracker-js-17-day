@@ -1,7 +1,7 @@
 import { Chip, styled } from '@mui/material'
 import { ExitIcon } from '../../assets/AllExportIcon'
 
-export const Chip = ({
+export const Chipp = ({
    label,
    color = 'gray',
    icon,
@@ -14,7 +14,9 @@ export const Chip = ({
       label={
          <ChipContent>
             {icon && <IconWrapper>{icon}</IconWrapper>}
+
             <span>{label}</span>
+
             {removable && (
                <ExitIconWrapper
                   onClick={(e) => {
@@ -41,13 +43,17 @@ const StyledChip = styled(Chip, {
    height: isRound ? '40px' : 'auto',
    padding: isRound ? '0' : '10px',
    backgroundColor:
-      colorProp === 'green'
+      colorProp === 'GREEN'
          ? 'rgb(48,176,9)'
-         : colorProp === 'red'
+         : colorProp === 'RED'
            ? 'rgb(217,21,17)'
            : colorProp === 'orange'
              ? 'rgb(237,138,0)'
-             : 'rgb(201,201,201)',
+             : colorProp === 'BLUE'
+               ? 'rgb(0,121,191)'
+               : colorProp === 'YELLOW'
+                 ? 'rgb(243, 243, 7)'
+                 : 'rgb(201,201,201)',
    color: 'white',
    fontWeight: 500,
    fontSize: 16,

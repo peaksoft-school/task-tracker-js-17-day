@@ -44,4 +44,5 @@ const StyledFormControl = styled(FormControl)({
 
 const StyledMuiSelect = styled(MuiSelect)({
    borderRadius: '8px',
+   width: '350px',
 })

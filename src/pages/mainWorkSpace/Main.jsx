@@ -25,6 +25,7 @@ function Main() {
    const { token } = useSelector((state) => state.auth)
    const { main, favouritesCount } = useSelector((state) => state.main)
 
+
    const dispach = useDispatch()
    const navigate = useNavigate()
 
@@ -53,13 +54,17 @@ function Main() {
 
    const openoardMain = (id) => {
       dispach(MAIN_THUNK.getAllBoards({ id }))
+      
          .unwrap()
          .then(() => {
-            navigate(`/workspace/${id}`)
+            navigate(`/workspace/${id}/boards`)
          })
+         
+         
          .catch((error) => {
             console.error('Ошибка при переходе к доскам:', error)
          })
+         console.log(id,'woerkspaceId');
    }
 
    return (

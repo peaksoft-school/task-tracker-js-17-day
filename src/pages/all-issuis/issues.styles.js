@@ -10,6 +10,9 @@ import {
    TableRow,
 } from '@mui/material'
 import { Input } from '../../components/UI/Input'
+import { useSelector } from 'react-redux'
+
+
 
 export const StyledChekbox = {
    '& input': {
@@ -68,13 +71,12 @@ export const commonButtonStyle = {
 }
 
 export const StyledBackground = styled('div')(({ background }) => {
-   const isUrl = background && (background.startsWith('http') || background.startsWith('url'));
+   const isColor = typeof background === 'string' && background.startsWith('#')
    
    return {
       minHeight: '100vh',
-      background: background 
-         ? (isUrl ? `url(${background})` : background) 
-         : '#ffffff', 
+      backgroundColor: isColor ? background : 'transparent',
+      backgroundImage: !isColor && background ? `url(${background})` : 'none',
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

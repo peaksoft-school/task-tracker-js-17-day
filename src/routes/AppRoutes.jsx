@@ -1,11 +1,17 @@
 import { createBrowserRouter } from 'react-router-dom'
 import { ROLES } from './routes'
 import { SignIn } from '../pages/sign-in/SignIn'
+
 import { SignUp } from '../pages/sign-up/SignUp'
 import { ChangePassword } from '../pages/change-password/ChangePassword'
+import { InnerPageBoard } from '../pages/board/InnerPageBoard'
+import Board from '../pages/board/Board'
+import { Profile } from '../pages/profile/Profile'
+import IssuesPage from '../pages/all-issuis/Issues'
 import PrivateRoute from './PrivateRoute'
 import Issues from '../pages/all-issuis/Issues'
 import Main from '../pages/mainWorkSpace/Main'
+
 import BoardsPage from '../pages/BoardsPage'
 import ParticipantsPage from '../pages/participants/ParticipantsPage'
 
@@ -18,6 +24,7 @@ export const routes = createBrowserRouter([
       path: '/sign-up',
       element: <SignUp />,
    },
+
    {
       path: '/forgot-password/:id',
       element: <ChangePassword />,
@@ -41,7 +48,7 @@ export const routes = createBrowserRouter([
       path: '/workspace/:id/boards',
       element: (
          <PrivateRoute
-            Component={<BoardsPage />}
+            Component={<Board />}
             isAllowed={true}
             fallBacPath="/"
          />
@@ -57,6 +64,16 @@ export const routes = createBrowserRouter([
          />
       ),
    },
+
+   {
+      path: '/profile',
+      element: <Profile />,
+   },
+   {
+      path: '/boards/:id/columns-with-cards',
+      element: <InnerPageBoard/>,
+   },
+
    {
       path: '/workspace',
       element: (

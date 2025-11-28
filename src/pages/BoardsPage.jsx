@@ -46,38 +46,40 @@ function BoardsPage() {
    }
 
    return (
-      <StyledBackground background={currentBackground}>
-         <Header />
-         <div style={{ display: 'flex' }}>
-            <Sidebar />
+      <>
+         {boards.map((board) => (
+            <StyledBackground background={board.backgroundUrl}>
+               <Header />
+               <div style={{ display: 'flex' }}>
+                  <Sidebar />
 
-            <PageContainer>
-               <Title>Boards</Title>
+                  <PageContainer>
+                     <Title>Boards</Title>
 
-               {isLoading ? (
-                  <LoaderContainer>
-                     <CircularProgress />
-                  </LoaderContainer>
-               ) : (
-                  <BoardsGrid>
-                     {boards?.map((board) => (
-                        <BoardCard
-                           key={board.id}
-                           bg={board.backgroundUrl}
-                           onClick={() => handleBoardClick(board)}
-                        >
-                           <BoardName>{board.name}</BoardName>
-                        </BoardCard>
-                     ))}
+                     {isLoading ? (
+                        <LoaderContainer>
+                           <CircularProgress />
+                        </LoaderContainer>
+                     ) : (
+                        <BoardsGrid>
+                           <BoardCard
+                              key={board.id}
+                              bg={board.backgroundUrl}
+                              onClick={() => handleBoardClick(board)}
+                           >
+                              <BoardName>{board.name}</BoardName>
+                           </BoardCard>
 
-                     <CreateBoardCard>
-                        <span>Create new board</span>
-                     </CreateBoardCard>
-                  </BoardsGrid>
-               )}
-            </PageContainer>
-         </div>
-      </StyledBackground>
+                           <CreateBoardCard>
+                              <span>Create new board</span>
+                           </CreateBoardCard>
+                        </BoardsGrid>
+                     )}
+                  </PageContainer>
+               </div>
+            </StyledBackground>
+         ))}
+      </>
    )
 }
 export default BoardsPage

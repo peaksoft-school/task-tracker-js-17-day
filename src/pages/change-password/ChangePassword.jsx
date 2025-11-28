@@ -1,10 +1,39 @@
 import { Box, styled, Typography } from '@mui/material'
-import { Black, HideIcon } from '../../assets/AllExportIcon'
+import { Black, HideIcon, ShowIcon } from '../../assets/AllExportIcon'
 import { AppButton } from '../../components/UI/AppButton'
 import { Input } from '../../components/UI/Input'
 import BackgroundImage from '../../assets/images/icon/imgbackraund/bg-register.png'
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { PROFILE_THUNK } from '../../store/profile/profileThunk'
 
 export const ChangePassword = () => {
+   const [showPassword, setShowPassword] = useState(false)
+
+   const [showRepitPassword, setShowRepitPassword] = useState(false)
+
+   const [passwords, setPasswords] = useState({
+      oldPassword: '',
+      newPassword: '',
+   })
+
+   const dispatch = useDispatch()
+
+   
+
+   const hendlerRepitPassword = () => {
+      try {
+         dispatch(PROFILE_THUNK.updatePassword(passwords)).unwrap()
+      } catch (error) {
+         console.log(error)
+      }
+   }
+
+   const handlePasswordChange = (e) => {
+      const { name, value } = e.target
+      setPasswords((prev) => ({ ...prev, [name]: value }))
+   }
+
    return (
       <StylesBox>
          <StylesBoxRight>
@@ -18,20 +47,38 @@ export const ChangePassword = () => {
                   <Typography variant="h2">Password</Typography>
 
                   <Input
-                     placeholder="Password"
-                     type="password"
+                     placeholder="Old-Password"
+                     type={showPassword ? 'text' : 'password'}
                      iconPosition="end"
-                     icon={<HideIcon />}
+                     onChange={handlePasswordChange}
+                     value={passwords.oldPassword}
+                     icon={
+                        showPassword ? (
+                           <StyledIconShow onClick={() =>  setShowPassword(false)} />
+                        ) : (
+                           <StyledIconHide onClick={() =>  setShowPassword(true)} />
+                        )
+                     }
                   />
 
                   <Input
-                     placeholder="Repeat password"
-                     type="Password"
+                     placeholder="New-Password"
+                     type={showRepitPassword ? 'text' : 'password'}
+                     onChange={handlePasswordChange}
+                     value={passwords.newPassword}
+                     icon={
+                        showRepitPassword ? (
+                           <StyledIconShow onClick={() => setShowRepitPassword(false)} />
+                        ) : (
+                           <StyledIconHide onClick={ () => setShowRepitPassword(true)} />
+                        )
+                     }
                      iconPosition="end"
-                     icon={<HideIcon />}
                   />
 
-                  <StyledButton>Log In</StyledButton>
+                  <StyledButton onClick={hendlerRepitPassword}>
+                     Log In
+                  </StyledButton>
                </StylesBoxInput>
             </Box>
          </StylesBoxRight>
@@ -42,6 +89,13 @@ export const ChangePassword = () => {
       </StylesBox>
    )
 }
+const StyledIconHide = styled(HideIcon)({
+   cursor: 'pointer',
+})
+
+const StyledIconShow = styled(ShowIcon)({
+   cursor: 'pointer',
+})
 
 const StyledButton = styled(AppButton)({
    padding: '8px 60px',

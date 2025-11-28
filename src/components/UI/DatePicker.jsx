@@ -36,26 +36,44 @@ function RangeDay(props) {
    )
 }
 
-export default function CustomDateRangeCalendar() {
+export default function CustomDateRangeCalendar(props) {
+   const { onChange } = props; 
    const [start, setStart] = React.useState(dayjs())
    const [end, setEnd] = React.useState(null)
+   const [time, setTime] = React.useState(dayjs())
 
    const [value, setValue] = React.useState(dayjs('2022-04-17T15:30'))
 
+
+
+   const emit = (s, e, t = time) => {
+      onChange?.({
+         start: s,
+         end: e,
+         time: t,
+      })
+   }
+ 
    const handleSelect = (newDate) => {
       if (!start || (start && end)) {
          setStart(newDate)
          setEnd(null)
+         emit(newDate, null)
       } else if (newDate.isBefore(start, 'day')) {
          setEnd(start)
          setStart(newDate)
+         emit(newDate, start)
       } else {
          setEnd(newDate)
+         emit(start, newDate)
       }
    }
 
+   
+
    return (
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
+      <Box>
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="ru">
          <StyledBox>
             <DateCalendar
                value={start}
@@ -70,36 +88,39 @@ export default function CustomDateRangeCalendar() {
                   ),
                }}
             />
+
             <StyledDatePicker
                label="Start date"
                value={start}
-               format="DD/MM/YYYY"
-               slots={{ openPickerIcon: () => null }}
                onChange={(newValue) => {
                   setStart(newValue)
-                  if (end && newValue && newValue.isAfter(end)) {
-                     setEnd(null)
-                  }
+                  emit(newValue, end)
                }}
             />
+
             <StyledBoxTime>
                <StyledDatePicker
                   label="Due date"
                   value={end}
-                  format="DD/MM/YYYY"
-                  slots={{ openPickerIcon: () => null }}
-                  minDate={start ?? undefined}
-                  onChange={(newValue) => setEnd(newValue)}
+                  minDate={start}
+                  onChange={(newValue) => {
+                     setEnd(newValue)
+                     emit(start, newValue)
+                  }}
                />
-               <DemoContainer components={['TimePicker']}>
-                  <StyledTimePicker
-                     defaultValue={dayjs('2025-09-17T15:30 UTC+03:00')}
-                     slots={{ openPickerIcon: () => null }}
-                  />
-               </DemoContainer>
+
+               <StyledTimePicker
+                  value={time}
+                  onChange={(newValue) => {
+                     setTime(newValue)
+                     emit(start, end, newValue)
+                  }}
+               />
             </StyledBoxTime>
          </StyledBox>
       </LocalizationProvider>
+         
+      </Box>
    )
 }
 

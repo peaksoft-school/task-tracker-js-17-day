@@ -1,8 +1,10 @@
 export const Colors = [
-   { color: '#cccccc' },
-   { color: '#b04631' },
-   { color: '#3e702d' },
-   { color: '#d19034' },
-   { color: '#895f9e' },
-   { color: '#015d91' },
+   "#c5c5c5",
+   "#9a4931",
+   "#c8913b",
+   "#619a4a",
+   "#815f9f",
+   "#315e8f",
+   "#b75e8f",
+   "#2f2f2f",
 ]

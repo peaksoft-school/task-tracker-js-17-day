@@ -42,6 +42,14 @@ import WarningNotificationIcon from './images/icon/notificationIcons/Warning.svg
 import WhitePliusIcon from './images/icon/system/Alerts, Warning, Signs Icon.svg?react'
 import Black from './images/icon/system/Black and White Collection 2.svg?react'
 import GoogleIcon from './images/icon/system/googleIkon.svg?react'
+import CheckMarkIcon from './images/icon/system/CheckMark.svg?react'
+import CommunicationIcon from './images/icon/system/Communication Icon.svg?react'
+import HourglassIcon from './images/icon/system/Hourglass.svg?react'
+import NotifyIcon from './images/icon/system/Notify.svg?react'
+import PenselIcon from './images/icon/system/Pensel.svg?react'
+import XIcon from './images/icon/system/X.svg?react'
+import ThreeDotsIcon from './images/icon/arrows/ThreeDots.svg?react'
+import VectorIcon from './images/icon/system/Vector.svg?react'
 
 export {
    //? arrows
@@ -52,6 +60,7 @@ export {
    // ? favoriteIcon
    FavoriteIconstarBlue,
    FavoriteIconstarSilver,
+   ThreeDotsIcon,
    //? side panel
    FilesAndFoldersIcon,
    GraphicIcon,
@@ -67,21 +76,27 @@ export {
    CalendarIcon,
    CheckIcon,
    ClockIcon,
+   CheckMarkIcon,
+   CommunicationIcon,
    CopyIcon,
    DeleteIcon,
    DoneIcon,
    EditIcon,
    ExitIcon,
    HideIcon,
+   HourglassIcon,
    LabelIcon,
    MemberIcon,
    MinusIcon,
    NotificationIcon,
+   NotifyIcon,
    PlusIcon,
+   PenselIcon,
    SearchIcon,
    ShowIcon,
    StarIcon,
    TemplateIcon,
+   VectorIcon ,
    //? notificationIcons
    DoneNotificationIcon,
    ErrorNotificationIcon,
@@ -89,4 +104,5 @@ export {
    WhitePliusIcon,
    Black,
    GoogleIcon,
+   XIcon,
 }
